@@ -1,0 +1,99 @@
+<nav class="navbar shadow-md py-10 lg:py-0">
+    <div class="flex w-full md:w-3/4 mx-auto items-center">
+        <div class="flex logo ml-5">
+            <img src="assets/logo.png" class="w-[35px] lg:w-[25px]" alt="">
+            <span class="text-[35px] lg:text-[25px]">Tonotri</span>
+        </div>
+        <div class="hidden lg:flex items-center px-5 gap-4 text-[18px]">
+            <a routerLink="/community" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link" 
+                class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                Community
+            </a>
+            <a routerLink="/explore" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link" 
+                class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                Explore
+            </a>
+            <a routerLink="/plan" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link" 
+                class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                Plan
+            </a>
+            <a routerLink="/trips" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link" 
+                class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                Trips
+            </a>
+        </div>
+        <div class="flex ml-auto justify-end">
+            <button (click)="logout()" class="hidden lg:flex items-center gap-2 hover:bg-[#29A5DB] text-[16px] p-3 rounded-md transition-colors cursor-pointer">
+                <img src="/assets/exit.png" alt="logout" class="w-5 h-5 object-contain" />
+                Logout
+            </button>
+            <button 
+            (click)="toggleMenu()"
+            class="lg:hidden text-[20px] mr-7 p-2 hover:bg-[#29A5DB] rounded-md">
+                <img src="assets/more.png" width="30" alt="">
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div *ngIf="isMenuOpen" (click)="closeMenu()" class="fixed inset-0 bg-black/50 z-40"></div>
+
+<div
+  class="fixed lg:hidden top-[80px] left-0 h-[calc(100%-80px)] w-[80%] bg-white shadow-xl z-1000000 transform transition-transform duration-300"
+  [class.-translate-x-full]="!isMenuOpen"
+  [class.translate-x-0]="isMenuOpen">
+
+  <!-- LINKS -->
+  <div class="flex flex-col p-4 gap-2 text-[16px]">
+            <div>
+                <a
+                    id="community"
+                    (click)="onClick($event)"
+                    routerLink="/community"
+                    class="flex w-full items-center text-left px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]"
+                    [class.bg-[#FA9917]]="menuSectionActive === 'community'">
+                    Community
+                    <img src="assets/arrow-down.png" *ngIf="isExploreOpen" class="w-[16px] h-[16px] ml-auto" alt="">
+                </a>
+            </div>
+            <div>
+                <button
+                    id="explore"
+                    (click)="onClick($event)"
+                    class="flex w-full items-center text-left px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]"
+                    [class.bg-[#FA9917]]="menuSectionActive === 'explore'">
+                    Explore
+                    <img src="assets/arrow-down.png" *ngIf="menuSectionActive === 'explore'" class="w-[16px] h-[16px] ml-auto" alt="">
+                </button>
+
+                <div *ngIf="menuSectionActive === 'explore'" class="flex flex-col ml-4 mt-2 gap-2">
+                    <a routerLink="/explore/countries" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] active-link" 
+                        class="px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                        Countries
+                    </a>
+                    <a routerLink="/explore/cities" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] active-link" 
+                        class="px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                        Cities
+                    </a>
+                </div>
+            </div>
+            <a routerLink="/plan" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link" 
+                class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                Plan
+            </a>
+            <a routerLink="/trips" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link" 
+                class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                Trips
+            </a>
+  </div>
+
+  <!-- LOGOUT -->
+  <div class="absolute bottom-5 w-full px-4">
+    <button
+      (click)="logout(); closeMenu()"
+      class="w-full flex items-center gap-2 p-3 bg-gray-100 hover:bg-gray-200 rounded-md">
+      <img src="/assets/exit.png" class="w-5 h-5" alt="">
+      Logout
+    </button>
+  </div>
+</div>

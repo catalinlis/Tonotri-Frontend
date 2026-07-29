@@ -1,0 +1,51 @@
+<nav class="fixed top-0 left-0 right-0 bg-blue-200 border-b border-b-[7px] border-blue-300 py-2 px-6">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-8">
+            <a routerLink="/" class="flex items-center gap-2 cursor-pointer">
+                <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">A</span>
+                </div>
+                <span class="text-white font-semibold text-lg tracking-tight">AuthApp</span>
+            </a>
+
+            <!-- Links next to logo -->
+            <div class="hidden md:flex items-center gap-6">
+                <a routerLink="/"
+                    class="text-gray-400 hover:text-white text-sm font-medium transition-colors duration-200 cursor-pointer">
+                    Profile
+                </a>
+                <a routerLink="/settings"
+                    class="text-gray-400 hover:text-white text-sm font-medium transition-colors duration-200 cursor-pointer">
+                    Settings
+                </a>
+            </div>
+        </div>
+        <button
+            class="flex items-center gap-2 bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer"
+            (click)="logout()">
+            Logout
+        </button>
+
+    </div>
+</nav>
+<div class="flex justify-center mt-16 space-x-2">
+    <div class="hidden md:block w-50 h-60 shrink-0 bg-blue-400">
+        <div class="fixed top-16 w-50 bg-blue-400" style="height: 50px;">sfwefwe</div>
+    </div>
+
+    
+    <div class="w-full md:w-[600px] bg-red-400 space-x-2 space-y-2 p-2">
+        <div class="w-full h-70 bg-blue-200">
+            gergrger
+        </div>
+        <div class="w-full h-70 bg-blue-200">
+            gergrger
+        </div>
+        <div class="w-full h-70 bg-blue-200">
+            gergrger
+        </div>
+        <div class="w-full h-70 bg-blue-200 ">
+            gergrger
+        </div>
+    </div>
+</div>

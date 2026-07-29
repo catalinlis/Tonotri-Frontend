@@ -1,0 +1,36 @@
+<!-- full-background.component.html -->
+<div class="background">
+  <div class="flex justify-center items-center min-h-screen text-center">
+    <div>
+      <div class="w-full max-w-sm bg-[rgb(245,225,220)] p-2 rounded-md mb-2 border border-red-500 flex justify-center"
+        [class.hidden]="formError === null">
+        <span class="flex items-center gap-2 font-semibold text-[16px] text-red-500 text-left"><img src="assets/warning.png" class="w-4 h-4"/> {{formError?.message}}</span>
+      </div>
+      <div class="w-full max-w-sm bg-blue-500/80 pt-3 rounded-xl shadow-md border border-white mx-auto flex flex-col items-center">
+        <div class="text-lg text-white text-center mb-3 p-1">Introduce the 6-digit code received on specified e-mail</div>
+        <hr class="w-full text-white">
+        <div class="w-[250px] max-w-sm bg-white p-2 rounded-b-lg mb-2 flex justify-center">
+            <span class="flex items-center gap-2 text-[13px] text-gray-700 text-left ml-1"><img src="assets/information.png" class="w-4 h-4 mr-1"/>After the email confirmation you will be redirected to login page.</span>
+        </div>
+        <form [formGroup]="form" class="w-[250px] space-y-2 space-x-2 mt-5 mb-6">
+            <input 
+                type="text" 
+                formControlName="code"
+                class="w-full border bg-white border-gray-300 rounded-lg text-center p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter code"/>
+            <div class="flex gap-2 text-sm">
+                <button class="w-full text-white rounded-md p-3 bg-orange-400 hover:bg-orange-600 cursor-pointer mb-4 mt-2"
+                (click)="sendCode()" [disabled]="sendButtonDisabled" [class.disable]="sendButtonDisabled">Send Code</button>
+                <button class="w-full text-white rounded-md p-3 bg-orange-400 hover:bg-orange-600 cursor-pointer mb-4 mt-2"
+                (click)="onSubmit()">Confirm</button>
+            </div>
+
+            <div class="text-white text-sm" *ngIf="start">
+                <span *ngIf="!codeExpired">Code expires in {{ timeAsDate | date: 'mm:ss' }}</span>
+                <span *ngIf="codeExpired">Code expired.</span>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

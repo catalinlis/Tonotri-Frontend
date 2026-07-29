@@ -1,0 +1,74 @@
+.background {
+    margin-top: 70px;
+    padding: 0;
+    height: auto;
+    width: 100%;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.leaflet-right {
+  display: none !important;
+}
+
+.leaflet-bottom {
+  display: none !important;
+}
+
+/* Remove the square focus box on all map paths */
+::ng-deep .leaflet-interactive:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Also remove it from the map container itself if needed */
+::ng-deep .leaflet-container:focus {
+  outline: none !important;
+}
+
+.leaflet-touch .leaflet-bar, 
+.leaflet-bar {
+  border: none !important;           /* Removes the default thin gray border */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important; /* Modern floating shadow */
+  border-radius: 12px !important;    /* Makes the corners very rounded */
+  overflow: hidden;                  /* Ensures buttons don't bleed over corners */
+}
+
+.leaflet-control-zoom-in, 
+.leaflet-control-zoom-out {
+  background-color: #ffffff !important; /* Button background color */
+  width: 40px !important;               /* Increase button width */
+  height: 40px !important;              /* Increase button height */
+  
+  /* Centering logic */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  
+  transition: background-color 0.2s ease; /* Smooth hover transition */
+}
+
+::ng-deep .leaflet-control-zoom.leaflet-bar {
+  background: transparent !important; /* Remove container bg if using gap */
+  box-shadow: none !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+::ng-deep .leaflet-control-zoom a {
+  border-radius: 50% !important; /* Round individual buttons instead of the bar */
+  color: white;
+  margin-top: 5px;
+  border: solid 2px rgb(33,150,243) !important;
+  background-color: rgb(33,150,243) !important;;
+}
+
+::ng-deep .leaflet-control-zoom a:hover{
+  border-color: white !important;
+}
+
+#map {
+  background-color: rgb(135, 209, 255) !important; /* Makes the ocean/background white */
+}
+

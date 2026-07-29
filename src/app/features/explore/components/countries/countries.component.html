@@ -1,0 +1,194 @@
+<div class="block w-full h-auto rounded-2xl overflow-hidden bg-gradient-to-r from-[#32B2D9] to-[#5D9E8E]">
+    <div class="block lg:flex w-full">
+        <div class="block w-full lg:flex lg:w-3/5">
+            <div class="text-white text-[22px] p-5 leading-7 lg:leading-8">
+                <div class="text-[35px] text-white pb-4">Explore countries</div>
+                From the mountains of Switzerland to the beaches of Greece, every country offers a unique world to explore.
+                Think about the cultures, cuisines, landscapes, and experiences you want to discover. Use this space to plan 
+                your future adventures and build your personal travel map.
+            </div>
+        </div>
+        <div class="block w-full pt-0 p-4 lg:p-4 lg:flex lg:w-2/5 lg:ml-auto">
+            <img src="assets/explore2.jpg" class="w-full h-full object-cover rounded-xl border-2 border-white mr-3" alt="">
+        </div>
+    </div>
+</div>
+<div class="block w-full h-auto rounded-2xl overflow-hidden bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[22px] border border-[rgb(230,230,230)]">
+    <div class="leading-8 text-[#5D9E8E]">Select a country to explore destinations, cities, and local experiences.</div>
+    <div class="flex w-full justify-center items-center mt-5">
+        <ng-country-select 
+                    [(ngModel)]="selectedCountry"
+                    [placeholder]="'Select a country'"
+                    [color]="'accent'">
+        </ng-country-select>
+        <button class="flex h-[56px] bg-[#5D9E8E] items-center justify-center text-white ml-2 px-4 rounded-md 
+                       transition-all duration-300 hover:scale-103 hover:bg-[#56B09A]"
+                (click)="onSearch()">
+            <div class="">Search</div>
+            <img src="assets/search.png" class="hidden md:block ml-2 w-[22px]" alt="">
+        </button>
+    </div>
+</div>
+<div *ngIf="imagesReady" class="photo-countries">
+    <div class="flex flex-col w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] gap-2">
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-9">
+            <img src="assets/photos.png" class="w-[35px]" alt="">
+            <span class="ml-3">{{country}}</span>
+        </div>
+
+
+        <div class="flex flex-col md:flex-row w-full gap-4 md:gap-2">
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="0" [gallery]="galleryId">
+                <img [src]="imagesUrls[0]"
+                    class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" 
+                    alt="">
+            </div>
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]"  [lightbox]="1" [gallery]="galleryId">
+                <img [src]="imagesUrls[1]"
+                    class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" 
+                    alt="">
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row w-full mt-2 md:mt-0 gap-4 md:gap-2">
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="2" [gallery]="galleryId">
+                <img [src]="imagesUrls[2]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
+            </div>
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="3" [gallery]="galleryId">
+                <img [src]="imagesUrls[3]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
+            </div>
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="4" [gallery]="galleryId">
+                <img [src]="imagesUrls[4]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="descriptionReady">
+    <div class="country-description">
+    <div class="w-full bg-[rgb(245,245,245)] rounded-2xl p-5 md:p-7 mt-2 mb-5 border border-[rgb(230,230,230)] gap-2">
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-7">
+            <img src="assets/country.png" class="w-[35px]" alt="">
+            <span class="ml-2">{{countryDescription?.country}}</span>
+        </div>
+        <div class="flex w-full text-[#828282] text-[18px] md:text-[20px] text-justify pb-5 leading-8">
+            {{countryDescription?.summary}}
+        </div>
+        <div class="block md:flex w-full gap-2">
+            <div class="w-full md:w-1/2 text-white p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg">
+                <div class="flex w-full text-[18px]">
+                    <img src="assets/calendar.png" class="w-[18px] h-[18px]" alt="">&nbsp;Best time to visit
+                </div>
+                <div class="block w-full text-[16px] pt-2 leading-6">{{countryDescription?.best_time_to_visit}}</div>
+            </div>
+            <div class="flex  flex-col w-full md:w-1/4 mt-2 md:mt-0 text-white p-3 bg-[#D7A318] rounded-lg">
+                <div class="flex w-full text-[18px]">
+                    <img src="assets/language.png" class="w-[18px] h-[18px]" alt="">&nbsp;Language
+                </div>
+                <div class="block w-full text-[16px] pt-2 leading-6">{{countryDescription?.language}}</div>
+            </div>
+            <div class="flex  flex-col w-full md:w-1/4 mt-2 md:mt-0 text-white p-3 bg-[#D7A318] rounded-lg">
+                <div class="flex w-full text-[18px]">
+                    <img src="assets/exchange.png" class="w-[18px] h-[18px]" alt="">&nbsp;Currency
+                </div>
+                <div class="block w-full text-[16px] pt-2 leading-6">{{countryDescription?.currency}}</div>
+            </div>
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/location.png" class="w-[35px]" alt="">
+            <span class="ml-2">Top Cities</span>
+        </div>
+        @for(city of countryDescription?.top_cities; track city.name){
+            <div class="w-full p-3 md:p-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+                <div class="flex w-full items-center justify-center md:justify-start md:text-left md:pl-5 text-[25px] pb-3 leading-7">
+                    {{city.name}}
+                </div>
+                <hr>
+                <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7 mt-1">
+                    {{city.description}}
+                </div>
+            </div>
+        }
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/pin.png" class="w-[35px]" alt="">
+            <span class="ml-2">Top Places</span>
+        </div>
+        @for(place of countryDescription?.top_places; track place.name){
+            <div class="w-full p-3 md:p-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+                <div class="flex w-full items-center text-center justify-center md:justify-start md:text-left md:pl-5 text-[25px] pb-3 leading-7">
+                    {{place.name}}
+                </div>
+                <hr>
+                <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7 mt-1">
+                    {{place.description}}
+                </div>
+                <div class="flex w-full gap-2 justify-end mt-2">
+                    <div class="flex w-fit text-[15px] items-center text-center bg-[#678EF9] border border-1 border-white p-1 px-2 rounded-lg text-white">
+                        {{place.category}}
+                    </div>
+                    <div class="flex w-fit text-[15px] items-center text-[15px] justify-center bg-[#678EF9] border border-1 border-white p-1 px-2 rounded-lg text-white">
+                        <img src="assets/calendar.png" class="w-[15px]" alt="">
+                        <span class="ml-2">Recommended {{place.recommended_days}} days</span>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/event.png" class="w-[35px]" alt="">
+            <span class="ml-2">Events</span>
+        </div>
+        <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 gap-3">
+            @for (place of countryDescription?.annual_events; track place.name) {
+                
+                <div class="flex flex-col h-full bg-[#FAE953] border border-[#FA6B00] text-[#FA6B00] rounded-lg shadow-md overflow-hidden leading-6">
+    
+                    <!-- Header Section -->
+                    <div class="flex w-full text-[23px] font-bold p-4 border-b border-[#FA6B00]">
+                        <img src="assets/ticket.png" class="w-[23px] h-[23px]" alt="">
+                        <span class="ml-2">{{ place.name }}</span>
+                    </div>
+    
+                    <!-- Description Section -->
+                    <div class="w-full text-[16px] text-[#FA6B00] p-4">
+                        {{ place.description }}
+                    </div>
+    
+                    <!-- Refactored Bottom Section: Added 'mt-auto' to push it down cleanly -->
+                    <div class="mt-auto text-[14px] text-[#FA6B00] p-2 rounded-b-md border-t-1 border-[#FA6B00] ">
+                        <div class="w-fit px-2 bg-[#FA6B00] rounded-lg text-white ml-auto border border-[#FA4000]">
+                            {{place.category}}
+                        </div>
+                        <div class="flex w-fit items-center px-2 bg-[#FA6B00] rounded-lg text-white ml-auto mt-1 border border-[#FA4000]">
+                            <img src="assets/calendar.png" class="w-[14px] h-[14px]" alt="">
+                            <span class="ml-2">{{place.period}}</span>
+                        </div>
+                        <div class="flex w-fit items-center px-2 bg-[#FA6B00] rounded-lg text-white ml-auto mt-1 border border-[#FA4000]">
+                            <img src="assets/location_white.png" class="w-[14px] h-[14px]" alt="">
+                            <span class="ml-2">{{place.city}}</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/idea.png" class="w-[35px]" alt="">
+            <span class="ml-2">Travel Tips</span>
+        </div>
+        @for (tip of countryDescription?.travel_tips; track $index){
+            <div class="w-full text-[20px] text-[#828282] leading-6 mt-2 p-2 bg-[rgb(230,230,230)] border border-[rgb(220,220,220)] rounded-lg">{{tip}}</div>
+        }
+    </div>
+    </div>
+</div>
+<div *ngIf="countrySearch" class="flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-5">
+    <div class="flex flex-col w-full items-center justify-center">
+        <div>
+            <igx-circular-bar
+                [animate]="false"
+                [indeterminate]="true"
+                [textVisibility]="false">
+            </igx-circular-bar>
+        </div>
+        <div class="flex text-[20px] text-[rgb(100,100,100)]">
+            Thinking right now
+        </div>
+    </div>
+</div>

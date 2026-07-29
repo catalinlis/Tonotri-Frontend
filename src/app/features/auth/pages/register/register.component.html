@@ -1,0 +1,72 @@
+<!-- full-background.component.html -->
+<div class="background">
+  <div class="flex justify-center items-center min-h-screen text-center">
+    <div>
+      <div *ngIf="error" class="w-full max-w-sm bg-[rgb(245,225,220)] p-2 rounded-md mb-2 border border-red-500 flex justify-center">
+        <span class="flex items-center gap-2 font-semibold text-[15px] text-red-500 text-left"><img src="assets/warning.png" class="w-4 h-4"/> {{error!.message}}</span>
+      </div>
+      <div class="w-full max-w-sm bg-blue-500/80 pt-3 rounded-xl shadow-md border border-white">
+        <div class="text-[23px] p-2 text-white text-center mb-3">Register</div>
+        <hr class="text-white mb-4"/>
+        <form [formGroup]="registerForm" class="space-y-2 ml-4 mr-4">
+          <input
+            type="text"
+            placeholder="Enter Username"
+            formControlName="username"
+            class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="text"
+            placeholder="Enter Email"
+            formControlName="email"
+            class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div class="flex gap-2">
+            <input
+              type="text"
+              placeholder="Enter Firstname"
+              formControlName="first_name"
+              class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="text"
+              placeholder="Enter Lastname"
+              formControlName="last_name"
+              class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <mat-form-field appearance="fill" class="w-full">
+            <input matInput 
+              [matDatepicker]="picker" 
+              formControlName="birthday"
+              placeholder="Choose a birthday">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-button-toggle-group formControlName="gender" name="gender" class="w-full">
+            <mat-button-toggle value="female" class="w-50">Female</mat-button-toggle>
+            <mat-button-toggle value="male" class="w-50">Male</mat-button-toggle>
+          </mat-button-toggle-group>
+          <input
+            type="password"
+            placeholder="Enter Password"
+            formControlName="password1"
+            class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            placeholder="Repeat Password"
+            formControlName="password2"
+            class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            (click)="onSubmit()"
+            class="flex justify-center w-full mb-4 bg-orange-400 p-3 text-white p-1 mb-2 rounded-lg hover:bg-orange-600 transition cursor-pointer mb-5">
+            Sign up
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="background">
+    <div class="w-full mt-22 lg:mt-17 md:w-4/5 xl:w-3/5 mx-auto">
+        <div class="hidden md:flex items-center justify-between pt-1 pb-3">
+            <!-- Step 1 (active) -->
+            <div class="flex items-center w-full">
+                <div class="flex items-center justify-center w-9 h-9 rounded-sm bg-[#00B640] border-2 border-[#009434] text-white font-bold">
+                    1
+                </div>
+                <div class="ml-3 text-sm font-medium text-[#00B640]">
+                    Personal Info
+                </div>
+                <div class="flex-1 h-[2px] bg-[#00B640] mx-4"></div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flex items-center w-full">
+                <div class="flex items-center justify-center w-11 h-11 rounded-sm border-2 border-[#00B640] text-[#00B640] font-bold">
+                    2
+                </div>
+                <div class="ml-3 text-sm font-medium text-[#00B640]">
+                    Your photo
+                </div>
+                <div class="flex-1 h-[2px] bg-[rgb(200,200,200)] mx-4"></div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flex items-center">
+                <div class="flex items-center justify-center w-9 h-9 rounded-sm bg-[rgb(200,200,200)] text-white font-semibold">
+                    3
+                </div>
+                <div class="ml-3 text-[15px] font-medium text-[rgb(200,200,200)]  whitespace-nowrap">
+                    Visited countries
+                </div>
+            </div>
+        </div>
+        <div class="block md:hidden flex w-full bg-[#00B640] border-2 border-[#009434] rounded-sm mb-2">
+            <span class="text-[17px] font-medium text-white p-3 pl-8">
+                Registration Step 2 - Your photo
+            </span>
+        </div>
+        <div class="block md:flex w-full p-4 bg-[#BC46E0] rounded-md items-center justify-center">
+            <div class="block group w-full md:w-1/2 p-3 pb-7 md:p-5">
+                <span class="transition-transform duration-300 group-hover:scale-105 inline-block leading-12 text-[26pt] text-white">Select your photo that represents you the best</span>
+            </div>
+            <div class="block w-full md:w-1/2 ml-auto">
+                <img src="assets/register1.jpg" class="rounded-md border-3 border-white" alt="">
+            </div>
+        </div>
+        <div class="block md:flex w-full mx-auto mt-2">
+            <div class="flex w-full md:w-2/3 bg-[#BFADE0] rounded-sm p-6 items-center justify-center">
+                <div class="flex items-center justify-center w-[200px] h-[200px] bg-white rounded-full
+                            transition-transform duration-300 ease-in-out hover:scale-110 cursor-pointer">
+                    <div class="flex items-center justify-center w-[192px] h-[192px] border-3 border-[#B59FE1] rounded-full">
+                        <img *ngIf="previewUrl" [src]="previewUrl" class="photo" alt="">
+                        <div *ngIf="!previewUrl" class="w-[140px] h-[140px]">
+                            <div class="grid grid-cols-2 gap-2">
+                                <img src="assets/man1.png" alt="">
+                                <img src="assets/woman1.png" alt="">
+                                <img src="assets/man2.png" alt="">
+                                <img src="assets/woman2.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="block md:flex md:flex-col mt-2 md:mt-0 md:ml-2 w-full md:w-1/3 items-center rounded-sm">
+                <div class="h-auto bg-[#D77CE0] p-1 rounded-sm">
+                    <div class="flex w-full bg-[#D77CE0] justify-center items-center border-1 border-white rounded-sm p-1">
+                        <div class="flex justify-center w-1/10">
+                            <img src="assets/information-white.png" width="20" alt="">
+                        </div>
+                        <div class="w-9/10 ml-1">
+                            <div class="text-sm text-white">
+                                Upload a profile photo to personalize your account.<br>
+                                JPG or PNG, max 5MB.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input #file type="file" (change)="onFileSelected($event)" class="hidden">
+                <button (click)="file.click()" class="flex md:flex-col justify-center items-center transition-transform duration-300 hover:scale-105 w-full md:w-full md:h-full 
+                               p-5 md:p-0 bg-[#B75AE0] text-white text-[25px] rounded-sm mt-2 cursor-pointer border-1 border-[#7300B6]">
+                    <div>Upload photo</div><br/>
+                    <div class="flex justify-center items-center bg-white w-[55px] h-[55px] ml-7 md:ml-0 md:w-[70px] md:h-[70px] rounded-full border-2 border-[#7300B6]"><img src="assets/camera.png" width="40" alt=""></div>
+                </button>
+            </div>
+        </div>
+        <div class="flex w-full mx-auto mt-2 pl-1">
+            <button class="w-full flex justify-center items-center md:w-1/3 transition-transform duration-300 hover:scale-102 p-3 pl-10 pr-10 text-[22px] text-white bg-[#3248D9] rounded-sm ml-auto mb-[100px] cursor-pointer"
+            (click)="nextStep()">
+                <span *ngIf="!previewUrl" class="flex">Skip this step</span>
+                <span *ngIf="previewUrl" class="flex">Next step</span>
+                <img src="assets/next.png" class="flex ml-3 w-[23px]">
+            </button>
+        </div>
+    </div>
+</div>

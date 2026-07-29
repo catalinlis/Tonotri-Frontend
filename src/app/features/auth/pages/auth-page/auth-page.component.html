@@ -1,0 +1,61 @@
+<!-- full-background.component.html -->
+<div class="background">
+  <div class="hidden xl:block w-1/2 h-full absolute justify-end items-center bar bg-blue-300/40">
+    <div class="description ml-30 text-white mt-50 rounded-lg">
+      Share and manage your trips ))
+    </div>
+  </div>
+  <div class="flex justify-center items-center min-h-screen text-center xl:justify-end xl:pr-20">
+    <div class="w-full max-w-sm bg-blue-500/80 pt-3 rounded-xl shadow-md border border-white">
+      <p class="header text-white text-center mb-3">Login</p>
+      <hr class="text-white mb-4"/>
+      <form  class="space-y-2 ml-4 mr-4" [formGroup]="loginForm" (ngSubmit)="login()">
+        <input
+          id="username"
+          type="text"
+          placeholder="Username"
+          formControlName="username"
+          class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [class.error-input]="error"
+        />
+        @if(error !== null){
+          <div id='error' class="flex w-full items-center text-[rgb(255,12,1)] text-base text-left bg-[rgb(255,230,230)] border border-red rounded-md">
+            <div class="flex p-2 overflow">
+              <img src="assets/warning.png" class="w-4 h-4 mt-1 ml-1" />
+              <span class="ml-1">{{error.message}}</span>
+            </div>
+          </div>
+        }
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+          class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [class.error-input]="error"
+        />
+        <button
+          id="sign-in-button"
+          class="w-full bg-blue-300 text-white p-3 rounded-lg  hover:bg-blue-700 transition cursor-pointer">
+          Sign in
+        </button>
+      </form>
+      <p class="text-white text-[16px] mt-1 mb-1">- or -</p>
+      <div class="google-sign-in px-4">
+        <button
+          (click)="signInWithGoogle()"
+          class="flex justify-center w-full bg-orange-400 px-2 text-white p-3 mb-2 rounded-lg hover:bg-red-600 transition cursor-pointer">
+          Sign in with Google<img src="/assets/google.png" class="ml-2 h-4" style="margin-top: 2px;">
+        </button>
+      </div>
+      <p class="text-white text-[16px] mt-7 mb-2">Don't you have an account, yet?</p>
+      <div class="sign-up px-4">
+        <button
+          (click)="signUp()"
+          class="flex justify-center w-full mb-4 bg-blue-400 px-2 text-white p-3 mb-2 rounded-lg hover:bg-blue-600 transition cursor-pointer">
+          Sign up
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

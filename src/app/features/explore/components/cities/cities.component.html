@@ -1,0 +1,431 @@
+<div class="block w-full h-auto rounded-2xl overflow-hidden bg-gradient-to-r from-[#FEB756] to-[#FE9900]">
+    <div class="block lg:flex w-full">
+        <div class="block w-full lg:flex lg:w-3/5">
+            <div class="text-white text-[22px] p-5 leading-7 lg:leading-8">
+                <div class="text-[35px] text-white pb-4">Explore cities</div>
+                From the vibrant streets of Tokyo to the historic charm of Rome, every city has its own rhythm, 
+                atmosphere, and story to discover. Think about the architecture, local food, nightlife, hidden corners, 
+                and unforgettable moments waiting for you. Use this space to explore new destinations, save inspiring 
+                places, and build your own collection of city adventures.
+            </div>
+        </div>
+        <div class="block w-full pt-0 p-4 lg:p-4 lg:flex lg:w-2/5 lg:ml-auto">
+            <img src="assets/new-york.jpg" class="w-full h-full object-cover rounded-xl border-2 border-white mr-3" alt="">
+        </div>
+    </div>
+</div>
+<div class="block w-full h-auto rounded-2xl bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[22px] border border-[rgb(230,230,230)]">
+    <div class="leading-8 text-[#5D9E8E]">Select a city to explore neighborhoods, attractions, local culture, and unique experiences.</div>
+    <div class="flex flex-col md:flex-row w-full justify-center items-center mt-5">
+        <div class="block md:flex text-center w-full md:w-auto">
+            <ng-country-select
+                [(ngModel)]="selectedCountry"
+                [placeholder]="'Select a country'"
+                [color]="'accent'">
+            </ng-country-select>
+        </div>
+        <div class="block md:flex text-center w-full md:w-auto relative mt-2 md:mt-0 md:ml-2" appClickOutside (clickOutside)="closeDropdown()">
+
+            <mat-form-field class="w-[240px]">
+                <mat-label>Search city</mat-label>
+
+                <input
+                    #cityInput
+                    matInput
+                    [formControl]="searchControl"
+                    (focus)="updateDropdownPosition(cityInput)"
+                >
+            </mat-form-field>
+
+            @if (dropdownOpen) {
+                <ul
+                    class="absolute md:left-0 w-[240px] md:w-full md:translate-x-0
+                           left-1/2 -translate-x-1/2 text-left
+                           bg-white border border-gray-300 rounded-lg
+                           shadow-lg max-h-[250px]
+                           overflow-y-auto z-50"
+                    [class.top-full]="dropdownPosition === 'bottom'"
+                    [class.mt-1]="dropdownPosition === 'bottom'"
+                    [class.bottom-full]="dropdownPosition === 'top'"
+                    [class.mb-1]="dropdownPosition === 'top'"
+                >
+                    @if(searchFlag){
+                        <div class="w-full mx-auto text-center p-2">
+                            <igx-circular-bar
+                                [animate]="false"
+                                [indeterminate]="true"
+                                [textVisibility]="false">
+                            </igx-circular-bar>
+                        </div>
+                    }
+                    @else if(cities.length > 0)
+                    {
+                        @for (city of cities; track city.id) {
+                            <li class="px-3 py-2 text-[14px] cursor-pointer hover:bg-gray-100 transition"
+                                (click)="selectCity(city)">
+                                {{ city.name }}, {{city.region}}
+                            </li>
+                        }
+                    }
+                    @else if(cities.length === 0){
+                        <li class="px-3 py-2 text-[14px]">No city found</li>
+                    }
+                </ul>
+            }
+        </div>
+        <button class="flex w-[240px] md:w-auto h-[56px] bg-[#5D9E8E] 
+                       items-center justify-center text-white mt-2 md:mt-0 md:ml-2 px-4 mb-5 md:mb-0
+                       rounded-md transition-all duration-300 hover:scale-103 hover:bg-[#56B09A]"
+                (click)="onSearch()">
+            <div>Search</div>
+            <img src="assets/search.png" class="ml-2 w-[22px]" alt="">
+        </button>
+    </div>
+</div>
+
+<div *ngIf="imagesReady" class="photo-countries">
+    <div class="flex flex-col w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] gap-2">
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-9">
+            <img src="assets/photos.png" class="w-[35px]" alt="">
+            <span class="ml-3">{{country}}</span>
+        </div>
+
+
+        <div class="flex flex-col md:flex-row w-full gap-4 md:gap-2">
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="0" [gallery]="galleryId">
+                <img [src]="imagesUrls[0]"
+                    class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" 
+                    alt="">
+            </div>
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]"  [lightbox]="1" [gallery]="galleryId">
+                <img [src]="imagesUrls[1]"
+                    class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" 
+                    alt="">
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row w-full mt-2 md:mt-0 gap-4 md:gap-2">
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="2" [gallery]="galleryId">
+                <img [src]="imagesUrls[2]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
+            </div>
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="3" [gallery]="galleryId">
+                <img [src]="imagesUrls[3]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
+            </div>
+            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="4" [gallery]="galleryId">
+                <img [src]="imagesUrls[4]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="descriptionReady">
+    <div class="country-description">
+    <div class="w-full bg-[rgb(245,245,245)] rounded-2xl p-5 md:p-7 mt-2 mb-5 border border-[rgb(230,230,230)] gap-2">
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-7">
+            <img src="assets/country.png" class="w-[35px]" alt="">
+            <span class="ml-2">{{cityDescription?.city}}</span>
+        </div>
+        <div class="flex w-full text-[#828282] text-[18px] md:text-[20px] text-justify pb-5 leading-8">
+            {{cityDescription?.summary}}
+        </div>
+        <div class="block md:flex w-full gap-2">
+            <div class="w-full md:w-1/2 text-white p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg">
+                <div class="flex w-full text-[18px]">
+                    <img src="assets/calendar.png" class="w-[18px] h-[18px]" alt="">&nbsp;Best time to visit
+                </div>
+                <div class="block w-full text-[16px] pt-2 leading-6">{{cityDescription?.best_time_to_visit}}</div>
+            </div>
+            <div class="flex  flex-col w-full md:w-1/4 mt-2 md:mt-0 text-white p-3 bg-[#D7A318] rounded-lg">
+                <div class="flex w-full text-[18px]">
+                    <img src="assets/language.png" class="w-[18px] h-[18px]" alt="">&nbsp;Language
+                </div>
+                <div class="block w-full text-[16px] pt-2 leading-6">{{cityDescription?.language}}</div>
+            </div>
+            <div class="flex  flex-col w-full md:w-1/4 mt-2 md:mt-0 text-white p-3 bg-[#D7A318] rounded-lg">
+                <div class="flex w-full text-[18px]">
+                    <img src="assets/exchange.png" class="w-[18px] h-[18px]" alt="">&nbsp;Currency
+                </div>
+                <div class="block w-full text-[16px] pt-2 leading-6">{{cityDescription?.currency}}</div>
+            </div>
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/location.png" class="w-[35px]" alt="">
+            <span class="ml-2">Districts</span>
+        </div>
+        <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 gap-3">
+            @for (district of cityDescription?.districts; track district.name) {
+                
+                <div class="flex flex-col h-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg shadow-md overflow-hidden leading-6">
+    
+                    <!-- Header Section -->
+                    <div class="flex w-full text-[23px] p-4 border-b border-white">
+                        <img src="assets/cityscape.png" class="w-[23px] h-[23px]" alt="">
+                        <span class="ml-2">{{ district.name }}</span>
+                    </div>
+    
+                    <!-- Description Section -->
+                    <div class="w-full text-[16px] text-white p-4">
+                        {{ district.description }}
+                    </div>
+    
+                </div>
+            }
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/star.png" class="w-[35px]" alt="">
+            <span class="ml-2">Famous for</span>
+        </div>
+        @for(famous of cityDescription?.famous_for; track famous.name){
+            <div class="w-full p-3 md:p-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+                <div class="flex w-full items-center justify-center md:justify-start md:text-left md:pl-5 text-[25px] pb-3 leading-7">
+                    {{famous.name}}
+                </div>
+                <hr>
+                <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7 mt-1">
+                    {{famous.description}}
+                </div>
+            </div>
+        }
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/pin.png" class="w-[35px]" alt="">
+            <span class="ml-2">Top Places</span>
+        </div>
+        @for(place of cityDescription?.top_places; track place.name){
+            <div class="w-full p-3 md:p-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+                <div class="flex w-full items-center text-center justify-center md:justify-start md:text-left md:pl-5 text-[25px] pb-3 leading-7">
+                    {{place.name}}
+                </div>
+                <hr>
+                <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7 mt-1">
+                    {{place.description}}
+                </div>
+                <div class="flex w-full gap-2 justify-end mt-2">
+                    <div class="flex w-fit text-[15px] items-center text-center bg-[#678EF9] border border-1 border-white p-1 px-2 rounded-lg text-white">
+                        {{place.category}}
+                    </div>
+                </div>
+            </div>
+        }
+        @if(cityDescription?.nightlife_areas){
+            <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+                <img src="assets/nightlife.png" class="w-[35px]" alt="">
+                <span class="ml-2">Nightlife</span>
+            </div>
+            <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 gap-3">
+                @for (nightlife of cityDescription?.nightlife_areas; track nightlife.name) {
+                
+                    <div class="flex flex-col h-full bg-gradient-to-b from-[#2E0061] to-[#5409B3] text-white rounded-lg shadow-md overflow-hidden leading-6">
+    
+                        <!-- Header Section -->
+                        <div class="flex w-full text-[23px] p-4 border-b border-white">
+                            <img src="assets/night-party.png" class="w-[23px] h-[23px]" alt="">
+                            <span class="ml-2">{{ nightlife.name }}</span>
+                        </div>
+    
+                        <!-- Description Section -->
+                        <div class="flex w-full text-[16px] text-white p-4">
+                            <img src="assets/disco-ball.png" class="w-[80px] h-[80px] ml-[-50px]" alt="">
+                            <div class="ml-2">{{ nightlife.summary }}</div>
+                        </div>
+
+                        <div class="mt-auto text-[14px] text-[#FA6B00] p-2 rounded-b-md border-t-1 border-white ">
+                            <div class="flex w-fit items-center px-2 bg-[#8050D7] rounded-lg text-white ml-auto mt-1 border border-[#2E0061]">
+                                <span class="ml-2">{{nightlife.best_for}}</span>
+                            </div>
+                        </div>
+    
+                    </div>
+                }
+            </div>
+        }
+        @if(cityDescription?.local_foods){
+            <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+                <img src="assets/dinner.png" class="w-[35px]" alt="">
+                <span class="ml-2">Local food</span>
+            </div>
+            <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 gap-3">
+                @for (local_food of cityDescription?.local_foods; track local_food.name) {
+                
+                    <div class="flex flex-col h-full bg-gradient-to-b from-[#F99709] to-[#F9B000] text-white rounded-lg shadow-md overflow-hidden leading-6">
+    
+                        <!-- Header Section -->
+                        <div class="flex w-full text-[23px] p-4 border-b border-white">
+                            <img src="assets/restaurant.png" class="w-[23px] h-[23px]" alt="">
+                            <span class="ml-3">{{ local_food.name }}</span>
+                        </div>
+    
+                        <!-- Description Section -->
+                        <div class="flex w-full text-[16px] text-white p-4">
+                            <img src="assets/salad.png" class="w-[100px] h-[100px] ml-[-60px]" alt="">
+                            <div class="ml-2">{{ local_food.description }}</div>
+                        </div>
+    
+                    </div>
+                }
+            </div>
+        }
+        @if(cityDescription?.shopping_areas){
+            <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+                <img src="assets/bag.png" class="w-[35px]" alt="">
+                <span class="ml-2">Shopping areas</span>
+            </div>
+            <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 gap-3">
+                @for (shopping_area of cityDescription?.shopping_areas; track shopping_area.name) {
+                
+                    <div class="flex flex-col h-full bg-gradient-to-b from-[#F99709] to-[#F9B000] text-white rounded-lg shadow-md overflow-hidden leading-6">
+    
+                        <!-- Header Section -->
+                        <div class="flex w-full text-[23px] p-4 border-b border-white">
+                            <img src="assets/shop-bag.png" class="w-[23px] h-[23px]" alt="">
+                            <span class="ml-3">{{ shopping_area.name }}</span>
+                        </div>
+    
+                        <!-- Description Section -->
+                        <div class="flex w-full text-[16px] text-white p-4">
+                            <img src="assets/shopping-bag.png" class="w-[100px] h-[100px] ml-[-50px]" alt="">
+                            <div class="ml-2">{{ shopping_area.description }}</div>
+                        </div>
+    
+                    </div>
+                }
+            </div>
+        }
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/event.png" class="w-[35px]" alt="">
+            <span class="ml-2">Events</span>
+        </div>
+        <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 gap-3">
+            @for (place of cityDescription?.annual_events; track place.name) {
+                
+                <div class="flex flex-col h-full bg-[#FAE953] border border-[#FA6B00] text-[#FA6B00] rounded-lg shadow-md overflow-hidden leading-6">
+    
+                    <!-- Header Section -->
+                    <div class="flex w-full text-[23px] font-bold p-4 border-b border-[#FA6B00]">
+                        <img src="assets/ticket.png" class="w-[23px] h-[23px]" alt="">
+                        <span class="ml-2">{{ place.name }}</span>
+                    </div>
+    
+                    <!-- Description Section -->
+                    <div class="w-full text-[16px] text-[#FA6B00] p-4">
+                        {{ place.description }}
+                    </div>
+    
+                    <!-- Refactored Bottom Section: Added 'mt-auto' to push it down cleanly -->
+                    <div class="mt-auto text-[14px] text-[#FA6B00] p-2 rounded-b-md border-t-1 border-[#FA6B00] ">
+                        <div class="w-fit px-2 bg-[#FA6B00] rounded-lg text-white ml-auto border border-[#FA4000]">
+                            {{place.category}}
+                        </div>
+                        <div class="flex w-fit items-center px-2 bg-[#FA6B00] rounded-lg text-white ml-auto mt-1 border border-[#FA4000]">
+                            <img src="assets/calendar.png" class="w-[14px] h-[14px]" alt="">
+                            <span class="ml-2">{{place.period}}</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="w-full grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4 mt-7">
+            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+                <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
+                    Airport
+                </div>
+                <div class="flex p-2">
+                    <div class="w-1/2 items-center text-center"><img src="assets/departure.png" class="w-[50px] h-[50px] mx-auto" alt=""></div>
+                    <div class="flex w-1/2 items-center text-center">
+                        @if(cityDescription?.transportation?.airport){
+                            <img src="assets/check.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                        @else{
+                            <img src="assets/uncheck.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+                <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
+                    Metro
+                </div>
+                <div class="flex p-2">
+                    <div class="w-1/2 items-center text-center"><img src="assets/metro.png" class="w-[50px] h-[50px] mx-auto" alt=""></div>
+                    <div class="flex w-1/2 items-center text-center">
+                        @if(cityDescription?.transportation?.metro){
+                            <img src="assets/check.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                        @else{
+                            <img src="assets/uncheck.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+                <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
+                    Tram
+                </div>
+                <div class="flex p-2">
+                    <div class="w-1/2 items-center text-center"><img src="assets/tram.png" class="w-[50px] h-[50px] mx-auto" alt=""></div>
+                    <div class="flex w-1/2 items-center text-center">
+                        @if(cityDescription?.transportation?.tram){
+                            <img src="assets/check.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                        @else{
+                            <img src="assets/uncheck.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+                <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
+                    Bus
+                </div>
+                <div class="flex p-2">
+                    <div class="w-1/2 items-center text-center"><img src="assets/bus.png" class="w-[50px] h-[50px] mx-auto" alt=""></div>
+                    <div class="flex w-1/2 items-center text-center">
+                        @if(cityDescription?.transportation?.bus){
+                            <img src="assets/check.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                        @else{
+                            <img src="assets/uncheck.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+                <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
+                    Bike friendly
+                </div>
+                <div class="flex p-2">
+                    <div class="w-1/2 items-center text-center"><img src="assets/bike.png" class="w-[50px] h-[50px] mx-auto" alt=""></div>
+                    <div class="flex w-1/2 items-center text-center">
+                        @if(cityDescription?.transportation?.bike_friendly){
+                            <img src="assets/check.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                        @else{
+                            <img src="assets/uncheck.png" class="w-[30px] h-[30px] mx-auto" alt="">
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7">
+            <img src="assets/idea.png" class="w-[35px]" alt="">
+            <span class="ml-2">Travel Tips</span>
+        </div>
+        @for (tip of cityDescription?.travel_tips; track $index){
+            <div class="w-full text-[20px] text-[#828282] leading-6 mt-2 p-2 bg-[rgb(230,230,230)] border border-[rgb(220,220,220)] rounded-lg">{{tip}}</div>
+        }
+    </div>
+    </div>
+</div>
+
+<div *ngIf="citySearch" class="flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-5">
+    <div class="flex flex-col w-full items-center justify-center">
+        <div>
+            <igx-circular-bar
+                [animate]="false"
+                [indeterminate]="true"
+                [textVisibility]="false">
+            </igx-circular-bar>
+        </div>
+        <div class="flex text-[20px] text-[rgb(100,100,100)]">
+            Thinking right now
+        </div>
+    </div>
+</div>
