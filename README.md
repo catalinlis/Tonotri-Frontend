@@ -47,3 +47,4 @@ The application will be available at:
 http://localhost:4200
 ```
 
+### Do not forget to deploy Tonotri-Backend server before!
