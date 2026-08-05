@@ -3,6 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { CountryDescription } from '../models/country-description';
 import { City } from '../models/city';
 import { CityDescription } from '../models/city-description';
+import { Landmark } from '../models/landmark';
+import { LandmarkDescription } from '../models/landmark-description';
 
 @Injectable({
   providedIn: 'root',
@@ -27,5 +29,13 @@ export class ExploreService {
 
   getCityDescription(country: string, city: string, population: number){
     return this.http.get<CityDescription>(`/api/explore/city-description/?country=${country}&city=${city}&population=${population}`);
+  }
+
+  getLandmarkVariations(landmark: string){
+    return this.http.get<Landmark>(`/api/explore/landmark-variations/?landmark=${landmark}`);
+  }
+
+  getLandmarkDescription(landmark: string, city: string, country: string){
+    return this.http.get<LandmarkDescription>(`/api/explore/landmark-description/?landmark=${landmark}&city=${city}&country=${country}`);
   }
 }

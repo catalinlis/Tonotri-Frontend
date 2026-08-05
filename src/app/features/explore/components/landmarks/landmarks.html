@@ -1,0 +1,270 @@
+<div class="block w-full h-auto rounded-2xl overflow-hidden bg-gradient-to-r from-[#FF9800] to-[#FFB800]">
+    <div class="block lg:flex w-full">
+        <div class="block w-full lg:flex lg:w-3/5">
+            <div class="text-white text-[22px] p-5 leading-7 lg:leading-8">
+                <div class="text-[35px] text-white pb-4">Discover landmarks</div>
+                From ancient castles and historic fortresses to iconic monuments and hidden gems, 
+                every landmark tells a unique story about the places that shaped our world. Discover 
+                the architecture, history, and cultural significance behind each destination. 
+            </div>
+        </div>
+        <div class="block w-full pt-0 p-4 lg:p-4 lg:flex lg:w-2/5 lg:ml-auto">
+            <img src="assets/coloseum.jpg" class="w-full h-full object-cover rounded-xl border-2 border-white mr-3" alt="">
+        </div>
+    </div>
+</div>
+
+<div class="block w-full h-auto rounded-2xl bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[22px] border border-[rgb(230,230,230)]">
+    <div class="leading-8 text-[#5D9E8E]">Discover remarkable landmarks and uncover the history, architecture, and stories behind the places that shaped our world. 
+        Please specify the location as well for a better search.</div>
+    <div class="flex flex-col md:flex-row w-full justify-center items-center mt-5">
+        
+        <div class="block md:flex text-center w-full md:w-auto relative mt-2 md:mt-0 md:ml-2">
+
+            <mat-form-field class="w-[300px]">
+                <mat-label>Search landmark</mat-label>
+
+                <input
+                    #cityInput
+                    matInput
+                    [formControl]="searchControl"
+                >
+            </mat-form-field>
+        </div>
+        <button class="flex w-[300px] md:w-auto h-[56px] bg-[#5D9E8E] 
+                       items-center justify-center text-white mt-2 md:mt-0 md:ml-2 px-4 mb-5 md:mb-0
+                       rounded-md transition-all duration-300 hover:scale-103 hover:bg-[#56B09A] cursor-pointer"
+                (click)="onSearchLandmark()"
+                >
+            <div>Search</div>
+            <img src="assets/search.png" class="ml-2 w-[22px]" alt="">
+        </button>
+    </div>
+</div>
+
+@if(landmark !== null){
+    <div class="flex flex-col md:flex-row w-full h-auto mb-2">
+        <div class="flex w-full md:w-2/3 rounded-2xl bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[18px] border border-[rgb(230,230,230)] leading-7">
+            Is this the landmark you're searching? If not please provide 
+            in the search, the city and the country for a complex search.
+        </div>
+        @if(landmark.official_name !== '' && landmark.city !== '' && landmark.country !== ''){
+            <div class="flex w-full md:w-1/3 md:ml-2 mt-2 p-5 bg-[#FFB800] hover:bg-[#FFA104] transition-all duration-300 rounded-2xl cursor-pointer"
+                 (click)="onSearchLandmarkDescription()"
+            >
+                <div class="flex flex-col w-8/10">
+                    <div class="flex items-center">
+                        <img src="assets/arc-de-triomphe.png" class="w-[30px] h-[30px]" alt="">
+                        <div class="text-[25px] text-white ml-3 leading-7">{{landmark.official_name}}</div>
+                    </div>
+                    <div class="flex items-center mt-3">
+                        <img src="assets/map.png" class="w-[30px] h-[30px]" alt="">
+                        <div class="text-[20px] text-white ml-3 leading-6">{{landmark.city}}, {{landmark.country}}</div>
+                    </div>
+                </div>
+                <div class="flex items-center w-2/10">
+                    <img src="assets/right-arrow.png" class="w-[30px] h-[30px] ml-auto" alt="">
+                </div>
+            </div>
+        }
+        @else{
+            <div class="flex w-full md:w-1/3 md:ml-2 mt-2 p-5 bg-[#FFB800] rounded-2xl text-[25px] text-white justify-center items-center leading-8">
+                The landmark is not found.
+            </div>
+        }
+    </div>
+}
+
+<div *ngIf="descriptionReady">
+    <div class="w-full bg-[rgb(245,245,245)] rounded-2xl p-5 md:p-7 mt-2 mb-5 border border-[rgb(230,230,230)] gap-2">
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-10">
+            <img src="assets/landmark-gray.png" class="w-[35px]" alt="">
+            <span class="ml-3">{{landmarkDescription?.official_name}}</span>
+        </div>
+        <div class="flex w-full text-[#828282] text-[18px] md:text-[20px] text-justify pb-5 leading-8">
+            {{landmarkDescription?.summary}}
+        </div>
+        <div class="block md:flex w-full gap-2">
+            <div class="w-full md:w-1/2 ml-auto text-white p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg">
+                <div class="flex w-full text-[18px]">
+                    <img src="assets/calendar.png" class="w-[18px] h-[18px]" alt="">&nbsp;Best time to visit
+                </div>
+                <div class="block w-full text-[16px] pt-2 leading-6">{{landmarkDescription?.best_time_to_visit}}</div>
+            </div>
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <img src="assets/star.png" class="w-[35px]" alt="">
+            <span class="ml-3">Famous for</span>
+        </div>
+        @for(famous of landmarkDescription?.famous_for; track $index){
+            <div class="w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+
+                <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7">
+                    {{famous}}
+                </div>
+            </div>
+        }
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <img src="assets/history.png" class="w-[35px] h-[35px]" alt="">
+            <span class="ml-3">History</span>
+        </div>
+        <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 gap-3 text-[16px]">
+            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+                <img src="assets/labour.png" class="w-[30px] h-[30px] mt-1" alt="">
+                <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
+                    Built by:<br><br>
+                    {{landmarkDescription?.history?.built_by}}
+                </div>
+            </div>
+            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+                <img src="assets/purpose.png" class="w-[27px] h-[27px] mt-1" alt="">
+                <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
+                    Purpose:<br><br>
+                    {{landmarkDescription?.history?.original_purpose}}
+                </div>
+            </div>
+            <div class="flex justify-center items-center p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+                <img src="assets/schedule.png" class="w-[27px] h-[27px]" alt="">
+                <div class="text-[rgb(100,100,100)] ml-2 text-[22px] leading-8">
+                    {{landmarkDescription?.history?.construction_period}}
+                </div>
+            </div>
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <img src="assets/events.png" class="w-[35px] h-[35px]" alt="">
+            <span class="ml-3">Events</span>
+        </div>
+        <div class="w-full grid grid-col-1 md:grid-cols-2 gap-3 mt-2 text-[16px]">
+            @for(event of landmarkDescription?.history?.historical_events; track event.year){
+                <div class="flex-col rounded-2xl bg-[#52CC87] text-white">
+                    <div class="p-2 text-center text-bold text-[20px] leading-7">{{event.year}}</div>
+                    <hr>
+                    <div class="ml-2 text-[18px] p-2 leading-6">
+                        {{event.event}}
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <img src="assets/blueprint.png" class="w-[35px] h-[35px]" alt="">
+            <span class="ml-3">Architecture</span>
+        </div>
+        <div class="flex w-full flex-col md:flex-row gap-3 text-[16px]">
+            <div class="flex w-full md:w-1/3 p-3 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+                <div class="text-[rgb(100,100,100)] ml-2 mt-1">
+                    <div class="mb-1 ml-2">Style</div>
+                    {{landmarkDescription?.architecture?.style}}
+                </div>
+            </div>
+            <div class="flex w-full md:w-2/3 p-3 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+                <div class="text-[rgb(100,100,100)] ml-2 mt-1">
+                    <div class="mb-1 ml-2">Materials</div>
+                    @for(material of landmarkDescription?.architecture?.materials; track $index){
+                        <div>- {{material}}</div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="flex-col rounded-2xl bg-[rgb(225,225,225)] mt-3 text-[rgb(100,100,100)] border border-[#828282]">
+            <div class="p-2 text-center text-bold text-[20px] mt-4">Notable features</div>
+            <div class="p-2">
+                @for(feature of landmarkDescription?.architecture?.notable_features; track $index){
+                    <div class="text-[18px] leading-6 bg-[rgb(210,210,210)] rounded-xl p-2 mt-1">{{feature}}</div>
+                }
+            </div>
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <span class="ml-3 mt-2">Cultural Importance</span>
+        </div>
+        <div class="flex w-full mt-1 text-[#828282] text-[18px] md:text-[20px] text-justify pb-5 leading-8">
+            {{landmarkDescription?.cultural_importance}}
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <span class="ml-3">Interesting facts</span>
+        </div>
+        @for(fact of landmarkDescription?.interesting_facts; track $index){
+            <div class="w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+
+                <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7">
+                    {{fact}}
+                </div>
+            </div>
+        }
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <img src="assets/eye.png" class="w-[35px] h-[35px]" alt="">
+            <span class="ml-3">Must see</span>
+        </div>
+        <div class="w-full grid grid-col-1 md:grid-cols-2 gap-3 mt-2 text-[16px]">
+            @for(must of landmarkDescription?.must_see; track must.name){
+                <div class="flex-col rounded-2xl bg-[#52CC87] text-white">
+                    <div class="p-3 text-center text-bold text-[20px] leading-7">{{must.name}}</div>
+                    <hr>
+                    <div class="ml-2 text-[18px] p-2 leading-6">
+                        {{must.description}}
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <img src="assets/information2.png" class="w-[35px] h-[35px]" alt="">
+            <span class="ml-3">Practical Information</span>
+        </div>
+        <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 gap-3 text-[16px] mb-4">
+            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+                <img src="assets/schedule.png" class="mt-1 w-[25px] h-[25px]" alt="">
+                <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
+                    <div class="mb-2">Opening hours:</div>
+                    {{landmarkDescription?.practical_information?.opening_hours}}
+                </div>
+            </div>
+            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+                <img src="assets/accessibility.png" class="w-[27px] h-[27px] mt-1" alt="">
+                <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
+                    <div class="mb-2">Accessibility:</div>
+                    {{landmarkDescription?.practical_information?.accessibility}}
+                </div>
+            </div>
+            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+                <img src="assets/ticket2.png" class="mt-1 w-[27px] h-[27px]" alt="">
+                <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
+                    <div class="mb-2">Opening hours:</div>
+                    {{landmarkDescription?.practical_information?.ticket_information}}
+                </div>
+            </div>
+        </div>
+        @for(tip of landmarkDescription?.practical_information?.visitor_tips; track $index){
+            <div class="w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+
+                <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7">
+                    {{tip}}
+                </div>
+            </div>
+        }
+        <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 mt-7 leading-10">
+            <img src="assets/binoculars.png" class="w-[35px] h-[35px]" alt="">
+            <span class="ml-3">Look around now</span>
+        </div>
+        @for(look of landmarkDescription?.look_around_now; track $index){
+            <div class="w-full p-3 text-white bg-gradient-to-r to-[#FF9800] from-[#FFB800] rounded-lg mt-2">
+
+                <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7">
+                    {{look}}
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div *ngIf="searchFlag" class="flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-5">
+    <div class="flex flex-col w-full items-center justify-center">
+        <div>
+            <igx-circular-bar
+                [animate]="false"
+                [indeterminate]="true"
+                [textVisibility]="false">
+            </igx-circular-bar>
+        </div>
+        <div class="flex text-[20px] text-[rgb(100,100,100)]">
+            Thinking right now
+        </div>
+    </div>
+</div>
