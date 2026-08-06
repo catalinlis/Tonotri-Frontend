@@ -91,8 +91,13 @@ export class AuthPageComponent {
           this.router.navigateByUrl('/');
         },
         error: (err) => {
-            this.error = { field: 'backend', message: LOGIN_ERRORS['backend']['credentials'] }
+            
+            if(err.error && err.status===403 && 'guid' in err.error){
+              this.router.navigateByUrl(`/confirm?guid=${err.error.guid}`);
+              return;
+            }
 
+            this.error = { field: 'backend', message: LOGIN_ERRORS['backend']['credentials'] }
             this.cdr.detectChanges();
         }
       });
