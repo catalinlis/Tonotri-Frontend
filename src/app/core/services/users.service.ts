@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProfilePhoto } from '../../features/auth/models/profile-photo';
+import { UserDetailedInfo } from '../../features/community/models/user-detailed-info';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,10 @@ export class UsersService {
     return this.http.put(`/api/users/me/countries/`, {
       'codes': codes
     });
+  }
+
+  getDetailedPersonalInfo(): Observable<UserDetailedInfo>{
+    return this.http.get<UserDetailedInfo>(`/api/users/me`);
   }
 
 
