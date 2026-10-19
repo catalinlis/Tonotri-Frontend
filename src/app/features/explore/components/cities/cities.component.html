@@ -83,6 +83,7 @@
     </div>
 </div>
 
+
 <div *ngIf="imagesReady" class="photo-countries">
     <div class="flex flex-col w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] gap-2">
         <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-9">
@@ -113,6 +114,21 @@
             <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="4" [gallery]="galleryId">
                 <img [src]="imagesUrls[4]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
             </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="citySearch" class="flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-2">
+    <div class="flex flex-col w-full items-center justify-center">
+        <div>
+            <igx-circular-bar
+                [animate]="false"
+                [indeterminate]="true"
+                [textVisibility]="false">
+            </igx-circular-bar>
+        </div>
+        <div class="flex text-[20px] text-[rgb(100,100,100)]">
+            Thinking right now
         </div>
     </div>
 </div>
@@ -415,17 +431,3 @@
     </div>
 </div>
 
-<div *ngIf="citySearch" class="flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-5">
-    <div class="flex flex-col w-full items-center justify-center">
-        <div>
-            <igx-circular-bar
-                [animate]="false"
-                [indeterminate]="true"
-                [textVisibility]="false">
-            </igx-circular-bar>
-        </div>
-        <div class="flex text-[20px] text-[rgb(100,100,100)]">
-            Thinking right now
-        </div>
-    </div>
-</div>

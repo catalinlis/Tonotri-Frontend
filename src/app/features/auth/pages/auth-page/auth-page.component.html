@@ -1,13 +1,58 @@
 <!-- full-background.component.html -->
 <div class="background">
-  <div class="hidden xl:block w-1/2 h-full absolute justify-end items-center bar bg-blue-300/40">
-    <div class="description ml-30 text-white mt-50 rounded-lg">
-      Share and manage your trips ))
+  <div class="background-overlay" aria-hidden="true"></div>
+  <div class="auth-intro hidden xl:block w-1/2 h-full absolute justify-end items-center bar bg-blue-300/40">
+    <div class="intro-content text-white">
+      <p class="intro-eyebrow">YOUR WORLD. YOUR STORIES.</p>
+      <h1 class="description">Every trip is better<br>when it’s shared.</h1>
+      <p class="intro-copy">
+        Map your adventures, keep the moments that matter, and inspire friends to discover somewhere new.
+      </p>
+
+      <div class="journey-card" aria-label="Animated journey from Bucharest to Rome">
+        <div class="journey-header">
+          <div>
+            <span class="journey-label">LIVE JOURNEY</span>
+            <p>Weekend in Rome</p>
+          </div>
+          <span class="live-pill"><span></span> Exploring now</span>
+        </div>
+
+        <div class="route-map" aria-hidden="true">
+          <svg viewBox="0 0 460 150" role="presentation">
+            <path class="route-shadow" d="M28 108 C120 20, 280 22, 430 82" />
+            <path class="route-line" d="M28 108 C120 20, 280 22, 430 82" />
+          </svg>
+          <span class="route-dot route-dot-start"></span>
+          <span class="route-dot route-dot-end"></span>
+          <span class="traveller">✈</span>
+          <span class="city city-start">Bucharest</span>
+          <span class="city city-end">Rome</span>
+        </div>
+
+        <div class="journey-footer">
+          <div class="traveller-stack" aria-hidden="true">
+            <img src="/assets/woman1.png" alt="">
+            <img src="/assets/man1.png" alt="">
+            <span>+3</span>
+          </div>
+          <p><strong>5 friends</strong> are following this trip</p>
+        </div>
+      </div>
+
+      <div class="activity-bubble activity-photo">
+        <img src="/assets/camera.png" alt="" aria-hidden="true">
+        <span><strong>New memory</strong><small>12 photos added</small></span>
+      </div>
+      <div class="activity-bubble activity-like">
+        <span class="activity-heart" aria-hidden="true">♥</span>
+        <span><strong>Mara loved this</strong><small>just now</small></span>
+      </div>
     </div>
   </div>
-  <div class="flex justify-center items-center min-h-screen text-center xl:justify-end xl:pr-20">
-    <div class="w-full max-w-sm bg-blue-500/80 pt-3 rounded-xl shadow-md border border-white">
-      <p class="header text-white text-center mb-3">Login</p>
+  <div class="auth-form-shell flex justify-center items-center min-h-screen text-center xl:justify-end xl:pr-20">
+    <div class="login-card w-full max-w-sm bg-blue-500/80 rounded-xl shadow-md border border-white">
+      <p class="header text-white text-center">Login</p>
       <hr class="text-white mb-4"/>
       <form  class="space-y-2 ml-4 mr-4" [formGroup]="loginForm" (ngSubmit)="login()">
         <input
@@ -15,11 +60,11 @@
           type="text"
           placeholder="Username"
           formControlName="username"
-          class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="form-control animated-item w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           [class.error-input]="error"
         />
         @if(error !== null){
-          <div id='error' class="flex w-full items-center text-[rgb(255,12,1)] text-base text-left bg-[rgb(255,230,230)] border border-red rounded-md">
+          <div id='error' role="alert" class="error-message flex w-full items-center text-[rgb(255,12,1)] text-base text-left bg-[rgb(255,230,230)] border border-red rounded-md">
             <div class="flex p-2 overflow">
               <img src="assets/warning.png" class="w-4 h-4 mt-1 ml-1" />
               <span class="ml-1">{{error.message}}</span>
@@ -31,28 +76,28 @@
           type="password"
           placeholder="Password"
           formControlName="password"
-          class="w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="form-control animated-item w-full border bg-white border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           [class.error-input]="error"
         />
         <button
           id="sign-in-button"
-          class="w-full bg-blue-300 text-white p-3 rounded-lg  hover:bg-blue-700 transition cursor-pointer">
+          class="action-button animated-item w-full bg-blue-300 text-white p-3 rounded-lg hover:bg-blue-700 transition cursor-pointer">
           Sign in
         </button>
       </form>
-      <p class="text-white text-[16px] mt-1 mb-1">- or -</p>
-      <div class="google-sign-in px-4">
+      <p class="divider-label animated-item text-white text-[16px] mt-1 mb-1">- or -</p>
+      <div class="google-sign-in animated-item px-4">
         <button
           (click)="signInWithGoogle()"
-          class="flex justify-center w-full bg-orange-400 px-2 text-white p-3 mb-2 rounded-lg hover:bg-red-600 transition cursor-pointer">
+          class="action-button flex justify-center w-full bg-orange-400 px-2 text-white p-3 mb-2 rounded-lg hover:bg-red-600 transition cursor-pointer">
           Sign in with Google<img src="/assets/google.png" class="ml-2 h-4" style="margin-top: 2px;">
         </button>
       </div>
-      <p class="text-white text-[16px] mt-7 mb-2">Don't you have an account, yet?</p>
-      <div class="sign-up px-4">
+      <p class="signup-copy animated-item text-white text-[16px] mt-7 mb-2">Don't you have an account, yet?</p>
+      <div class="sign-up animated-item px-4">
         <button
           (click)="signUp()"
-          class="flex justify-center w-full mb-4 bg-blue-400 px-2 text-white p-3 mb-2 rounded-lg hover:bg-blue-600 transition cursor-pointer">
+          class="action-button flex justify-center w-full mb-4 bg-blue-400 px-2 text-white p-3 mb-2 rounded-lg hover:bg-blue-600 transition cursor-pointer">
           Sign up
         </button>
       </div>

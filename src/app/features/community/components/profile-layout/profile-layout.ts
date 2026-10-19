@@ -17,7 +17,7 @@ export class ProfileLayout {
 
   constructor() {
     effect(() => {
-      console.log('CHILD PHOTO:', this.profilePhoto());
+      console.log('CHILD PHOTO:', this.profileLoaded());
     });
   }
 }

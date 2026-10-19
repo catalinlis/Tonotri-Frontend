@@ -35,15 +35,35 @@ export class CommunityPageComponent implements OnInit{
       this.userService.getDetailedPersonalInfo().subscribe({
         next: (response) => {
           this.usersDetailedInfo = response;
-          if(this.usersDetailedInfo.profile_image){
-            let photo_id_string = this.usersDetailedInfo.profile_image.toString();
-            this.getProfilePhoto(photo_id_string);
+          console.log(this.usersDetailedInfo);
+          if(this.usersDetailedInfo.image_path){
+            
+            const img = new Image();
+            const url = this.usersDetailedInfo.image_path
+
+            img.onload = () => {
+              console.log('IMAGE LOADED:', url);
+              this.profilePhotoUrl = url;
+              this.profileComponentLoaded = true;
+              this.cdr.detectChanges();
+            };
+
+            img.onerror = () => {
+              console.error('Failed to load profile photo');
+            };
+
+            img.src = this.usersDetailedInfo.image_path
           }
-          
+          else{
+            this.profileComponentLoaded = true;
+            this.cdr.detectChanges();
+          }
         }
       });
     } catch(error){
       console.error(error);
+      this.profileComponentLoaded = true;
+      this.cdr.detectChanges();
     }
   }
 

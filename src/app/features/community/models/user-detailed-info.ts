@@ -4,6 +4,6 @@ export interface UserDetailedInfo {
   last_name: string;
   birthday: string;
   gender: string;
-  profile_image: number | null;
+  image_path: string | null;
   visited_countries: string[];
 }
