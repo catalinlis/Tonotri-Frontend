@@ -45,13 +45,16 @@ export class CountriesComponent {
   galleryId = 'myLightbox';
 
   async onSearch() {
+    const selectedCountryName = this.selectedCountry?.translations?.en;
+
+    if (!selectedCountryName || this.countrySearch) {
+      return;
+    }
+
     try {
       this.countrySearch = true;
-      const selectedCountryName = this.selectedCountry.translations?.en;
-
-      if (!selectedCountryName) {
-        return;
-      }
+      this.imagesReady = false;
+      this.descriptionReady = false;
 
       await Promise.all([
         this.loadCountryPhotos(selectedCountryName),
