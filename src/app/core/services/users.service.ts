@@ -18,7 +18,7 @@ export class UsersService {
   }
 
   addVisitedCountries(codes: string[]): Observable<any>{
-    
+    console.log(codes);
     return this.http.put(`/api/users/me/countries/`, {
       'codes': codes
     });

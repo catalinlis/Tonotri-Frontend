@@ -1,56 +1,45 @@
 <div class="background">
-    <div class="w-full md:w-4/5 xl:w-3/5 mx-auto">
-        <div class="hidden md:flex items-center justify-between pt-1 pb-3">
-            <!-- Step 1 (active) -->
-            <div class="flex items-center w-full">
-                <div class="flex items-center justify-center w-9 h-9 rounded-sm bg-[#00B640] border-2 border-[#009434] text-white font-bold">
-                    1
-                </div>
-                <div class="ml-3 text-sm font-medium text-[#00B640]">
-                    Personal Info
-                </div>
-                <div class="flex-1 h-[2px] bg-[#00B640] mx-4"></div>
+    <div class="w-full mt-22 lg:mt-17 md:w-4/5 xl:w-3/5 mx-auto">
+        <div class="step-progress hidden md:flex items-center" aria-label="Registration progress">
+            <div class="journey-step is-complete flex items-center">
+                <span class="step-badge" aria-hidden="true">✓</span>
+                <span class="step-copy"><small>Completed</small><strong>Personal Info</strong></span>
             </div>
-
-            <!-- Step 2 -->
-            <div class="flex items-center w-full">
-                <div class="flex items-center justify-center w-9 h-9 rounded-sm bg-[#00B640] border-2 border-[#009434] text-white font-bold">
-                    2
-                </div>
-                <div class="ml-3 text-sm font-medium text-[#00B640]">
-                    Your photo
-                </div>
-                <div class="flex-1 h-[2px] bg-[#00B640] mx-4"></div>
+            <span class="journey-line is-complete" aria-hidden="true"></span>
+            <div class="journey-step is-complete flex items-center">
+                <span class="step-badge" aria-hidden="true">✓</span>
+                <span class="step-copy"><small>Completed</small><strong>Your photo</strong></span>
             </div>
-
-            <!-- Step 3 -->
-            <div class="flex items-center">
-                <div class="flex items-center justify-center w-11 h-11 rounded-sm bg-white border-2 border-[#00B640] text-[#00B640] font-semibold">
-                    3
-                </div>
-                <div class="ml-3 text-[15px] font-medium text-[#00B640]  whitespace-nowrap">
-                    Visited countries
-                </div>
+            <span class="journey-line is-complete" aria-hidden="true"></span>
+            <div class="journey-step is-current flex items-center" aria-current="step">
+                <span class="step-badge">3</span>
+                <span class="step-copy"><small>Current step</small><strong>Visited countries</strong></span>
             </div>
         </div>
-        <div class="block md:hidden flex w-full bg-[#00B640] border-2 border-[#009434] rounded-sm mb-2">
-            <span class="text-[17px] font-medium text-white p-3 pl-8">
-                Registration Step 3 - Visited countries
-            </span>
+        <div class="mobile-step md:hidden mb-2" aria-label="Registration progress">
+            <div class="mobile-current-step flex items-center" aria-current="step">
+                <span class="mobile-step-badge">3</span>
+                <span class="grid leading-tight">
+                    <small class="text-[10px] font-bold uppercase tracking-[0.12em] text-[#00a63a]">Step 3 of 3</small>
+                    <strong class="mt-1 text-sm text-[#007d2c]">Visited countries</strong>
+                </span>
+                <span class="ml-auto rounded-full bg-green-100 px-3 py-1 text-[11px] font-semibold text-green-700">Current</span>
+            </div>
         </div>
     </div>
-    <div class="block md:flex header w-full h-auto md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto items-stretch md:border md:border-3 border-[#F7B80C] rounded-sm">
-        <div class="transition-all duration-500 ease-out group w-full md:w-55/100 border-r flex items-center justify-center text-[26pt] text-left  text-center bg-[#F7B80C] text-white cursor-pointer">
+    <div class="hero-panel block md:flex header w-full h-auto md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto items-stretch md:border md:border-3 border-[#F7B80C] rounded-sm">
+        <div class="hero-copy transition-all duration-500 ease-out group w-full md:w-55/100 border-r flex items-center justify-center text-[26pt] text-left  text-center bg-[#F7B80C] text-white cursor-pointer">
             <span class="transition-transform duration-300 group-hover:scale-105 inline-block cursor-pointer leading-12 pl-2 pl-8 md: pr-3 pt-10 pb-10">
+                <small class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-white/80">Final step · Make it yours</small>
                 Discover the world through your experiences.
             </span>
         </div>
         <div class="hidden md:flex md:w-45/100 ml-auto">
-            <img src="assets/world-locations.jpg" class="w-full h-auto object-contain" alt="">
+            <img src="assets/world-locations.jpg" class="hero-image w-full h-auto object-contain" alt="Illustrated world travel landmarks">
         </div>
    </div>
-   <div class="block md:flex w-full md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto mt-2">
-        <div class="w-full md:w-45/100 bg-gray-100 p-3 pl-5 border-l border-[rgb(150,150,150)]">
+   <div class="intro-section block md:flex w-full md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto mt-2">
+        <div class="story-panel w-full md:w-45/100 bg-gray-100 p-3 pl-5 border-l border-[rgb(150,150,150)]">
             <span class="text-gray-600 text-[18px]">
                 Select the countries you’ve visited and create your own personalized travel map. Each choice tells a story — from unforgettable adventures to places you’d love to visit again.<br/><br/>
                 - Mark the destinations you’ve been to<br/>
@@ -58,13 +47,13 @@
                 - Get inspired for your next adventures<br/>
             </span>
         </div>
-        <div class="w-full md:w-55/100 mt-2 md:mt-0 md:ml-1 border-b-2 border-[#3248D9]">
+        <div class="country-picker w-full md:w-55/100 mt-2 md:mt-0 md:ml-1 border-b-2 border-[#3248D9]">
             <div class="bg-[#3248D9] p-3 text-center text-white text-[18px]">
                 <span>Start now and see how much of the world you’ve explored.</span>
             </div>
             <div class="flex items-center justify-center py-6">
-                <div class="group h-[56px] w-[100px] bg-[#7BCFDB] rounded-md mr-2 flex justify-center items-center">
-                   <img src="assets/next.png" class="flex w-[25px]">
+                <div class="direction-cue group h-[56px] w-[100px] bg-[#7BCFDB] rounded-md mr-2 flex justify-center items-center">
+                   <img src="assets/next.png" class="flex w-[25px]" alt="">
                 </div>
                 <ng-country-select 
                     [placeholder]="'Select a country'"
@@ -75,35 +64,47 @@
             </div>
         </div>
    </div>
-   <div class="block md:flex w-full md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto mt-2">
-        <div class="w-full md:w-3/10 ml-auto bg-[#9995F5] p-3 text-[18px] text-center text-white rounded-sm self-start">
-            {{countriesChoosenCounter}}/195 countries visited
+   <div class="selection-section block md:flex w-full md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto mt-2">
+        <div class="counter-card w-full md:w-3/10 ml-auto bg-[#9995F5] p-3 text-[18px] text-center text-white rounded-sm self-start" [class.has-selection]="countriesChoosed">
+            <div><strong class="text-2xl tabular-nums">{{countriesChoosenCounter}}</strong><span class="text-white/80"> / 195</span></div>
+            <span class="text-sm">countries visited</span>
+            <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/25" aria-hidden="true">
+                <div class="progress-fill h-full rounded-full bg-white" [style.width.%]="(countriesChoosenCounter / 195) * 100"></div>
+            </div>
         </div>
         <div class="w-full md:w-7/10 mr-0 mt-2 md:ml-2 md:mt-0">
-            <span *ngIf="!countriesChoosed" class="w-full flex items-center justify-center bg-[rgb(200,200,200)] text-white p-3 text-[18px] rounded-sm">No country choosen.</span>
+            <span *ngIf="!countriesChoosed" class="w-full flex items-center justify-center bg-[rgb(200,200,200)] text-white p-3 text-[18px] rounded-sm">No country chosen yet.</span>
             <div *ngIf="countriesChoosed" class="md:grid md:grid-cols-2 md:gap-2">
                 @for(country of selectedCountries; track country.alpha2){
-                    <div class="mt-2 md:mt-0 flex justify-center items-center bg-[#7BCFDB] text-white p-3 rounded-sm">
+                    <div class="country-chip mt-2 md:mt-0 flex justify-center items-center bg-[#7BCFDB] text-white p-3 rounded-sm">
                         <span class="w-7/10 text-[15px]">{{country.translations?.["en"]}}</span>
                         <div class="bg-white ml-auto rounded-sm p-1">
-                            <img [src]="'https://flagcdn.com/40x30/' + country.alpha2.toLowerCase() + '.png'">
+                            <img [src]="'https://flagcdn.com/40x30/' + country.alpha2.toLowerCase() + '.png'" [alt]="country.translations?.['en'] + ' flag'">
                         </div>
+                        <button
+                            type="button"
+                            class="remove-country ml-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20 text-lg font-semibold text-white"
+                            (click)="removeCountry(country)"
+                            [attr.aria-label]="'Remove ' + country.translations?.['en']"
+                            title="Remove country">
+                            <span aria-hidden="true">×</span>
+                        </button>
                     </div>
                 }
             </div>
         </div>
     </div>
-    <div class="flex mt-2">
+    <div class="map-section flex mt-2">
             <div id="map" class="w-full h-[350px] xl:h-[500px] md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto border border-[rgb(125,190,235)] rounded-xl">
             </div>
     </div>
     <div class="flex w-full md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto mt-2">
-        <button class="w-full flex justify-center items-center md:w-auto transition-transform duration-300 hover:scale-102 
+        <button class="submit-button w-full flex justify-center items-center md:w-auto transition-transform duration-300 hover:scale-102 
                        p-3 pl-10 pr-10 text-[22px] text-white bg-[#3248D9] rounded-sm ml-auto mb-[100px] cursor-pointer"
                        (click)="skipToNextStep()">
             <span *ngIf="!countriesChoosed" class="flex">Skip this step</span>
             <span *ngIf="countriesChoosed" class="flex">Submit</span>
-            <img src="assets/next.png" class="flex ml-3 w-[23px]">
+            <img src="assets/next.png" class="flex ml-3 w-[23px]" alt="">
         </button>
     </div>
 </div>

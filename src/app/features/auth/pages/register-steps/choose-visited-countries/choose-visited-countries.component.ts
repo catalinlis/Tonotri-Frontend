@@ -120,6 +120,22 @@ export class ChooseVisitedCountriesComponent implements OnInit{
       this.countriesChoosed = true;
       this.countriesChoosenCounter++;
     }
+
+    this.countryControl.reset(null);
+  }
+
+  removeCountry(country: any): void {
+    const countryCode = country.alpha2.toLowerCase();
+
+    this.selectedCountries = this.selectedCountries.filter(
+      selectedCountry => selectedCountry.alpha2.toLowerCase() !== countryCode
+    );
+    this.highlightedCountries = this.highlightedCountries.filter(
+      code => code.toLowerCase() !== countryCode
+    );
+    this.countriesChoosenCounter = this.selectedCountries.length;
+    this.countriesChoosed = this.selectedCountries.length > 0;
+    this.updateMap();
   }
 
   async skipToNextStep(){
