@@ -6,18 +6,30 @@
         [class.hidden]="formError === null">
         <span class="flex items-center gap-2 font-semibold text-[16px] text-red-500 text-left"><img src="assets/warning.png" class="w-4 h-4"/> {{formError?.message}}</span>
       </div>
-      <div class="w-full max-w-sm bg-blue-500/80 pt-3 rounded-xl shadow-md border border-white mx-auto flex flex-col items-center">
+      <div class="confirmation-card w-full max-w-sm bg-blue-500 pt-3 rounded-xl shadow-md border border-white mx-auto flex flex-col items-center">
         <div class="text-lg text-white text-center mb-3 p-1">Introduce the 6-digit code received on specified e-mail</div>
         <hr class="w-full text-white">
         <div class="w-[250px] max-w-sm bg-white p-2 rounded-b-lg mb-2 flex justify-center">
             <span class="flex items-center gap-2 text-[13px] text-gray-700 text-left ml-1"><img src="assets/information.png" class="w-4 h-4 mr-1"/>After the email confirmation you will be redirected to login page.</span>
         </div>
         <form [formGroup]="form" class="w-[250px] space-y-2 space-x-2 mt-5 mb-6">
-            <input 
-                type="text" 
-                formControlName="code"
-                class="w-full border bg-white border-gray-300 rounded-lg text-center p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter code"/>
+            <div class="code-input relative grid w-full grid-cols-6 overflow-hidden rounded-lg border border-gray-300 bg-white px-7 transition duration-200 focus-within:-translate-y-0.5 focus-within:border-blue-600 focus-within:bg-blue-50 focus-within:shadow-lg focus-within:shadow-blue-900/15 focus-within:ring-4 focus-within:ring-blue-200">
+                <span
+                  *ngFor="let slot of codeSlots; let index = index"
+                  class="flex h-12 items-center justify-center text-lg font-semibold text-gray-700 transition-colors duration-200"
+                  aria-hidden="true"
+                >{{ form.get('code')?.value?.[index] || '-' }}</span>
+                <input
+                    type="text"
+                    formControlName="code"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    maxlength="6"
+                    pattern="[0-9]*"
+                    aria-label="6-digit confirmation code"
+                    (input)="onCodeInput($event)"
+                    class="absolute inset-0 h-full w-full cursor-text opacity-0"/>
+            </div>
             <div class="flex gap-2 text-sm">
                 <button class="w-full text-white rounded-md p-3 bg-orange-400 hover:bg-orange-600 cursor-pointer mb-4 mt-2"
                 (click)="sendCode()" [disabled]="sendButtonDisabled" [class.disable]="sendButtonDisabled">Send Code</button>

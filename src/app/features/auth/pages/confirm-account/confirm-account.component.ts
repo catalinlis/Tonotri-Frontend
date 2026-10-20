@@ -26,6 +26,7 @@ export class ConfirmAccountComponent implements OnInit, OnDestroy {
     sendButtonDisabled: boolean = false;
     start = false;
     guid: string | null = null;
+    readonly codeSlots = [0, 1, 2, 3, 4, 5];
     formError: { field: string, message: string } | null = null;
     form!: FormGroup;
 
@@ -60,6 +61,16 @@ export class ConfirmAccountComponent implements OnInit, OnDestroy {
 
     get timeAsDate(): Date{
       return new Date(0,0,0,0,0,this.remainingSeconds);
+    }
+
+    onCodeInput(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      const digitsOnly = input.value.replace(/\D/g, '').slice(0, 6);
+
+      if (input.value !== digitsOnly) {
+        input.value = digitsOnly;
+        this.form.get('code')?.setValue(digitsOnly, { emitEvent: false });
+      }
     }
 
     getFirstFormError(): { field: string; message: string } | null{
