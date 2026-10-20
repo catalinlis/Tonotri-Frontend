@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLinkActive, RouterModule } from "@angular/router";
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { UsersService } from '../../../core/services/users.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,12 +11,19 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {
+export class NavbarComponent{
   authService = inject(AuthService);
   router = inject(Router);
   isMenuOpen = false;
   isExploreOpen = false;
   menuSectionActive = 'community';
+ 
+  get hideMainNavigation(): boolean {
+    const currentPath = this.router.url.split('?')[0].split('#')[0];
+
+    return currentPath === '/onboarding/your-photo'
+      || currentPath === '/onboarding/visited-countries';
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
