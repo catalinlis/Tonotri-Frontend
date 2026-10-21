@@ -114,44 +114,43 @@
 <div *ngIf="isMenuOpen" (click)="closeMenu()" class="fixed inset-0 bg-black/50 z-40"></div>
 
 <div
-  class="fixed lg:hidden top-[80px] left-0 h-[calc(100%-80px)] w-[80%] bg-white shadow-xl z-1000000 transform transition-transform duration-300"
+  class="mobile-drawer fixed flex flex-col lg:hidden top-[80px] bottom-0 left-0 w-[80%] max-w-[380px] bg-white shadow-xl z-1000000 transform transition-transform duration-300"
   [class.-translate-x-full]="!isMenuOpen"
   [class.translate-x-0]="isMenuOpen">
 
   <!-- LINKS -->
-  <div *ngIf="!hideMainNavigation" class="flex flex-col p-4 gap-2 text-[16px]">
+  <div *ngIf="!hideMainNavigation" class="mobile-navigation flex flex-col p-4 gap-2 text-[18px]">
             <div>
                 <a
-                    id="community"
-                    (click)="onClick($event)"
                     routerLink="/community"
-                    class="flex w-full items-center text-left px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]"
-                    [class.bg-[#FA9917]]="menuSectionActive === 'community'">
+                    routerLinkActive="mobile-nav-active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="closeMenu()"
+                    class="mobile-nav-link flex w-full items-center text-left px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB]">
                     Community
-                    <img src="assets/arrow-down.png" *ngIf="isExploreOpen" class="w-[16px] h-[16px] ml-auto" alt="">
                 </a>
             </div>
             <div>
                 <button
-                    id="explore"
-                    (click)="onClick($event)"
-                    class="flex w-full items-center text-left px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]"
-                    [class.bg-[#FA9917]]="menuSectionActive === 'explore'">
+                    (click)="toggleExplore()"
+                    class="mobile-nav-link flex w-full items-center text-left px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB]"
+                    [class.mobile-nav-active]="isExploreRoute"
+                    [attr.aria-expanded]="isExploreOpen">
                     Explore
-                    <img src="assets/arrow-down.png" *ngIf="menuSectionActive === 'explore'" class="w-[16px] h-[16px] ml-auto" alt="">
+                    <img src="assets/arrow-down.png" class="explore-arrow w-[16px] h-[16px] ml-auto" [class.open]="isExploreOpen" alt="">
                 </button>
 
-                <div *ngIf="menuSectionActive === 'explore'" class="flex flex-col ml-4 mt-2 gap-2">
-                    <a routerLink="/explore/countries" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] active-link" 
-                        class="px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                <div *ngIf="isExploreOpen" class="mobile-explore-submenu flex flex-col ml-4 mt-2 gap-2">
+                    <a routerLink="/explore/countries" routerLinkActive="mobile-subnav-active" [routerLinkActiveOptions]="{ exact: true }"
+                        (click)="closeMenu()" class="mobile-subnav-link px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB]">
                         Countries
                     </a>
-                    <a routerLink="/explore/cities" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] active-link" 
-                        class="px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                    <a routerLink="/explore/cities" routerLinkActive="mobile-subnav-active" [routerLinkActiveOptions]="{ exact: true }"
+                        (click)="closeMenu()" class="mobile-subnav-link px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB]">
                         Cities
                     </a>
-                    <a routerLink="/explore/landmarks" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] active-link" 
-                        class="px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                    <a routerLink="/explore/landmarks" routerLinkActive="mobile-subnav-active" [routerLinkActiveOptions]="{ exact: true }"
+                        (click)="closeMenu()" class="mobile-subnav-link px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB]">
                         Landmarks
                     </a>
                 </div>
@@ -166,13 +165,52 @@
             </a>
   </div>
 
-  <!-- LOGOUT -->
-  <div class="absolute bottom-5 w-full px-4">
-    <button
-      (click)="logout(); closeMenu()"
-      class="w-full flex items-center gap-2 p-3 bg-gray-100 hover:bg-gray-200 rounded-md">
-      <img src="/assets/exit.png" class="w-5 h-5" alt="">
-      Logout
-    </button>
-  </div>
+  @if (authService.currentUser(); as user) {
+    <div class="mobile-account-panel mx-4 mb-5 mt-auto">
+      <div class="mobile-account-identity">
+        <span class="mobile-account-avatar">
+          @if (user.image_path && !profileImageFailed) {
+            <img
+              [src]="user.image_path"
+              (error)="onProfileImageError()"
+              alt=""
+              class="w-full h-full object-cover">
+          } @else {
+            <span aria-hidden="true">
+              {{ (user.first_name || user.username).charAt(0).toUpperCase() }}
+            </span>
+          }
+        </span>
+        <span class="mobile-account-name">
+          <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+          <span>&#64;{{ user.username }}</span>
+        </span>
+      </div>
+
+      <a routerLink="/community" class="mobile-account-action" (click)="closeMenu()">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 21a8 8 0 0 1 16 0"></path>
+        </svg>
+        Profile
+      </a>
+
+      <button type="button" class="mobile-account-action" disabled title="Settings page coming soon">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.97 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.53-1H3v-4h.08A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.97 4.6 1.7 1.7 0 0 0 10 3.08V3h4v.08a1.7 1.7 0 0 0 1.03 1.53 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.13.62.67 1.06 1.3 1.06H21v4h-.3c-.63 0-1.17.44-1.3 1z"></path>
+        </svg>
+        Settings
+      </button>
+
+      <button type="button" class="mobile-account-action mobile-logout-action" (click)="logout(); closeMenu()">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10 17l5-5-5-5"></path>
+          <path d="M15 12H3"></path>
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+        </svg>
+        Log out
+      </button>
+    </div>
+  }
 </div>

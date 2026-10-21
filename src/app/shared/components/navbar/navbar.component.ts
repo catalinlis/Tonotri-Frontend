@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLinkActive, RouterModule } from "@angular/router";
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { UsersService } from '../../../core/services/users.service';
 import { ClickOutsideDirective } from '../../../core/directives/click-outside';
 
 @Component({
@@ -19,7 +18,6 @@ export class NavbarComponent{
   isExploreOpen = false;
   isProfileMenuOpen = false;
   profileImageFailed = false;
-  menuSectionActive = 'community';
  
   get hideMainNavigation(): boolean {
     const currentPath = this.router.url.split('?')[0].split('#')[0];
@@ -28,13 +26,25 @@ export class NavbarComponent{
       || currentPath === '/onboarding/visited-countries';
   }
 
+  get isExploreRoute(): boolean {
+    return this.router.url.split('?')[0].split('#')[0].startsWith('/explore');
+  }
+
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
     this.isProfileMenuOpen = false;
+
+    if (this.isMenuOpen && this.isExploreRoute) {
+      this.isExploreOpen = true;
+    }
   }
 
   closeMenu() {
     this.isMenuOpen = false;
+  }
+
+  toggleExplore(): void {
+    this.isExploreOpen = !this.isExploreOpen;
   }
 
   logout(){
@@ -57,19 +67,4 @@ export class NavbarComponent{
     this.profileImageFailed = true;
   }
 
-  onClick(event: Event) {
-    const button = event.target as HTMLButtonElement;
-    
-    switch(button.id){
-      case 'community': {
-        this.menuSectionActive = 'community';
-        break;
-      }
-      case 'explore': {
-        this.menuSectionActive = 'explore';
-        break;
-      }
-      default: break;
-    }
-  }
 }
