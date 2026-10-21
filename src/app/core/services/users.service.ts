@@ -8,7 +8,7 @@ import { UserDetailedInfo } from '../../features/community/models/user-detailed-
   providedIn: 'root',
 })
 export class UsersService {
-  http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   uploadProfilePhoto(file: File): Observable<any>{
     const formData = new FormData();

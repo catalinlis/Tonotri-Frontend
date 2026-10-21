@@ -2,7 +2,11 @@
 
   <!-- LEFT MENU (fixed) -->
   <div class="hidden lg:block lg:fixed h-screen">
-    <app-profile-layout [user]="usersDetailedInfo" [profilePhoto]="profilePhotoUrl" [profileLoaded]="profileComponentLoaded"></app-profile-layout>
+    <app-profile-layout
+      [user]="usersDetailedInfo()"
+      [profilePhoto]="profilePhotoUrl()"
+      [profileLoaded]="profileComponentLoaded()">
+    </app-profile-layout>
   </div>
 
 </div>

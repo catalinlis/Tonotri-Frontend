@@ -3,11 +3,12 @@ import { Router, RouterLinkActive, RouterModule } from "@angular/router";
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { UsersService } from '../../../core/services/users.service';
+import { ClickOutsideDirective } from '../../../core/directives/click-outside';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLinkActive, RouterModule, CommonModule],
+  imports: [RouterLinkActive, RouterModule, CommonModule, ClickOutsideDirective],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
@@ -16,6 +17,8 @@ export class NavbarComponent{
   router = inject(Router);
   isMenuOpen = false;
   isExploreOpen = false;
+  isProfileMenuOpen = false;
+  profileImageFailed = false;
   menuSectionActive = 'community';
  
   get hideMainNavigation(): boolean {
@@ -27,6 +30,7 @@ export class NavbarComponent{
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+    this.isProfileMenuOpen = false;
   }
 
   closeMenu() {
@@ -34,10 +38,23 @@ export class NavbarComponent{
   }
 
   logout(){
+    this.isProfileMenuOpen = false;
     this.authService.logout().subscribe({
       next: () => this.router.navigateByUrl('/login'),
       error: () => this.router.navigateByUrl('/login')
     });
+  }
+
+  toggleProfileMenu(): void {
+    this.isProfileMenuOpen = !this.isProfileMenuOpen;
+  }
+
+  closeProfileMenu(): void {
+    this.isProfileMenuOpen = false;
+  }
+
+  onProfileImageError(): void {
+    this.profileImageFailed = true;
   }
 
   onClick(event: Event) {

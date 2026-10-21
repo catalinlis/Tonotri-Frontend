@@ -23,10 +23,85 @@
             </a>
         </div>
         <div class="flex ml-auto justify-end">
-            <button (click)="logout()" class="hidden lg:flex items-center gap-2 hover:bg-[#29A5DB] text-[16px] p-3 rounded-md transition-colors cursor-pointer">
-                <img src="/assets/exit.png" alt="logout" class="w-5 h-5 object-contain" />
-                Logout
-            </button>
+            @if (authService.currentUser(); as user) {
+                <div class="profile-menu hidden lg:block relative" appClickOutside (clickOutside)="closeProfileMenu()">
+                    <button
+                        type="button"
+                        class="profile-trigger flex items-center gap-2 rounded-full p-1 pr-3"
+                        (click)="toggleProfileMenu()"
+                        [attr.aria-expanded]="isProfileMenuOpen"
+                        aria-haspopup="menu"
+                        aria-label="Open user menu">
+                        <span class="profile-avatar">
+                            @if (user.image_path && !profileImageFailed) {
+                                <img
+                                    [src]="user.image_path"
+                                    (error)="onProfileImageError()"
+                                    alt=""
+                                    class="w-full h-full object-cover">
+                            } @else {
+                                <span aria-hidden="true">
+                                    {{ (user.first_name || user.username).charAt(0).toUpperCase() }}
+                                </span>
+                            }
+                        </span>
+                        <span class="max-w-[130px] truncate text-[15px]">
+                            {{ user.first_name || user.username }}
+                        </span>
+                    </button>
+
+                    @if (isProfileMenuOpen) {
+                        <div class="profile-dropdown" role="menu">
+                            <div class="profile-dropdown-header">
+                                <span class="profile-dropdown-avatar">
+                                    @if (user.image_path && !profileImageFailed) {
+                                        <img [src]="user.image_path" (error)="onProfileImageError()" alt="" class="w-full h-full object-cover">
+                                    } @else {
+                                        <span aria-hidden="true">
+                                            {{ (user.first_name || user.username).charAt(0).toUpperCase() }}
+                                        </span>
+                                    }
+                                </span>
+                                <span class="profile-dropdown-identity">
+                                    <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+                                    <span>&#64;{{ user.username }}</span>
+                                </span>
+                            </div>
+                            <a
+                                routerLink="/community"
+                                role="menuitem"
+                                class="profile-dropdown-action"
+                                (click)="closeProfileMenu()">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="4"></circle>
+                                    <path d="M4 21a8 8 0 0 1 16 0"></path>
+                                </svg>
+                                Profile
+                            </a>
+                            <button
+                                type="button"
+                                role="menuitem"
+                                class="profile-dropdown-action"
+                                disabled
+                                title="Settings page coming soon">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.97 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.53-1H3v-4h.08A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.97 4.6 1.7 1.7 0 0 0 10 3.08V3h4v.08a1.7 1.7 0 0 0 1.03 1.53 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.13.62.67 1.06 1.3 1.06H21v4h-.3c-.63 0-1.17.44-1.3 1z"></path>
+                                </svg>
+                                Settings
+                            </button>
+                            <button type="button" role="menuitem" class="profile-dropdown-action logout-action" (click)="logout()">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M10 17l5-5-5-5"></path>
+                                    <path d="M15 12H3"></path>
+                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                </svg>
+                                Log out
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
             <button 
             (click)="toggleMenu()"
             class="lg:hidden text-[20px] mr-7 p-2 hover:bg-[#29A5DB] rounded-md">
