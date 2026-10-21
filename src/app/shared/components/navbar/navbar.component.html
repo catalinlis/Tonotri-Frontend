@@ -1,9 +1,15 @@
 <nav class="navbar shadow-md py-10 lg:py-0">
     <div class="flex w-full md:w-3/4 mx-auto items-center">
-        <div class="flex logo ml-5">
-            <img src="assets/logo.png" class="w-[35px] lg:w-[25px]" alt="">
-            <span class="text-[35px] lg:text-[25px]">Tonotri</span>
-        </div>
+        <a routerLink="/community" class="brand-lockup ml-5" aria-label="Tonotri home">
+            <span class="brand-symbol">
+                <img src="assets/logo.png" alt="">
+            </span>
+            <span class="brand-copy">
+                <span class="brand-name">
+                    <span class="brand-tono">Tono</span><span class="brand-tri">tri</span>
+                </span>
+            </span>
+        </a>
         <div *ngIf="!hideMainNavigation" class="hidden lg:flex items-center px-5 gap-4 text-[18px]">
             <a routerLink="/community" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link" 
                 class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
