@@ -5,6 +5,7 @@ import { City } from '../models/city';
 import { CityDescription } from '../models/city-description';
 import { Landmark } from '../models/landmark';
 import { LandmarkDescription } from '../models/landmark-description';
+import { CountryPhotos } from '../models/country-photos';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class ExploreService {
     const query = city ? `/api/explore/location-photos/?country=${country}&city=${city}&population=${population}` 
                        : `/api/explore/location-photos/?country=${country}`;
     
-    return this.http.get<{photo_urls:string[]; location: string, count: number}>(query);
+    return this.http.get<CountryPhotos>(query);
   }
 
   getCountryDescription(country: string){

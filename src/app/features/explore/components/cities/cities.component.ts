@@ -165,7 +165,7 @@ export class CitiesComponent implements OnInit{
       const response = await firstValueFrom(this.exploreService.getLocationPhotos(country, city, population));
       if(response.count > 0){
         const urls = response.photo_urls;
-        this.country = response.location;
+        this.country = response.country;
         this.imagesUrls = await this.preloadImages(urls);
         this.loadGalleryImages(urls);
         this.imagesReady=true;
