@@ -20,10 +20,6 @@ export class PhotoGalleryDialogComponent {
   readonly selectedIndex = signal(this.data.startIndex);
   readonly selectedImage = computed(() => this.data.images[this.selectedIndex()]);
 
-  constructor() {
-    console.log('Gallery data:', this.data);
-  }
-
   previous(): void {
     this.selectedIndex.update(index =>
       (index - 1 + this.data.images.length) % this.data.images.length
