@@ -1,7 +1,7 @@
-<div class="block w-full h-auto rounded-2xl overflow-hidden bg-gradient-to-r from-[#FEB756] to-[#FE9900]">
+<div class="cities-hero block w-full h-auto rounded-2xl overflow-hidden bg-gradient-to-r from-[#FEB756] to-[#FE9900]">
     <div class="block lg:flex w-full">
         <div class="block w-full lg:flex lg:w-3/5">
-            <div class="text-white text-[22px] p-5 leading-7 lg:leading-8">
+            <div class="hero-copy text-white text-[22px] p-5 leading-7 lg:leading-8">
                 <div class="text-[35px] text-white pb-4">Explore cities</div>
                 From the vibrant streets of Tokyo to the historic charm of Rome, every city has its own rhythm, 
                 atmosphere, and story to discover. Think about the architecture, local food, nightlife, hidden corners, 
@@ -10,11 +10,11 @@
             </div>
         </div>
         <div class="block w-full pt-0 p-4 lg:p-4 lg:flex lg:w-2/5 lg:ml-auto">
-            <img src="assets/new-york.jpg" class="w-full h-full object-cover rounded-xl border-2 border-white mr-3" alt="">
+            <img src="assets/new-york.jpg" class="hero-image w-full h-full object-cover rounded-xl border-2 border-white mr-3" alt="New York city skyline">
         </div>
     </div>
 </div>
-<div class="block w-full h-auto rounded-2xl bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[22px] border border-[rgb(230,230,230)]">
+<div class="city-search-panel block w-full h-auto rounded-2xl bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[22px] border border-[rgb(230,230,230)]">
     <div class="leading-8 text-[#5D9E8E]">Select a city to explore neighborhoods, attractions, local culture, and unique experiences.</div>
     <div class="flex flex-col md:flex-row w-full justify-center items-center mt-5">
         <div class="block md:flex text-center w-full md:w-auto">
@@ -73,10 +73,10 @@
                 </ul>
             }
         </div>
-        <button class="flex w-[240px] md:w-auto h-[56px] bg-[#5D9E8E] 
+        <button class="city-search-button flex w-[240px] md:w-auto h-[56px] bg-[#5D9E8E] 
                        items-center justify-center text-white mt-2 md:mt-0 md:ml-2 px-4 mb-5 md:mb-0
                        rounded-md transition-all duration-300 hover:scale-103 hover:bg-[#56B09A]"
-                (click)="onSearch()">
+                (click)="onSearch()" [disabled]="!selectedCountry || !selectedCity || citySearch">
             <div>Search</div>
             <img src="assets/search.png" class="ml-2 w-[22px]" alt="">
         </button>
@@ -84,7 +84,7 @@
 </div>
 
 
-<div *ngIf="imagesReady" class="photo-countries">
+<div *ngIf="imagesReady" class="photo-countries results-reveal">
     <div class="flex flex-col w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] gap-2">
         <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-9">
             <img src="assets/photos.png" class="w-[35px]" alt="">
@@ -93,32 +93,32 @@
 
 
         <div class="flex flex-col md:flex-row w-full gap-4 md:gap-2">
-            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="0" [gallery]="galleryId">
+            <button type="button" class="gallery-card w-full lg:w-1/2 h-[250px] md:h-[350px]" (click)="openGallery(0)" aria-label="Open city photo 1 in gallery">
                 <img [src]="imagesUrls[0]"
                     class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" 
                     alt="">
-            </div>
-            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]"  [lightbox]="1" [gallery]="galleryId">
+            </button>
+            <button type="button" class="gallery-card w-full lg:w-1/2 h-[250px] md:h-[350px]" (click)="openGallery(1)" aria-label="Open city photo 2 in gallery">
                 <img [src]="imagesUrls[1]"
                     class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" 
                     alt="">
-            </div>
+            </button>
         </div>
         <div class="flex flex-col md:flex-row w-full mt-2 md:mt-0 gap-4 md:gap-2">
-            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="2" [gallery]="galleryId">
+            <button type="button" class="gallery-card w-full lg:w-1/2 h-[250px] md:h-[350px]" (click)="openGallery(2)" aria-label="Open city photo 3 in gallery">
                 <img [src]="imagesUrls[2]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
-            </div>
-            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="3" [gallery]="galleryId">
+            </button>
+            <button type="button" class="gallery-card w-full lg:w-1/2 h-[250px] md:h-[350px]" (click)="openGallery(3)" aria-label="Open city photo 4 in gallery">
                 <img [src]="imagesUrls[3]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
-            </div>
-            <div class="w-full lg:w-1/2 h-[250px] md:h-[350px]" [lightbox]="4" [gallery]="galleryId">
+            </button>
+            <button type="button" class="gallery-card w-full lg:w-1/2 h-[250px] md:h-[350px]" (click)="openGallery(4)" aria-label="Open city photo 5 in gallery">
                 <img [src]="imagesUrls[4]" class="w-full h-full object-cover rounded-xl mr-3 transition-transform duration-300 hover:scale-105 cursor-pointer" alt="">
-            </div>
+            </button>
         </div>
     </div>
 </div>
 
-<div *ngIf="citySearch" class="flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-2">
+<div *ngIf="citySearch" class="thinking-panel flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-2">
     <div class="flex flex-col w-full items-center justify-center">
         <div>
             <igx-circular-bar
@@ -133,7 +133,7 @@
     </div>
 </div>
 
-<div *ngIf="descriptionReady">
+<div *ngIf="descriptionReady" class="results-reveal">
     <div class="country-description">
     <div class="w-full bg-[rgb(245,245,245)] rounded-2xl p-5 md:p-7 mt-2 mb-5 border border-[rgb(230,230,230)] gap-2">
         <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-7">
@@ -144,19 +144,19 @@
             {{cityDescription?.summary}}
         </div>
         <div class="block md:flex w-full gap-2">
-            <div class="w-full md:w-1/2 text-white p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg">
+            <div class="content-card w-full md:w-1/2 text-white p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg">
                 <div class="flex w-full text-[18px]">
                     <img src="assets/calendar.png" class="w-[18px] h-[18px]" alt="">&nbsp;Best time to visit
                 </div>
                 <div class="block w-full text-[16px] pt-2 leading-6">{{cityDescription?.best_time_to_visit}}</div>
             </div>
-            <div class="flex  flex-col w-full md:w-1/4 mt-2 md:mt-0 text-white p-3 bg-[#D7A318] rounded-lg">
+            <div class="content-card flex flex-col w-full md:w-1/4 mt-2 md:mt-0 text-white p-3 bg-[#D7A318] rounded-lg">
                 <div class="flex w-full text-[18px]">
                     <img src="assets/language.png" class="w-[18px] h-[18px]" alt="">&nbsp;Language
                 </div>
                 <div class="block w-full text-[16px] pt-2 leading-6">{{cityDescription?.language}}</div>
             </div>
-            <div class="flex  flex-col w-full md:w-1/4 mt-2 md:mt-0 text-white p-3 bg-[#D7A318] rounded-lg">
+            <div class="content-card flex flex-col w-full md:w-1/4 mt-2 md:mt-0 text-white p-3 bg-[#D7A318] rounded-lg">
                 <div class="flex w-full text-[18px]">
                     <img src="assets/exchange.png" class="w-[18px] h-[18px]" alt="">&nbsp;Currency
                 </div>
@@ -170,7 +170,7 @@
         <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 gap-3">
             @for (district of cityDescription?.districts; track district.name) {
                 
-                <div class="flex flex-col h-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg shadow-md overflow-hidden leading-6">
+                <div class="content-card flex flex-col h-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg shadow-md overflow-hidden leading-6">
     
                     <!-- Header Section -->
                     <div class="flex w-full text-[23px] p-4 border-b border-white">
@@ -191,7 +191,7 @@
             <span class="ml-2">Famous for</span>
         </div>
         @for(famous of cityDescription?.famous_for; track famous.name){
-            <div class="w-full p-3 md:p-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+            <div class="content-card w-full p-3 md:p-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
                 <div class="flex w-full items-center justify-center md:justify-start md:text-left md:pl-5 text-[25px] pb-3 leading-7">
                     {{famous.name}}
                 </div>
@@ -206,7 +206,7 @@
             <span class="ml-2">Top Places</span>
         </div>
         @for(place of cityDescription?.top_places; track place.name){
-            <div class="w-full p-3 md:p-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+            <div class="content-card w-full p-3 md:p-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
                 <div class="flex w-full items-center text-center justify-center md:justify-start md:text-left md:pl-5 text-[25px] pb-3 leading-7">
                     {{place.name}}
                 </div>
@@ -229,7 +229,7 @@
             <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 gap-3">
                 @for (nightlife of cityDescription?.nightlife_areas; track nightlife.name) {
                 
-                    <div class="flex flex-col h-full bg-gradient-to-b from-[#2E0061] to-[#5409B3] text-white rounded-lg shadow-md overflow-hidden leading-6">
+                    <div class="content-card flex flex-col h-full bg-gradient-to-b from-[#2E0061] to-[#5409B3] text-white rounded-lg shadow-md overflow-hidden leading-6">
     
                         <!-- Header Section -->
                         <div class="flex w-full text-[23px] p-4 border-b border-white">
@@ -261,7 +261,7 @@
             <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 gap-3">
                 @for (local_food of cityDescription?.local_foods; track local_food.name) {
                 
-                    <div class="flex flex-col h-full bg-gradient-to-b from-[#F99709] to-[#F9B000] text-white rounded-lg shadow-md overflow-hidden leading-6">
+                    <div class="content-card flex flex-col h-full bg-gradient-to-b from-[#F99709] to-[#F9B000] text-white rounded-lg shadow-md overflow-hidden leading-6">
     
                         <!-- Header Section -->
                         <div class="flex w-full text-[23px] p-4 border-b border-white">
@@ -287,7 +287,7 @@
             <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-2 gap-3">
                 @for (shopping_area of cityDescription?.shopping_areas; track shopping_area.name) {
                 
-                    <div class="flex flex-col h-full bg-gradient-to-b from-[#F99709] to-[#F9B000] text-white rounded-lg shadow-md overflow-hidden leading-6">
+                    <div class="content-card flex flex-col h-full bg-gradient-to-b from-[#F99709] to-[#F9B000] text-white rounded-lg shadow-md overflow-hidden leading-6">
     
                         <!-- Header Section -->
                         <div class="flex w-full text-[23px] p-4 border-b border-white">
@@ -312,7 +312,7 @@
         <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 gap-3">
             @for (place of cityDescription?.annual_events; track place.name) {
                 
-                <div class="flex flex-col h-full bg-[#FAE953] border border-[#FA6B00] text-[#FA6B00] rounded-lg shadow-md overflow-hidden leading-6">
+                <div class="content-card flex flex-col h-full bg-[#FAE953] border border-[#FA6B00] text-[#FA6B00] rounded-lg shadow-md overflow-hidden leading-6">
     
                     <!-- Header Section -->
                     <div class="flex w-full text-[23px] font-bold p-4 border-b border-[#FA6B00]">
@@ -339,7 +339,7 @@
             }
         </div>
         <div class="w-full grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4 mt-7">
-            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+            <div class="content-card h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
                 <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
                     Airport
                 </div>
@@ -355,7 +355,7 @@
                     </div>
                 </div>
             </div>
-            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+            <div class="content-card h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
                 <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
                     Metro
                 </div>
@@ -371,7 +371,7 @@
                     </div>
                 </div>
             </div>
-            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+            <div class="content-card h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
                 <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
                     Tram
                 </div>
@@ -387,7 +387,7 @@
                     </div>
                 </div>
             </div>
-            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+            <div class="content-card h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
                 <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
                     Bus
                 </div>
@@ -403,7 +403,7 @@
                     </div>
                 </div>
             </div>
-            <div class="h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
+            <div class="content-card h-full bg-[rgb(210,210,210)] border border-[rgb(180,180,180)] rounded-lg shadow-md overflow-hidden leading-6">
                 <div class="w-full text-center p-2 border-b-1 border-[rgb(180,180,180)] text-[rgb(100,100,100)] text-[17px]">
                     Bike friendly
                 </div>
@@ -425,7 +425,7 @@
             <span class="ml-2">Travel Tips</span>
         </div>
         @for (tip of cityDescription?.travel_tips; track $index){
-            <div class="w-full text-[20px] text-[#828282] leading-6 mt-2 p-2 bg-[rgb(230,230,230)] border border-[rgb(220,220,220)] rounded-lg">{{tip}}</div>
+            <div class="travel-tip w-full text-[20px] text-[#828282] leading-6 mt-2 p-2 bg-[rgb(230,230,230)] border border-[rgb(220,220,220)] rounded-lg">{{tip}}</div>
         }
     </div>
     </div>

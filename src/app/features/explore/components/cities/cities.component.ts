@@ -13,11 +13,9 @@ import { IgxCircularProgressBarComponent } from 'igniteui-angular/progressbar';
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CityDescription } from '../../models/city-description';
-import { GalleryModule } from 'ng-gallery';
-import { LightboxModule } from 'ng-gallery/lightbox';
-import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 import { firstValueFrom } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { Dialog } from '@angular/cdk/dialog';
+import { PhotoGalleryDialogComponent } from '../../../../shared/components/photo-gallery-dialog/photo-gallery-dialog.component';
 
 @Component({
   selector: 'app-cities',
@@ -29,9 +27,7 @@ import { MatDialog } from '@angular/material/dialog';
             MatInputModule, 
             MatFormFieldModule,
             IgxCircularProgressBarComponent,
-            ClickOutsideDirective,
-            GalleryModule,
-            LightboxModule
+            ClickOutsideDirective
           ],
   templateUrl: './cities.component.html',
   styleUrl: './cities.component.css',
@@ -40,7 +36,7 @@ export class CitiesComponent implements OnInit{
   exploreService = inject(ExploreService);
   cdr = inject(ChangeDetectorRef);
   sanitizer = inject(DomSanitizer);
-  photoGallery = inject(MatDialog);
+  photoGallery = inject(Dialog);
   toastr = inject(ToastrService);
   searchControl = new FormControl('');
   selectedCountry: any;
@@ -55,9 +51,6 @@ export class CitiesComponent implements OnInit{
   country: string = "";
   cityDescription: CityDescription | null = null;
   citySearch: boolean = false;
-  items: GalleryItem[] = [];
-  gallery = inject(Gallery);
-  galleryId = 'myLightbox';
 
   ngOnInit(): void {
     this.searchControl.valueChanges
@@ -117,8 +110,11 @@ export class CitiesComponent implements OnInit{
 
   selectCity(city: City): void {
     const value = city.name;
-    this.searchControl.setValue(value);
+    this.searchControl.setValue(value, { emitEvent: false });
     this.selectedCity = city;
+    this.dropdownOpen = false;
+    this.searchFlag = false;
+    this.cdr.detectChanges();
   }
 
   closeDropdown() {
@@ -167,7 +163,6 @@ export class CitiesComponent implements OnInit{
         const urls = response.photo_urls;
         this.country = response.country;
         this.imagesUrls = await this.preloadImages(urls);
-        this.loadGalleryImages(urls);
         this.imagesReady=true;
         this.cdr.detectChanges();
       }
@@ -176,13 +171,26 @@ export class CitiesComponent implements OnInit{
     }
   }
 
-  loadGalleryImages(urls: string[]){
-    this.items = urls.map(
-        img => new ImageItem({ src: img, thumb: img })
-    );
+  openGallery(startIndex: number): void {
+    if (!this.imagesUrls[startIndex]) {
+      return;
+    }
 
-    const galleryRef = this.gallery.ref(this.galleryId);
-    galleryRef.load(this.items);
+    const cityName = this.selectedCity?.name;
+    const title = cityName ? `${cityName}, ${this.country}` : this.country;
+
+    this.photoGallery.open(PhotoGalleryDialogComponent, {
+      data: {
+        images: this.imagesUrls,
+        startIndex,
+        title
+      },
+      width: '100vw',
+      height: '100vh',
+      maxWidth: '100vw',
+      panelClass: 'photo-gallery-dialog',
+      backdropClass: 'photo-gallery-backdrop'
+    });
   }
 
   preloadImages(urls: string[]): Promise<SafeUrl[]>{
