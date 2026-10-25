@@ -1,1 +1,12 @@
-<p>community-page works!</p>
+<div class="flex lg:w-full lg:px-4 xl:px-0 xl:w-3/4 mt-20 mx-auto">
+
+  <!-- LEFT MENU (fixed) -->
+  <div class="hidden lg:block lg:fixed h-screen">
+    <app-profile-layout
+      [user]="usersDetailedInfo()"
+      [profilePhoto]="profilePhotoUrl()"
+      [profileLoaded]="profileComponentLoaded()">
+    </app-profile-layout>
+  </div>
+
+</div>

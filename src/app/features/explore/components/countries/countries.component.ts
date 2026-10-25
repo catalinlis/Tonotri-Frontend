@@ -8,11 +8,8 @@ import { ExploreService } from '../../services/explore.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core';
 import { CountryDescription } from '../../models/country-description';
-import { MatDialog } from '@angular/material/dialog';
-import { Overlay } from '@angular/cdk/overlay';
-import { GalleryModule } from 'ng-gallery';
-import { LightboxModule } from 'ng-gallery/lightbox';
-import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
+import { Dialog } from '@angular/cdk/dialog';
+import { PhotoGalleryDialogComponent } from '../../../../shared/components/photo-gallery-dialog/photo-gallery-dialog.component';
 
 
 @Component({
@@ -20,9 +17,7 @@ import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
   imports: [CountrySelectComponent, 
             FormsModule, 
             CommonModule, 
-            IgxCircularProgressBarComponent,
-            GalleryModule,
-            LightboxModule
+            IgxCircularProgressBarComponent
           ],
   templateUrl: './countries.component.html',
   styleUrl: './countries.component.css',
@@ -30,10 +25,8 @@ import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 export class CountriesComponent {
   exploreService = inject(ExploreService);
   sanitizer = inject(DomSanitizer);
-  photoGallery = inject(MatDialog);
-  overlay = inject(Overlay);
+  photoGallery = inject(Dialog);
   cdr=inject(ChangeDetectorRef);
-  gallery = inject(Gallery);
   selectedCountry: any;
   countrySearch: boolean = false;
   descriptionReady: boolean = false;
@@ -41,17 +34,18 @@ export class CountriesComponent {
   imagesUrls: SafeUrl[] = [];
   country: string = "";
   countryDescription: CountryDescription | null = null;
-  items: GalleryItem[] = [];
-  galleryId = 'myLightbox';
 
   async onSearch() {
+    const selectedCountryName = this.selectedCountry?.translations?.en;
+
+    if (!selectedCountryName || this.countrySearch) {
+      return;
+    }
+
     try {
       this.countrySearch = true;
-      const selectedCountryName = this.selectedCountry.translations?.en;
-
-      if (!selectedCountryName) {
-        return;
-      }
+      this.imagesReady = false;
+      this.descriptionReady = false;
 
       await Promise.all([
         this.loadCountryPhotos(selectedCountryName),
@@ -72,9 +66,8 @@ export class CountriesComponent {
     try{
       const response = await firstValueFrom(this.exploreService.getLocationPhotos(country));
       const urls = response.photo_urls;
-      this.country = response.location;
+      this.country = response.country;
       this.imagesUrls = await this.preloadImages(urls);
-      this.loadGalleryImages(urls);
       this.imagesReady=true;
       this.cdr.detectChanges();
     } catch(error){
@@ -82,13 +75,23 @@ export class CountriesComponent {
     }
   }
 
-  loadGalleryImages(urls: string[]){
-    this.items = urls.map(
-        img => new ImageItem({ src: img, thumb: img })
-    );
+  openGallery(startIndex: number): void {
+    if (!this.imagesUrls[startIndex]) {
+      return;
+    }
 
-    const galleryRef = this.gallery.ref(this.galleryId);
-    galleryRef.load(this.items);
+    this.photoGallery.open(PhotoGalleryDialogComponent, {
+      data: {
+        images: this.imagesUrls,
+        startIndex,
+        title: this.country
+      },
+      width: '100vw',
+      height: '100vh',
+      maxWidth: '100vw',
+      panelClass: 'photo-gallery-dialog',
+      backdropClass: 'photo-gallery-backdrop'
+    });
   }
 
   preloadImages(urls: string[]): Promise<SafeUrl[]>{

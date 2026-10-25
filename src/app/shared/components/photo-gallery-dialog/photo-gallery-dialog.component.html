@@ -1,0 +1,45 @@
+<section class="gallery-shell" aria-label="Photo gallery">
+  <div class="flex justify-center">
+    <div class="gallery-title text-center">
+      <div class="p-3">{{ data.title || 'Explore' }}</div>
+    </div>
+
+    <button type="button" class="close-button" (click)="close()" aria-label="Close photo gallery">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="gallery-stage">
+    <button type="button" class="navigation-button previous" (click)="previous()" aria-label="Previous photo">
+      <img src="assets/right-arrow.png" alt="" aria-hidden="true">
+    </button>
+
+    <div class="active-photo-frame">
+      <img [src]="selectedImage()" [alt]="(data.title || 'Country') + ' photo ' + (selectedIndex() + 1)">
+    </div>
+
+    <button type="button" class="navigation-button next" (click)="next()" aria-label="Next photo">
+      <img src="assets/right-arrow.png" alt="" aria-hidden="true">
+    </button>
+  </div>
+
+  <footer class="gallery-footer">
+    <div class="photo-counter" aria-live="polite">
+      {{ selectedIndex() + 1 }} <span>/ {{ data.images.length }}</span>
+    </div>
+
+    <div class="thumbnail-list" aria-label="Choose a photo">
+      @for (image of data.images; track $index) {
+        <button
+          type="button"
+          class="thumbnail-button"
+          [class.active]="$index === selectedIndex()"
+          (click)="select($index)"
+          [attr.aria-label]="'Show photo ' + ($index + 1)"
+          [attr.aria-current]="$index === selectedIndex() ? 'true' : null">
+          <img [src]="image" alt="">
+        </button>
+      }
+    </div>
+  </footer>
+</section>

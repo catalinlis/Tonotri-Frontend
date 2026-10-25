@@ -15,10 +15,130 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("/assets/mountain.jpg");
-    background-size: cover;   /* Cover full area */
+    background-color: #071f3d;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.background::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    z-index: -2;
+    background-image: url("/assets/explore2.jpg");
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    animation: background-reveal 1.5s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.background-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(135deg, rgba(7, 37, 75, .25), rgba(4, 23, 52, .48));
+    animation: overlay-arrival 900ms ease-out both;
+}
+
+.register-shell {
+    position: relative;
+    width: 100%;
+    max-width: 24rem;
+    margin-inline: 1rem;
+}
+
+.register-card {
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: card-arrival 700ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.register-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, white, transparent);
+    transform: translateX(-100%);
+    animation: highlight-sweep 1s 500ms ease-out both;
+}
+
+.register-title {
+    animation: item-arrival 500ms 150ms ease-out both;
+}
+
+.register-card hr {
+    transform-origin: center;
+    animation: rule-expand 500ms 220ms ease-out both;
+}
+
+.register-item {
+    animation: item-arrival 480ms ease-out both;
+}
+
+.item-1 { animation-delay: 260ms; }
+.item-2 { animation-delay: 320ms; }
+.item-3 { animation-delay: 380ms; }
+.item-4 { animation-delay: 440ms; }
+.item-5 { animation-delay: 500ms; }
+.item-6 { animation-delay: 560ms; }
+.item-7 { animation-delay: 620ms; }
+.item-8 { animation-delay: 680ms; }
+
+.register-control {
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.register-control:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(8, 43, 91, .22);
+}
+
+.register-button {
+    font-weight: 600;
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.register-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 22px rgba(91, 43, 8, .25);
+}
+
+.register-button:active {
+    transform: translateY(0) scale(.98);
+}
+
+.register-error {
+    transform-origin: bottom;
+    animation: error-arrival 380ms cubic-bezier(.34, 1.56, .64, 1) both;
+}
+
+.ambient-orb {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(6px);
+    pointer-events: none;
+}
+
+.ambient-orb-one {
+    top: 8%;
+    left: 12%;
+    width: 14rem;
+    height: 14rem;
+    background: rgba(85, 174, 255, .16);
+    animation: orb-drift-one 9s ease-in-out infinite;
+}
+
+.ambient-orb-two {
+    right: 10%;
+    bottom: 8%;
+    width: 18rem;
+    height: 18rem;
+    background: rgba(255, 164, 73, .12);
+    animation: orb-drift-two 11s -3s ease-in-out infinite;
 }
 
 input{
@@ -33,4 +153,69 @@ button{
 
 input::placeholder{
   color: gray;
+}
+
+@keyframes background-reveal {
+    from { opacity: .45; filter: blur(16px); }
+    to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes overlay-arrival {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes card-arrival {
+    from { opacity: 0; transform: translateY(28px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes item-arrival {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rule-expand {
+    from { opacity: 0; transform: scaleX(0); }
+    to { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes highlight-sweep {
+    to { transform: translateX(100%); }
+}
+
+@keyframes error-arrival {
+    0% { opacity: 0; transform: translateY(8px) scale(.96); }
+    65% { transform: translateX(3px) scale(1); }
+    82% { transform: translateX(-2px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes orb-drift-one {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(40px, 28px); }
+}
+
+@keyframes orb-drift-two {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-35px, -24px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .background::before,
+    .background-overlay,
+    .register-card,
+    .register-card::before,
+    .register-title,
+    .register-card hr,
+    .register-item,
+    .register-error,
+    .ambient-orb {
+        animation: none !important;
+    }
+
+    .register-control,
+    .register-button {
+        transition: none;
+    }
 }

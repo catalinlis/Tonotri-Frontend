@@ -1,7 +1,7 @@
-<div class="block w-full h-auto rounded-2xl overflow-hidden bg-gradient-to-r from-[#FF9800] to-[#FFB800]">
+<div class="landmarks-hero block w-full h-auto rounded-2xl overflow-hidden bg-gradient-to-r from-[#FF9800] to-[#FFB800]">
     <div class="block lg:flex w-full">
         <div class="block w-full lg:flex lg:w-3/5">
-            <div class="text-white text-[22px] p-5 leading-7 lg:leading-8">
+            <div class="hero-copy text-white text-[22px] p-5 leading-7 lg:leading-8">
                 <div class="text-[35px] text-white pb-4">Discover landmarks</div>
                 From ancient castles and historic fortresses to iconic monuments and hidden gems, 
                 every landmark tells a unique story about the places that shaped our world. Discover 
@@ -9,12 +9,12 @@
             </div>
         </div>
         <div class="block w-full pt-0 p-4 lg:p-4 lg:flex lg:w-2/5 lg:ml-auto">
-            <img src="assets/coloseum.jpg" class="w-full h-full object-cover rounded-xl border-2 border-white mr-3" alt="">
+            <img src="assets/coloseum.jpg" class="hero-image w-full h-full object-cover rounded-xl border-2 border-white mr-3" alt="The Colosseum in Rome">
         </div>
     </div>
 </div>
 
-<div class="block w-full h-auto rounded-2xl bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[22px] border border-[rgb(230,230,230)]">
+<div class="landmark-search-panel block w-full h-auto rounded-2xl bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[22px] border border-[rgb(230,230,230)]">
     <div class="leading-8 text-[#5D9E8E]">Discover remarkable landmarks and uncover the history, architecture, and stories behind the places that shaped our world. 
         Please specify the location as well for a better search.</div>
     <div class="flex flex-col md:flex-row w-full justify-center items-center mt-5">
@@ -31,10 +31,11 @@
                 >
             </mat-form-field>
         </div>
-        <button class="flex w-[300px] md:w-auto h-[56px] bg-[#5D9E8E] 
+        <button class="landmark-search-button flex w-[300px] md:w-auto h-[56px] bg-[#5D9E8E] 
                        items-center justify-center text-white mt-2 md:mt-0 md:ml-2 px-4 mb-5 md:mb-0
                        rounded-md transition-all duration-300 hover:scale-103 hover:bg-[#56B09A] cursor-pointer"
                 (click)="onSearchLandmark()"
+                [disabled]="!searchControl.value || searchFlag"
                 >
             <div>Search</div>
             <img src="assets/search.png" class="ml-2 w-[22px]" alt="">
@@ -43,13 +44,13 @@
 </div>
 
 @if(landmark !== null){
-    <div class="flex flex-col md:flex-row w-full h-auto mb-2">
+    <div class="landmark-match results-reveal flex flex-col md:flex-row w-full h-auto mb-2">
         <div class="flex w-full md:w-2/3 rounded-2xl bg-[rgb(245,245,245)] mt-2 p-5 text-[rgb(100,100,100)] text-[18px] border border-[rgb(230,230,230)] leading-7">
             Is this the landmark you're searching? If not please provide 
             in the search, the city and the country for a complex search.
         </div>
         @if(landmark.official_name !== '' && landmark.city !== '' && landmark.country !== ''){
-            <div class="flex w-full md:w-1/3 md:ml-2 mt-2 p-5 bg-[#FFB800] hover:bg-[#FFA104] transition-all duration-300 rounded-2xl cursor-pointer"
+            <div class="content-card landmark-choice flex w-full md:w-1/3 md:ml-2 mt-2 p-5 bg-[#FFB800] hover:bg-[#FFA104] transition-all duration-300 rounded-2xl cursor-pointer"
                  (click)="onSearchLandmarkDescription()"
             >
                 <div class="flex flex-col w-8/10">
@@ -75,8 +76,23 @@
     </div>
 }
 
-<div *ngIf="descriptionReady">
-    <div class="w-full bg-[rgb(245,245,245)] rounded-2xl p-5 md:p-7 mt-2 mb-5 border border-[rgb(230,230,230)] gap-2">
+<div *ngIf="searchFlag" class="thinking-panel flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-2">
+    <div class="flex flex-col w-full items-center justify-center">
+        <div>
+            <igx-circular-bar
+                [animate]="false"
+                [indeterminate]="true"
+                [textVisibility]="false">
+            </igx-circular-bar>
+        </div>
+        <div class="flex text-[20px] text-[rgb(100,100,100)]">
+            Thinking right now
+        </div>
+    </div>
+</div>
+
+<div *ngIf="descriptionReady" class="results-reveal">
+    <div class="country-description w-full bg-[rgb(245,245,245)] rounded-2xl p-5 md:p-7 mt-2 mb-5 border border-[rgb(230,230,230)] gap-2">
         <div class="flex w-full items-center text-[35px] justify-center md:justify-start text-[#828282] md:pl-5 pb-5 leading-10">
             <img src="assets/landmark-gray.png" class="w-[35px]" alt="">
             <span class="ml-3">{{landmarkDescription?.official_name}}</span>
@@ -85,7 +101,7 @@
             {{landmarkDescription?.summary}}
         </div>
         <div class="block md:flex w-full gap-2">
-            <div class="w-full md:w-1/2 ml-auto text-white p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg">
+            <div class="content-card w-full md:w-1/2 ml-auto text-white p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg">
                 <div class="flex w-full text-[18px]">
                     <img src="assets/calendar.png" class="w-[18px] h-[18px]" alt="">&nbsp;Best time to visit
                 </div>
@@ -97,7 +113,7 @@
             <span class="ml-3">Famous for</span>
         </div>
         @for(famous of landmarkDescription?.famous_for; track $index){
-            <div class="w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+            <div class="content-card w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
 
                 <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7">
                     {{famous}}
@@ -109,21 +125,21 @@
             <span class="ml-3">History</span>
         </div>
         <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 gap-3 text-[16px]">
-            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+            <div class="content-card flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
                 <img src="assets/labour.png" class="w-[30px] h-[30px] mt-1" alt="">
                 <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
                     Built by:<br><br>
                     {{landmarkDescription?.history?.built_by}}
                 </div>
             </div>
-            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+            <div class="content-card flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
                 <img src="assets/purpose.png" class="w-[27px] h-[27px] mt-1" alt="">
                 <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
                     Purpose:<br><br>
                     {{landmarkDescription?.history?.original_purpose}}
                 </div>
             </div>
-            <div class="flex justify-center items-center p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+            <div class="content-card flex justify-center items-center p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
                 <img src="assets/schedule.png" class="w-[27px] h-[27px]" alt="">
                 <div class="text-[rgb(100,100,100)] ml-2 text-[22px] leading-8">
                     {{landmarkDescription?.history?.construction_period}}
@@ -136,7 +152,7 @@
         </div>
         <div class="w-full grid grid-col-1 md:grid-cols-2 gap-3 mt-2 text-[16px]">
             @for(event of landmarkDescription?.history?.historical_events; track event.year){
-                <div class="flex-col rounded-2xl bg-[#52CC87] text-white">
+                <div class="content-card flex-col rounded-2xl bg-[#52CC87] text-white">
                     <div class="p-2 text-center text-bold text-[20px] leading-7">{{event.year}}</div>
                     <hr>
                     <div class="ml-2 text-[18px] p-2 leading-6">
@@ -150,13 +166,13 @@
             <span class="ml-3">Architecture</span>
         </div>
         <div class="flex w-full flex-col md:flex-row gap-3 text-[16px]">
-            <div class="flex w-full md:w-1/3 p-3 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+            <div class="content-card flex w-full md:w-1/3 p-3 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
                 <div class="text-[rgb(100,100,100)] ml-2 mt-1">
                     <div class="mb-1 ml-2">Style</div>
                     {{landmarkDescription?.architecture?.style}}
                 </div>
             </div>
-            <div class="flex w-full md:w-2/3 p-3 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+            <div class="content-card flex w-full md:w-2/3 p-3 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
                 <div class="text-[rgb(100,100,100)] ml-2 mt-1">
                     <div class="mb-1 ml-2">Materials</div>
                     @for(material of landmarkDescription?.architecture?.materials; track $index){
@@ -165,7 +181,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex-col rounded-2xl bg-[rgb(225,225,225)] mt-3 text-[rgb(100,100,100)] border border-[#828282]">
+        <div class="content-card flex-col rounded-2xl bg-[rgb(225,225,225)] mt-3 text-[rgb(100,100,100)] border border-[#828282]">
             <div class="p-2 text-center text-bold text-[20px] mt-4">Notable features</div>
             <div class="p-2">
                 @for(feature of landmarkDescription?.architecture?.notable_features; track $index){
@@ -183,7 +199,7 @@
             <span class="ml-3">Interesting facts</span>
         </div>
         @for(fact of landmarkDescription?.interesting_facts; track $index){
-            <div class="w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+            <div class="content-card w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
 
                 <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7">
                     {{fact}}
@@ -196,7 +212,7 @@
         </div>
         <div class="w-full grid grid-col-1 md:grid-cols-2 gap-3 mt-2 text-[16px]">
             @for(must of landmarkDescription?.must_see; track must.name){
-                <div class="flex-col rounded-2xl bg-[#52CC87] text-white">
+                <div class="content-card flex-col rounded-2xl bg-[#52CC87] text-white">
                     <div class="p-3 text-center text-bold text-[20px] leading-7">{{must.name}}</div>
                     <hr>
                     <div class="ml-2 text-[18px] p-2 leading-6">
@@ -210,21 +226,21 @@
             <span class="ml-3">Practical Information</span>
         </div>
         <div class="w-full grid grid-col-1 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 gap-3 text-[16px] mb-4">
-            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+            <div class="content-card flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
                 <img src="assets/schedule.png" class="mt-1 w-[25px] h-[25px]" alt="">
                 <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
                     <div class="mb-2">Opening hours:</div>
                     {{landmarkDescription?.practical_information?.opening_hours}}
                 </div>
             </div>
-            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+            <div class="content-card flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
                 <img src="assets/accessibility.png" class="w-[27px] h-[27px] mt-1" alt="">
                 <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
                     <div class="mb-2">Accessibility:</div>
                     {{landmarkDescription?.practical_information?.accessibility}}
                 </div>
             </div>
-            <div class="flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
+            <div class="content-card flex p-2 bg-[rgb(225,225,225)] rounded-2xl border border-[#828282]">
                 <img src="assets/ticket2.png" class="mt-1 w-[27px] h-[27px]" alt="">
                 <div class="text-[rgb(100,100,100)] ml-2 mt-1 mb-2">
                     <div class="mb-2">Opening hours:</div>
@@ -233,7 +249,7 @@
             </div>
         </div>
         @for(tip of landmarkDescription?.practical_information?.visitor_tips; track $index){
-            <div class="w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
+            <div class="travel-tip w-full p-3 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg mt-2">
 
                 <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7">
                     {{tip}}
@@ -245,26 +261,12 @@
             <span class="ml-3">Look around now</span>
         </div>
         @for(look of landmarkDescription?.look_around_now; track $index){
-            <div class="w-full p-3 text-white bg-gradient-to-r to-[#FF9800] from-[#FFB800] rounded-lg mt-2">
+            <div class="content-card w-full p-3 text-white bg-gradient-to-r to-[#FF9800] from-[#FFB800] rounded-lg mt-2">
 
                 <div class="flex w-full text-[18px] md:text-[20px] md:text-justify leading-7">
                     {{look}}
                 </div>
             </div>
         }
-    </div>
-</div>
-<div *ngIf="searchFlag" class="flex w-full bg-[rgb(245,245,245)] rounded-2xl p-7 mt-2 border border-[rgb(230,230,230)] mb-5">
-    <div class="flex flex-col w-full items-center justify-center">
-        <div>
-            <igx-circular-bar
-                [animate]="false"
-                [indeterminate]="true"
-                [textVisibility]="false">
-            </igx-circular-bar>
-        </div>
-        <div class="flex text-[20px] text-[rgb(100,100,100)]">
-            Thinking right now
-        </div>
     </div>
 </div>

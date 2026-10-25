@@ -14,10 +14,106 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("/assets/mountain.jpg");
-    background-size: cover;   /* Cover full area */
+    background-color: #071f3d;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.background::before {
+    content: '';
+    position: absolute;
+    inset: -24px;
+    z-index: 0;
+    background-image: url("/assets/explore2.jpg");
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    animation: background-reveal 1.8s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.background-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        linear-gradient(90deg, rgba(5, 29, 58, .48) 0%, rgba(7, 40, 75, .34) 50%, rgba(4, 24, 52, .58) 100%),
+        linear-gradient(180deg, rgba(8, 35, 68, .08), rgba(3, 19, 42, .28));
+    animation: overlay-fade-in 1s ease-out both;
+}
+
+.auth-intro,
+.auth-form-shell {
+    z-index: 2;
+}
+
+.auth-form-shell {
+    position: relative;
+}
+
+.login-card {
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: card-arrival 700ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.login-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .9), transparent);
+    transform: translateX(-100%);
+    animation: highlight-sweep 1s 500ms ease-out both;
+}
+
+.header {
+    animation: content-arrival 500ms 160ms ease-out both;
+}
+
+.login-card hr {
+    transform-origin: center;
+    animation: rule-expand 500ms 230ms ease-out both;
+}
+
+.animated-item {
+    animation: content-arrival 480ms ease-out both;
+}
+
+#username { animation-delay: 280ms; }
+#password { animation-delay: 350ms; }
+#sign-in-button { animation-delay: 420ms; }
+.divider-label { animation-delay: 470ms; }
+.google-sign-in { animation-delay: 520ms; }
+.signup-copy { animation-delay: 570ms; }
+.sign-up { animation-delay: 620ms; }
+
+.form-control {
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.form-control:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(8, 43, 91, .2);
+}
+
+.action-button {
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(7, 31, 73, .22);
+}
+
+.action-button:active {
+    transform: translateY(0) scale(.98);
+}
+
+.error-message {
+    transform-origin: top;
+    animation: error-arrival 360ms cubic-bezier(.34, 1.56, .64, 1) both;
 }
 
 button{
@@ -35,16 +131,210 @@ input::placeholder{
 }
 
 .header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.25rem;
+    margin: 0;
     font-size: 20px;
     font-family: 'Roboto';
     font-weight: 500;
 }
 
 .description{
-    font-family: 'Roboto';
-    font-size: 35px;
-    font-weight: 500;
+    margin: .5rem 0 1rem;
+    font-family: 'Roboto Slab', 'Roboto', serif;
+    font-size: clamp(2.5rem, 3.5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -.035em;
+    animation: description-arrival 800ms 180ms cubic-bezier(.22, 1, .36, 1) both;
 }
+
+.intro-content {
+    position: relative;
+    width: min(80%, 620px);
+    margin: 10vh auto 0;
+    text-align: left;
+}
+
+.intro-eyebrow {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    opacity: .85;
+    animation: content-arrival 600ms 100ms ease-out both;
+}
+
+.intro-copy {
+    max-width: 510px;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, .88);
+    animation: content-arrival 600ms 260ms ease-out both;
+}
+
+.journey-card {
+    position: relative;
+    width: min(100%, 510px);
+    margin-top: 2rem;
+    padding: 1.25rem 1.35rem 1rem;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 1.25rem;
+    background: rgba(8, 35, 70, .46);
+    box-shadow: 0 24px 55px rgba(4, 21, 48, .25);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    animation: content-arrival 700ms 380ms ease-out both, card-float 6s 1.1s ease-in-out infinite;
+}
+
+.journey-header,
+.journey-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.journey-label {
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    color: #a8d9ff;
+}
+
+.journey-header p {
+    margin: .2rem 0 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.live-pill {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .4rem .65rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .12);
+    font-size: .7rem;
+}
+
+.live-pill span {
+    width: .45rem;
+    height: .45rem;
+    border-radius: 50%;
+    background: #6ee7a8;
+    box-shadow: 0 0 0 0 rgba(110, 231, 168, .6);
+    animation: live-pulse 2s ease-out infinite;
+}
+
+.route-map {
+    position: relative;
+    height: 145px;
+}
+
+.route-map svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.route-shadow,
+.route-line {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.route-shadow {
+    stroke: rgba(255, 255, 255, .12);
+    stroke-width: 5;
+}
+
+.route-line {
+    stroke: #b9e3ff;
+    stroke-width: 2;
+    stroke-dasharray: 5 9;
+    animation: route-flow 1.6s linear infinite;
+}
+
+.traveller {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 2.7rem;
+    text-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+    offset-path: path('M28 108 C120 20, 280 22, 430 82');
+    offset-rotate: auto;
+    animation: travel-route 8s ease-in-out infinite;
+}
+
+.route-dot {
+    position: absolute;
+    width: .7rem;
+    height: .7rem;
+    border: 3px solid white;
+    border-radius: 50%;
+    background: #318cd1;
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, .13);
+}
+
+.route-dot-start { left: 23px; top: 103px; }
+.route-dot-end { right: 21px; top: 77px; }
+
+.city {
+    position: absolute;
+    bottom: .15rem;
+    font-size: .72rem;
+    color: rgba(255, 255, 255, .8);
+}
+
+.city-start { left: .15rem; }
+.city-end { right: .1rem; }
+
+.journey-footer {
+    justify-content: flex-start;
+    gap: .75rem;
+    padding-top: .8rem;
+    border-top: 1px solid rgba(255, 255, 255, .15);
+}
+
+.journey-footer p { margin: 0; font-size: .75rem; color: rgba(255, 255, 255, .75); }
+.journey-footer strong { color: white; }
+
+.traveller-stack { display: flex; align-items: center; }
+.traveller-stack img,
+.traveller-stack span {
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-left: -.35rem;
+    border: 2px solid rgba(255, 255, 255, .85);
+    border-radius: 50%;
+    background: #d9eaff;
+    object-fit: contain;
+}
+.traveller-stack img:first-child { margin-left: 0; }
+.traveller-stack span { display: grid; place-items: center; background: #2777b5; font-size: .6rem; font-weight: 700; }
+
+.activity-bubble {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .65rem .85rem;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: .9rem;
+    background: rgba(255, 255, 255, .92);
+    box-shadow: 0 15px 35px rgba(5, 25, 55, .22);
+    color: #143a62;
+    animation: bubble-float 4.5s ease-in-out infinite;
+}
+
+.activity-bubble img { width: 1.5rem; height: 1.5rem; }
+.activity-bubble span { display: flex; flex-direction: column; }
+.activity-bubble strong { font-size: .72rem; }
+.activity-bubble small { margin-top: .1rem; font-size: .62rem; color: #66809b; }
+.activity-photo { right: -2.4rem; bottom: 7.5rem; }
+.activity-like { left: -2.25rem; bottom: 1rem; animation-delay: -2.1s; }
+.activity-heart { display: grid !important; place-items: center; color: #ef5b75; font-size: 1.25rem; animation: heart-beat 1.8s ease-in-out infinite; }
 
 .bar{
     border-right: solid 2px white;
@@ -56,4 +346,117 @@ input::placeholder{
 
 .error-input::placeholder{
     color: red;
+}
+
+@keyframes background-reveal {
+    from { opacity: .35; filter: blur(18px); }
+    to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes overlay-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes card-arrival {
+    from { opacity: 0; transform: translate3d(36px, 0, 0) scale(.97); }
+    to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes description-arrival {
+    from { opacity: 0; transform: translateX(-28px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes content-arrival {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rule-expand {
+    from { opacity: 0; transform: scaleX(0); }
+    to { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes highlight-sweep {
+    to { transform: translateX(100%); }
+}
+
+@keyframes error-arrival {
+    0% { opacity: 0; transform: translateY(-6px) scaleY(.8); }
+    65% { transform: translateX(3px) scaleY(1); }
+    82% { transform: translateX(-2px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes route-flow {
+    to { stroke-dashoffset: -28; }
+}
+
+@keyframes travel-route {
+    0%, 8% { offset-distance: 0%; opacity: 0; }
+    14% { opacity: 1; }
+    82% { opacity: 1; }
+    92%, 100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes live-pulse {
+    70% { box-shadow: 0 0 0 7px rgba(110, 231, 168, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(110, 231, 168, 0); }
+}
+
+@keyframes card-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+}
+
+@keyframes bubble-float {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-9px) rotate(1deg); }
+}
+
+@keyframes heart-beat {
+    0%, 45%, 100% { transform: scale(1); }
+    15% { transform: scale(1.2); }
+    28% { transform: scale(.96); }
+}
+
+@media (max-width: 1279px) {
+    .login-card {
+        margin-inline: 1rem;
+        animation-name: card-arrival-mobile;
+    }
+}
+
+@keyframes card-arrival-mobile {
+    from { opacity: 0; transform: translateY(24px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .background,
+    .background::before,
+    .background-overlay,
+    .login-card,
+    .login-card::before,
+    .header,
+    .login-card hr,
+    .animated-item,
+    .description,
+    .error-message,
+    .intro-eyebrow,
+    .intro-copy,
+    .journey-card,
+    .route-line,
+    .traveller,
+    .live-pill span,
+    .activity-bubble,
+    .activity-heart {
+        animation: none !important;
+    }
+
+    .form-control,
+    .action-button {
+        transition: none;
+    }
 }

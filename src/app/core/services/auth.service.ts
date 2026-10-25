@@ -1,20 +1,23 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of, tap } from 'rxjs';
-import { Router } from '@angular/router';
+import { catchError, finalize, Observable, of, switchMap, tap } from 'rxjs';
+import { UserDetailedInfo } from '../../features/community/models/user-detailed-info';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private http = inject(HttpClient);
-  private router = inject(Router);
+  private readonly http = inject(HttpClient);
+  readonly currentUser = signal<UserDetailedInfo | null>(null);
+  readonly userLoading = signal(true);
 
   googleLogin(idToken: string) {
     return this.http.post(
       `/api/auth/social/google/`,
       { code: idToken },
       { withCredentials: true }
+    ).pipe(
+      switchMap(() => this.restoreSession())
     );
   }
 
@@ -30,7 +33,9 @@ export class AuthService {
 
 
   login(model: any){
-    return this.http.post(`/api/auth/login/`, model);
+    return this.http.post(`/api/auth/login/`, model).pipe(
+      switchMap(() => this.restoreSession())
+    );
   }
 
   register(model: FormData){
@@ -38,11 +43,40 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`/api/auth/logout/`, {});
+    return this.http.post(`/api/auth/logout/`, {}).pipe(
+      finalize(() => {
+        this.currentUser.set(null);
+        this.clearLoginCookie();
+      })
+    );
   }
 
   getProfile(): Observable<any> {
     return this.http.get(`/api/auth/profile/`);
+  }
+
+  getDetailedPersonalInfo(): Observable<UserDetailedInfo>{
+    return this.http.get<UserDetailedInfo>(`/api/users/me`);
+  }
+
+  restoreSession(): Observable<UserDetailedInfo | null> {
+    this.userLoading.set(true);
+
+    if (!this.isAuthenticated()) {
+      this.currentUser.set(null);
+      this.userLoading.set(false);
+      return of(null);
+    }
+
+    return this.getDetailedPersonalInfo().pipe(
+      tap(user => this.currentUser.set(user)),
+      catchError(() => {
+        this.currentUser.set(null);
+        this.clearLoginCookie();
+        return of(null);
+      }),
+      finalize(() => this.userLoading.set(false))
+    );
   }
 
   tokenCheck(guid: string): Observable<any>{
