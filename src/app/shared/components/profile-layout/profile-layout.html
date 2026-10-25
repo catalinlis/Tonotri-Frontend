@@ -1,0 +1,23 @@
+<div *ngIf="profileLoaded() === false">
+    <div class="flex flex-col w-[250px] h-auto shadow-[0_0_12px_2px_rgba(0,0,0,0.15)] rounded-lg">
+        <div class="flex flex-col w-full">
+            <app-loader Cwidth="200" Cheight="200" MarginTop="50" MarginLeft="25" [circle]="true"></app-loader>
+            <app-loader Cwidth="200" Cheight="25" MarginTop="15" MarginLeft="25"></app-loader>
+            <app-loader Cwidth="170" Cheight="25" MarginTop="15" MarginLeft="25"></app-loader>
+            <app-loader Cwidth="200" Cheight="25" MarginTop="15" MarginLeft="25" MarginBottom="50"></app-loader>
+        </div>
+    </div>
+</div>
+<div *ngIf="profileLoaded()" class="flex flex-col h-auto shadow-[0_0_12px_2px_rgba(0,0,0,0.15)] rounded-lg overflow-hidden">
+    <div class="flex w-full h-[150px] bg-white">
+
+    </div>
+    <div class="w-[250px] h-[200px] flex flex-col bg-gradient-to-r from-[#32B2D9] to-[#0EC4AB]">
+        <div class="profile-image flex w-[200px] h-[200px] rounded-[50%] bg-white items-center justify-center mx-auto mt-[-100px] shadow-[0_0_12px_2px_rgba(0,0,0,0.15)]">
+            <img *ngIf="profilePhoto()" [src]="profilePhoto()"
+                 class="w-[190px] h-[190px] object-cover rounded-[50%]" alt="Profile photo">
+        </div>
+        <div class="flex mx-auto mt-4 text-[23px] text-white">{{user()?.first_name}} {{user()?.last_name}}</div>
+    </div>
+
+</div>

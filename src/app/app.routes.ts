@@ -20,7 +20,8 @@ export const routes: Routes = [
         children: [
             {   path: '',   redirectTo: 'community',    pathMatch: 'full'   },
             {   path: 'community',  loadChildren: () => import('./features/community/community.routes').then(m => m.CommunityRoutingModule) },
-            {   path: 'explore',  loadChildren: () => import('./features/explore/explore.routes').then(m => m.ExploreRoutingModule) }
+            {   path: 'explore',  loadChildren: () => import('./features/explore/explore.routes').then(m => m.ExploreRoutingModule) },
+            {   path: 'profile', loadChildren: () => import('./features/profile/profile.routes').then(m => m.ProfileRoutingModule) }
         ]
     },
     {
