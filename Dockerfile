@@ -1,28 +1,24 @@
+# syntax=docker/dockerfile:1
+
 FROM node:22-alpine AS build
-WORKDIR /usr/local/app
+WORKDIR /app
 
-COPY . /usr/local/app/
-
-# Install global Angular CLI and dependencies
-RUN npm install -g @angular/cli
+# Keep dependency installation cached until the manifests change.
+COPY package.json package-lock.json ./
 RUN npm ci
 
-# Build the app for production
-RUN ng build --configuration production
+COPY . .
+RUN npm run build -- --configuration production
 
-# ----- Stage 2 : Nginx to serve ------
-FROM nginx:alpine AS prod
+FROM nginx:alpine AS production
 
-# Remove default nginx static assets
 RUN rm -rf /usr/share/nginx/html/*
-
-# Copy Angular dist output to Nginx html folder
-COPY --from=build /usr/local/app/dist/Tonotri-Frontend/browser /usr/share/nginx/html
-
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
+COPY --from=build /app/dist/Tonotri-Frontend/browser/ /usr/share/nginx/html/
 
 EXPOSE 80
 
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://127.0.0.1/ || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]
