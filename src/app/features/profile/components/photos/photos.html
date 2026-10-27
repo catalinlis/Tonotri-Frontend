@@ -1,1 +1,143 @@
-<p>photos works!</p>
+<div class="photos-toolbar" aria-label="Photo filters and layout">
+  <div class="photo-filters" aria-label="Filter photos by country">
+    <button
+      class="filter-chip"
+      [class.filter-chip--active]="activeFilter() === 'all'"
+      type="button"
+      (click)="activeFilter.set('all')">
+      All photos
+    </button>
+
+    @for (country of countryFilters; track country.code) {
+      <button
+        class="filter-chip"
+        [attr.data-country-index]="$index"
+        [class.filter-chip--active]="activeFilter() === country.code"
+        type="button"
+        (click)="activeFilter.set(country.code)">
+        <span class="country-code">{{ country.code }}</span>
+        {{ country.name }}
+      </button>
+    }
+
+    @if (moreCountryFilters.length > 0) {
+      <details
+        class="more-countries"
+        #moreCountries
+        (toggle)="updateCountryMenuPlacement(moreCountries, countriesMenu)">
+        <summary
+          class="filter-chip more-countries-trigger"
+          [class.filter-chip--active]="isMoreCountryActive()"
+          aria-label="Choose from more countries">
+          <span class="more-dots" aria-hidden="true">&bull;&bull;&bull;</span>
+          <span>More</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="m6 8 4 4 4-4"></path>
+          </svg>
+        </summary>
+
+        <div
+          class="countries-menu"
+          #countriesMenu
+          [class.countries-menu--above]="countryMenuPlacement() === 'above'">
+          <div class="countries-menu-heading">
+            <strong>More countries</strong>
+            <span>Choose a destination</span>
+          </div>
+          @for (country of dropdownCountryFilters; track country.code) {
+            <button
+              [class.country-option--active]="activeFilter() === country.code"
+              type="button"
+              (click)="activeFilter.set(country.code); moreCountries.open = false">
+              <span class="country-option-code">{{ country.code }}</span>
+              <span>{{ country.name }}</span>
+              @if (activeFilter() === country.code) {
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="m5 10 3 3 7-7"></path>
+                </svg>
+              }
+            </button>
+          }
+        </div>
+      </details>
+    }
+  </div>
+
+  <div class="layout-picker">
+    <span>Layout</span>
+    <div class="layout-options" aria-label="Choose photo layout">
+      <button
+        [class.layout-button--active]="activeLayout() === 'grid'"
+        type="button"
+        aria-label="Grid layout"
+        [attr.aria-pressed]="activeLayout() === 'grid'"
+        (click)="activeLayout.set('grid')">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="4" width="6" height="6"></rect>
+          <rect x="14" y="4" width="6" height="6"></rect>
+          <rect x="4" y="14" width="6" height="6"></rect>
+          <rect x="14" y="14" width="6" height="6"></rect>
+        </svg>
+      </button>
+      <button
+        [class.layout-button--active]="activeLayout() === 'columns'"
+        type="button"
+        aria-label="Column layout"
+        [attr.aria-pressed]="activeLayout() === 'columns'"
+        (click)="activeLayout.set('columns')">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="4" width="7" height="16"></rect>
+          <rect x="13" y="4" width="7" height="16"></rect>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<header class="photos-header">
+  <div class="left-header">Captured Moments</div>
+  <span class="photos-count">
+    {{ photosCount }} {{ photosCount === 1 ? 'photo' : 'photos' }}
+  </span>
+</header>
+
+<div class="active-filter-summary" aria-live="polite">
+  <span>Viewing</span>
+  <strong>{{ activeFilterLabel() }}</strong>
+  @if (activeFilter() !== 'all') {
+    <button type="button" (click)="activeFilter.set('all')" aria-label="Clear country filter">
+      Clear
+      <span aria-hidden="true">&times;</span>
+    </button>
+  }
+</div>
+
+@if (filteredPhotos().length > 0) {
+  <section
+    class="photos-gallery"
+    [class.photos-gallery--grid]="activeLayout() === 'grid'"
+    [class.photos-gallery--mosaic]="activeLayout() === 'columns'"
+    aria-label="Travel photo collection">
+    @for (photo of filteredPhotos(); track photo.url + photo.title; let index = $index) {
+      <article class="photo-card" [attr.data-index]="index">
+        <img [src]="photo.url" [alt]="photo.alt">
+        <div class="photo-overlay">
+          <strong>{{ photo.title }}</strong>
+          <span>{{ photo.country }} &middot; {{ photo.date }}</span>
+        </div>
+        <button type="button" class="favorite-photo" aria-label="Add {{ photo.title }} to favorites">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.7-7.5 1.1-1.1a5.5 5.5 0 0 0 0-7.8Z"></path>
+          </svg>
+        </button>
+      </article>
+    }
+  </section>
+} @else {
+  <div class="photos-empty-state">
+    <span aria-hidden="true">&#128247;</span>
+    <strong>No photos from {{ activeFilterLabel() }} yet</strong>
+    <p>Choose another destination to keep exploring the collection.</p>
+    <button type="button" (click)="activeFilter.set('all')">View all photos</button>
+  </div>
+}
