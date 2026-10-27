@@ -1,12 +1,125 @@
-<div class="flex lg:w-full lg:px-4 xl:px-0 xl:w-3/4 mt-20 mx-auto">
+<div class="profile-page">
+  <div class="profile-zone" aria-labelledby="profile-posts-title">
+    <div class="profile-zone-header">
+      @if (usersDetailedInfo(); as user) {
+        <div class="profile-card flex items-center justify-start gap-6 max-lg:flex-col max-lg:justify-center max-lg:gap-2">
+          <div class="profile-image lg:ml-[100px]">
+            @if (profileImageLoading()) {
+              <div class="profile-image-loader" aria-label="Loading profile photo">
+                <app-loader Cwidth="100%" Cheight="100%" [circle]="true"></app-loader>
+              </div>
+            }
+              <img [src]="profilePhotoUrl() || 'assets/user.png'" alt="{{ user.first_name }} {{ user.last_name }} profile photo"
+                class="w-[216px] h-[216px] object-cover rounded-[50%]"
+                [class.profile-image-pending]="profileImageLoading()"
+                (load)="onProfileImageLoad()"
+                (error)="onProfileImageError($event)">
+          </div>
 
-  <!-- LEFT MENU (fixed) -->
-  <div class="hidden lg:block lg:fixed h-screen">
-    <app-profile-layout
-      [user]="usersDetailedInfo()"
-      [profilePhoto]="profilePhotoUrl()"
-      [profileLoaded]="profileComponentLoaded()">
-    </app-profile-layout>
+          <div class="profile-info text-left max-lg:text-center mt-3 lg:mt-0">
+            <div id="profile-posts-title" class="name text-[25px] font-bold">{{ user.first_name }} {{ user.last_name }}</div>
+            <div class="username text-[18px] text-[rgb(120,120,120)] mt-1">&#64;{{ user.username }}</div>
+            <button
+              type="button"
+              class="mt-1 inline-flex items-center justify-center gap-2 rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-[#405854] transition-colors hover:bg-gray-100 active:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168ba4]"
+              aria-label="Edit profile">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+              </svg>
+              Edit Profile
+            </button>
+
+            <div class="profile-connections" aria-label="Profile connections">
+              <span><strong>{{ user.followers_count ?? 0 }}</strong> followers</span>
+              <span><strong>{{ user.following_count ?? 0 }}</strong> following</span>
+            </div>
+          </div>
+
+          <div class="traveler-level ml-auto mr-[70px] max-lg:mx-0 max-lg:mt-[20px]" aria-label="Traveler achievement level: Explorer, level 1">
+            <div class="traveler-level-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 2 3 6 6.5 1-4.75 4.6 1.1 6.5L12 17l-5.85 3.1 1.1-6.5L2.5 9 9 8Z"></path>
+              </svg>
+            </div>
+            <div class="traveler-level-details min-w-0">
+              <p class="traveler-level-label">Traveler achievement</p>
+              <div class="traveler-level-heading">
+                <strong>Explorer</strong>
+                <span class="traveler-level-badge">Level 1</span>
+              </div>
+              <div class="traveler-level-track" aria-label="25% progress to the next level">
+                <span class="traveler-level-progress" style="--level-progress: 25%"></span>
+              </div>
+              <p class="traveler-level-next">25% to Adventurer</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="travel-stats" aria-label="Travel statistics">
+          <div class="travel-stat-card">
+            <div class="travel-stat-content">
+              <strong>{{ user.visited_countries.length }}</strong>
+              <span>Countries visited</span>
+            </div>
+            <div class="travel-stat-icon travel-stat-icon--countries" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M3.5 9h17M3.5 15h17M12 3c2.2 2.4 3.3 5.4 3.3 9S14.2 18.6 12 21M12 3C9.8 5.4 8.7 8.4 8.7 12S9.8 18.6 12 21"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div class="travel-stat-card">
+            <div class="travel-stat-content">
+              <strong>0</strong>
+              <span>Cities explored</span>
+            </div>
+            <div class="travel-stat-icon travel-stat-icon--cities" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                <circle cx="12" cy="10" r="2.5"></circle>
+              </svg>
+            </div>
+          </div>
+
+          <div class="travel-stat-card">
+            <div class="travel-stat-content">
+              <strong>0</strong>
+              <span>Travel reviews</span>
+            </div>
+            <div class="travel-stat-icon travel-stat-icon--reviews" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div class="travel-stat-card">
+            <div class="travel-stat-content">
+              <strong>0</strong>
+              <span>Photos shared</span>
+            </div>
+            <div class="travel-stat-icon travel-stat-icon--photos" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 7h3l1.5-2h7L17 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <nav class="profile-tabs" aria-label="Profile sections">
+        <a class="profile-tab" routerLink="posts" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" (click)="preserveScrollPosition()">Posts</a>
+        <a class="profile-tab" routerLink="photos" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" (click)="preserveScrollPosition()">Photos</a>
+        <a class="profile-tab" routerLink="visited-places" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" (click)="preserveScrollPosition()">Visited Places</a>
+        <a class="profile-tab" routerLink="reviews" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" (click)="preserveScrollPosition()">Reviews</a>
+    </nav>
+
+    <div class="profile-zone-content">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-
 </div>

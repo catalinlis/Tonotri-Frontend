@@ -6,4 +6,6 @@ export interface UserDetailedInfo {
   gender: string;
   image_path: string | null;
   visited_countries: string[];
+  followers_count?: number;
+  following_count?: number;
 }

@@ -1,0 +1,194 @@
+<header class="posts-header">
+  <div class="left-header">Travel Stories</div>
+  <span class="posts-count">{{ postsCount }} posts</span>
+</header>
+
+@if (currentUser(); as user) {
+  <article class="post-card">
+    <header class="post-card-header">
+      <img
+        class="post-author-image"
+        [src]="profilePhotoUrl()"
+        alt="{{ user.first_name }} {{ user.last_name }} profile photo">
+
+      <div class="post-author-details">
+        <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+        <div class="post-meta">
+          <span>{{ post.publishedAt }}</span>
+          @if (post.location) {
+            <span class="post-location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                <circle cx="12" cy="10" r="2.5"></circle>
+              </svg>
+              {{ post.location }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <button class="post-menu" type="button" aria-label="More post options">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    @if (post.description) {
+      <p class="post-description">{{ post.description }}</p>
+    }
+
+    <div class="journey-gallery" [attr.data-count]="postPreviewImages.length" aria-label="Post photos">
+      @for (image of postPreviewImages; track image.url; let index = $index) {
+        <div class="journey-gallery-item" [class.journey-gallery-main]="index === 0">
+          <img [src]="image.url" [alt]="image.alt">
+          @if (index === 4 && postRemainingPhotos > 0) {
+            <button class="journey-more-photos" type="button" aria-label="View {{ postRemainingPhotos }} more post photos">
+              <strong>+{{ postRemainingPhotos }}</strong>
+              <span>more photos</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="post-card-footer">
+      <div class="post-tags" aria-label="Post tags">
+        @for (tag of post.tags; track tag) {
+          <span>#{{ tag }}</span>
+        }
+      </div>
+
+      <div class="post-engagement" aria-label="Post engagement">
+        <button type="button" aria-label="{{ post.likes }} likes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path>
+          </svg>
+          <span>{{ post.likes }}</span>
+        </button>
+        <button type="button" aria-label="{{ post.comments }} comments">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"></path>
+          </svg>
+          <span>{{ post.comments }}</span>
+        </button>
+      </div>
+    </div>
+  </article>
+
+  <article class="post-card journey-card">
+    <header class="post-card-header">
+      <img class="post-author-image" [src]="profilePhotoUrl()" alt="{{ user.first_name }} {{ user.last_name }} profile photo">
+      <div class="post-author-details">
+        <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+        <div class="post-meta">
+          <span>{{ journey.publishedAt }}</span>
+          <span class="post-location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+              <circle cx="12" cy="10" r="2.5"></circle>
+            </svg>
+            {{ journey.location }}
+          </span>
+        </div>
+      </div>
+      <span class="journey-label">Journey</span>
+      <button class="post-menu" type="button" aria-label="More journey options">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <div class="journey-title-row">
+      <div>
+        <span class="journey-kicker">Featured itinerary</span>
+        <span class="journey-title block">{{journey.title}}</span>
+      </div>
+    </div>
+
+    <div class="journey-gallery" [attr.data-count]="journeyPreviewImages.length" aria-label="Journey photos">
+      @for (image of journeyPreviewImages; track image.url; let index = $index) {
+        <div class="journey-gallery-item" [class.journey-gallery-main]="index === 0">
+          <img [src]="image.url" [alt]="image.alt">
+          @if (index === 4 && journeyRemainingPhotos > 0) {
+            <button class="journey-more-photos" type="button" aria-label="View {{ journeyRemainingPhotos }} more journey photos">
+              <strong>+{{ journeyRemainingPhotos }}</strong>
+              <span>more photos</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="journey-stats" aria-label="Journey summary">
+      <div>
+        <strong>{{ journey.days }}</strong>
+        <span>Days travelled</span>
+      </div>
+      <div>
+        <strong>{{ journey.places }}</strong>
+        <span>Places explored</span>
+      </div>
+      <div>
+        <strong>{{ journey.rating }}</strong>
+        <span>★ Trip rating</span>
+      </div>
+    </div>
+
+    <section class="journey-section journey-overview">
+      <h4>Journey story</h4>
+      <p>{{ journey.description }}</p>
+      <div class="post-tags" aria-label="Journey tags">
+        @for (tag of journey.tags; track tag) {
+          <span>#{{ tag }}</span>
+        }
+      </div>
+    </section>
+
+    <section class="journey-section">
+      <h4>Places along the way</h4>
+      <ol class="journey-timeline">
+        @for (stop of journey.stops; track stop.place) {
+          <li>
+            <span class="timeline-marker" aria-hidden="true"></span>
+            <div class="timeline-content">
+              <span>{{ stop.day }}</span>
+              <strong>{{ stop.place }}</strong>
+              <p>{{ stop.detail }}</p>
+            </div>
+          </li>
+        }
+      </ol>
+    </section>
+
+    <section class="journey-section journey-tips">
+      <div class="journey-tips-heading">
+        <span aria-hidden="true">✦</span>
+        <h4>Tips from this journey</h4>
+      </div>
+      <ul>
+        @for (tip of journey.tips; track tip) {
+          <li>{{ tip }}</li>
+        }
+      </ul>
+    </section>
+
+    <footer class="journey-actions">
+      <div class="journey-action-group">
+        <button type="button" aria-label="{{ journey.likes }} likes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path></svg>
+          {{ journey.likes }}
+        </button>
+        <button type="button" aria-label="{{ journey.comments }} comments">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"></path></svg>
+          {{ journey.comments }}
+        </button>
+        <button type="button" aria-label="{{ journey.shares }} shares">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"></path></svg>
+          {{ journey.shares }}
+        </button>
+      </div>
+      <button class="save-journey" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"></path></svg>
+        Save trip
+      </button>
+    </footer>
+  </article>
+}

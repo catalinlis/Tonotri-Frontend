@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { ProfileLayout } from '../../components/profile-layout/profile-layout';
+import { ProfileLayout } from '../../../../shared/components/profile-layout/profile-layout';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
