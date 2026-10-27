@@ -1,8 +1,7 @@
 import { Component, input } from '@angular/core';
-import { UserDetailedInfo } from '../../models/user-detailed-info';
-import { SafeUrl } from '@angular/platform-browser';
+import { UserDetailedInfo } from '../../../shared/models/user-detailed-info';
 import { CommonModule } from '@angular/common';
-import { AppLoaderComponent } from "../../../../shared/components/app-loader/loader.component";
+import { AppLoaderComponent } from "../../../shared/components/app-loader/loader.component";
 
 @Component({
   selector: 'app-profile-layout',
