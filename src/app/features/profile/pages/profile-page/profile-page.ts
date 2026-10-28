@@ -1,7 +1,5 @@
 import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet, Scroll } from '@angular/router';
-import { filter } from 'rxjs';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { AppLoaderComponent } from '../../../../shared/components/app-loader/loader.component';
 
@@ -12,31 +10,14 @@ import { AppLoaderComponent } from '../../../../shared/components/app-loader/loa
 })
 export class ProfilePage {
   private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
-  private savedScrollPosition: [number, number] | null = null;
 
   readonly usersDetailedInfo = this.authService.currentUser;
   readonly profilePhotoUrl = computed(() => this.authService.currentUser()?.image_path ?? null);
   readonly profileImageLoading = signal(true);
+  readonly achievementsExpanded = signal(false);
 
-  constructor() {
-    this.router.events
-      .pipe(
-        filter((event): event is Scroll => event instanceof Scroll),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe(() => {
-        if (!this.savedScrollPosition) return;
-
-        const [x, y] = this.savedScrollPosition;
-        this.savedScrollPosition = null;
-        requestAnimationFrame(() => window.scrollTo(x, y));
-      });
-  }
-
-  preserveScrollPosition(): void {
-    this.savedScrollPosition = [window.scrollX, window.scrollY];
+  toggleAchievements(): void {
+    this.achievementsExpanded.update((expanded) => !expanded);
   }
 
   onProfileImageLoad(): void {

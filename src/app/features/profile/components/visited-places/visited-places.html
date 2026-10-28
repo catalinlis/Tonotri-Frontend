@@ -1,1 +1,98 @@
-<p>visited places works!</p>
+<section class="travel-journal" aria-labelledby="travel-journal-title">
+  <header class="journal-header">
+    <div>
+      <div class="travel-journal-title">The world I’ve explored<span class="text-[orange]">.</span></div>
+      <p class="journal-subtitle">Every pin holds a story, every journey a memory.</p>
+    </div>
+    <button class="add-place-button" type="button" aria-label="Add a visited place"><span aria-hidden="true">+</span> Add a place</button>
+  </header>
+
+  <div class="journal-stats" aria-label="Travel journal statistics">
+    <article><div class="stat-label"><span class="stat-icon stat-icon--globe" aria-hidden="true">●</span> Countries</div><strong>12</strong><small>Across 3 continents</small></article>
+    <article><div class="stat-label"><span class="stat-icon stat-icon--pin" aria-hidden="true">●</span> Cities</div><strong>34</strong><small>Unique destinations</small></article>
+    <article><div class="stat-label"><span class="stat-icon stat-icon--trips" aria-hidden="true">&#x2708;&#xfe0e;</span> Trips</div><strong>18</strong><small>Unforgettable journeys</small></article>
+    <article><div class="stat-label"><span class="stat-icon stat-icon--star" aria-hidden="true">★</span> Avg. rating</div><strong>4.8<em>/5</em></strong><small>Your travel ratings</small></article>
+  </div>
+
+  <section #mapCard class="map-card" aria-labelledby="map-title">
+    <div class="map-card-header">
+      <div class="region-tabs" aria-label="Map regions">
+        <button type="button" [class.active]="activeRegion === 'world'" (click)="selectRegion('world')">World view</button>
+        <button type="button" [class.active]="activeRegion === 'europe'" (click)="selectRegion('europe')">Europe</button>
+        <button type="button" [class.active]="activeRegion === 'asia'" (click)="selectRegion('asia')">Asia</button>
+      </div>
+    </div>
+
+    <div class="map-shell">
+      <div #travelMap class="travel-map" role="application" [attr.aria-label]="mapStatus"></div>
+      <div class="map-legend"><span aria-hidden="true"></span> Visited locations</div>
+      @if (selectedPlace; as place) {
+        <article class="place-preview" aria-live="polite">
+          <div class="country-code">{{ place.countryCode }}</div>
+          <div><strong>{{ place.city }}, {{ place.country }}</strong><p>Visited {{ place.date }}</p></div>
+        </article>
+      }
+    </div>
+
+    <div class="map-footer">
+      <span><i aria-hidden="true"></i> Select a pin to explore a visited place</span>
+      <strong>{{ places.length }} places on the map</strong>
+    </div>
+  </section>
+
+  <section class="visited-places-panel" aria-labelledby="visited-places-title">
+    <header class="visited-places-header">
+      <div>
+        <p class="visited-places-eyebrow"><span aria-hidden="true"></span> Travel memories</p>
+        <p>Places that turned into stories worth keeping.</p>
+      </div>
+
+      <div class="place-filters" aria-label="Filter visited places">
+        <button
+          type="button"
+          [class.active]="placeFilter === 'all'"
+          [attr.aria-pressed]="placeFilter === 'all'"
+          (click)="setPlaceFilter('all')">
+          All places
+          <span class="filter-count">{{ visitedPlaceCards.length }}</span>
+        </button>
+        <button
+          type="button"
+          [class.active]="placeFilter === 'favorites'"
+          [attr.aria-pressed]="placeFilter === 'favorites'"
+          (click)="setPlaceFilter('favorites')">
+          <span aria-hidden="true">★</span>
+          Favorites
+        </button>
+      </div>
+    </header>
+
+    <div class="visited-place-grid" aria-live="polite">
+      @for (card of filteredVisitedPlaceCards; track card.place.city) {
+        <article class="visited-place-card">
+          <div class="visited-place-photo">
+            <img [src]="card.image" [alt]="card.imageAlt">
+            <span class="country-pill">{{ card.place.countryCode }} · {{ card.place.country }}</span>
+            <span class="rating-pill"><span aria-hidden="true">★</span> {{ card.place.rating }}</span>
+          </div>
+
+          <div class="visited-place-body">
+            <div>
+              <h3>{{ card.place.city }}</h3>
+              <p><span aria-hidden="true">◷</span> {{ card.place.date }}</p>
+            </div>
+            <button type="button" (click)="showPlaceOnMap(card.place)">
+              Show on map
+              <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+
+    <button class="view-all-places" type="button" (click)="setPlaceFilter('all')">
+      View all visited places
+      <span aria-hidden="true">→</span>
+    </button>
+  </section>
+</section>
