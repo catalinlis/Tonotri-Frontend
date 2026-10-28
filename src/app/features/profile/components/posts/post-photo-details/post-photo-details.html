@@ -1,0 +1,136 @@
+<article class="post-details">
+  <header class="post-author">
+    <img [src]="context().authorImage" alt="">
+    <div><strong>{{ context().author }}</strong><span>{{ context().publishedAt }}</span></div>
+  </header>
+
+  @if (context().location; as location) {
+    <div class="post-location-title">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+        <circle cx="12" cy="10" r="2.5"></circle>
+      </svg>
+      <span>{{ location }}</span>
+    </div>
+  }
+  @if (context().journeyDetails; as journey) {
+    <div class="journey-description">
+      <span class="journey-kicker">Featured itinerary</span>
+      <h2>{{ journey.title }}</h2>
+
+      <section class="journey-content-section">
+        <p class="post-copy">{{ context().description }}</p>
+      </section>
+
+      <div class="journey-stats" aria-label="Journey summary">
+        <div><strong>{{ journey.days }}</strong><span>Days travelled</span></div>
+        <div><strong>{{ journey.places }}</strong><span>Places explored</span></div>
+        <div><strong>{{ journey.rating }}</strong><span>★ Trip rating</span></div>
+      </div>
+
+      <section class="journey-content-section">
+        <h3>Places along the way</h3>
+        <ol class="journey-timeline">
+          @for (stop of journey.stops; track stop.place) {
+            <li>
+              <span class="timeline-marker" aria-hidden="true"></span>
+              <div>
+                <span>{{ stop.day }}</span>
+                <strong>{{ stop.place }}</strong>
+                <p>{{ stop.detail }}</p>
+              </div>
+            </li>
+          }
+        </ol>
+      </section>
+
+      <section class="journey-content-section journey-tips">
+        <div class="tips-header">✦ Tips from this journey</div>
+        <ul>
+          @for (tip of journey.tips; track tip) { <li>{{ tip }}</li> }
+        </ul>
+      </section>
+    </div>
+  } @else {
+    <p class="post-copy">{{ context().description }}</p>
+  }
+
+  <section class="tagged-locations">
+    <div class="tagged-locations-header">Tagged locations</div>
+    <div class="post-tags">
+      @for (tag of context().tags; track tag) { <span># {{ tag }}</span> }
+    </div>
+  </section>
+
+  <footer class="details-actions">
+    <button
+      type="button"
+      class="like-action"
+      [class.like-action--active]="isLiked()"
+      [attr.aria-pressed]="isLiked()"
+      [attr.aria-label]="isLiked() ? 'Remove like' : 'Like this post photo'"
+      (click)="toggleLike()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.7-7.5 1.1-1.1a5.5 5.5 0 0 0 0-7.8Z"></path>
+      </svg>
+      {{ displayedLikes() }} Likes
+    </button>
+    <button type="button" class="comment-action" [attr.aria-label]="context().comments + ' comments'" (click)="focusCommentTextarea()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"></path>
+      </svg>
+      Comment
+    </button>
+    <button
+      type="button"
+      class="save-action"
+      [class.save-action--active]="isSaved()"
+      [attr.aria-pressed]="isSaved()"
+      [attr.aria-label]="isSaved() ? 'Remove post photo from saved items' : 'Save this post photo'"
+      (click)="toggleSave()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"></path>
+      </svg>
+      {{ isSaved() ? 'Saved' : 'Save' }}
+    </button>
+  </footer>
+
+  <section class="comments-area" aria-label="Post comments">
+    @if (context().commentItems.length > 0) {
+      <div class="comments-list">
+        @for (comment of context().commentItems; track comment.author + comment.postedAt) {
+          <article class="comment-item">
+            <img [src]="comment.authorImage" alt="{{ comment.author }} profile photo">
+            <div>
+              <header><strong>{{ comment.author }}</strong><span>{{ comment.postedAt }}</span></header>
+              <p>{{ comment.text }}</p>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="comments-empty-state">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"></path>
+        </svg>
+        <strong>No comments yet</strong>
+        <span>Be the first to share your thoughts.</span>
+      </div>
+    }
+
+    <div class="comments-section">
+      <img class="comment-author-image" [src]="context().authorImage" alt="{{ context().author }} profile photo">
+      <div class="comment-composer">
+        <label for="post-photo-comment">Add a comment</label>
+        <textarea
+          #commentTextarea
+          id="post-photo-comment"
+          rows="2"
+          placeholder="Share your thoughts..."
+          [value]="commentDraft()"
+          (input)="updateCommentDraft($event)"></textarea>
+        <button type="button">Post comment</button>
+      </div>
+    </div>
+  </section>
+</article>

@@ -120,11 +120,13 @@
     aria-label="Travel photo collection">
     @for (photo of filteredPhotos(); track photo.url + photo.title; let index = $index) {
       <article class="photo-card" [attr.data-index]="index">
-        <img [src]="photo.url" [alt]="photo.alt">
-        <div class="photo-overlay">
-          <strong>{{ photo.title }}</strong>
-          <span>{{ photo.country }} &middot; {{ photo.date }}</span>
-        </div>
+        <button type="button" class="photo-open-button" (click)="openGallery(index)" aria-label="Open {{ photo.title }} photo">
+          <img [src]="photo.url" [alt]="photo.alt">
+          <span class="photo-overlay">
+            <strong>{{ photo.title }}</strong>
+            <span>{{ photo.country }} &middot; {{ photo.date }}</span>
+          </span>
+        </button>
         <button type="button" class="favorite-photo" aria-label="Add {{ photo.title }} to favorites">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.7-7.5 1.1-1.1a5.5 5.5 0 0 0 0-7.8Z"></path>

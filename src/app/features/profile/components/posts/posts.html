@@ -40,8 +40,9 @@
       @for (image of postPreviewImages; track image.url; let index = $index) {
         <div class="journey-gallery-item" [class.journey-gallery-main]="index === 0">
           <img [src]="image.url" [alt]="image.alt">
+          <button class="gallery-open-hitbox" type="button" (click)="openPostGallery(index)" aria-label="Open post photo {{ index + 1 }}"></button>
           @if (index === 4 && postRemainingPhotos > 0) {
-            <button class="journey-more-photos" type="button" aria-label="View {{ postRemainingPhotos }} more post photos">
+            <button class="journey-more-photos" type="button" (click)="openPostGallery(index)" aria-label="View {{ postRemainingPhotos }} more post photos">
               <strong>+{{ postRemainingPhotos }}</strong>
               <span>more photos</span>
             </button>
@@ -107,8 +108,9 @@
       @for (image of journeyPreviewImages; track image.url; let index = $index) {
         <div class="journey-gallery-item" [class.journey-gallery-main]="index === 0">
           <img [src]="image.url" [alt]="image.alt">
+          <button class="gallery-open-hitbox" type="button" (click)="openJourneyGallery(index)" aria-label="Open journey photo {{ index + 1 }}"></button>
           @if (index === 4 && journeyRemainingPhotos > 0) {
-            <button class="journey-more-photos" type="button" aria-label="View {{ journeyRemainingPhotos }} more journey photos">
+            <button class="journey-more-photos" type="button" (click)="openJourneyGallery(index)" aria-label="View {{ journeyRemainingPhotos }} more journey photos">
               <strong>+{{ journeyRemainingPhotos }}</strong>
               <span>more photos</span>
             </button>

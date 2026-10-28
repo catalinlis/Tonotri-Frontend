@@ -250,6 +250,20 @@
   overflow: hidden;
 }
 
+.gallery-open-hitbox {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.gallery-open-hitbox:focus-visible {
+  outline: 3px solid #75d5ca;
+  outline-offset: -4px;
+}
+
 .journey-gallery img {
   display: block;
   width: 100%;
@@ -294,6 +308,7 @@
 
 .journey-more-photos {
   position: absolute;
+  z-index: 2;
   inset: 0;
   display: flex;
   align-items: center;
