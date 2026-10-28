@@ -11,6 +11,11 @@
     max-width: 100vw !important;
 }
 
+.profile-media-dialog-panel .cdk-dialog-container:focus,
+.profile-media-dialog-panel .cdk-dialog-container:focus-visible {
+    outline: none;
+}
+
 @font-face {
     font-family: 'Roboto';
     src: url('/assets/fonts/RobotoSlab-Regular.ttf') format('truetype');

@@ -41,7 +41,7 @@
   overflow: hidden;
   border: 6px solid white;
   border-radius: 50%;
-  box-shadow: 0 0 0 3px rgb(50 178 217 / 24%);
+  box-shadow: 0 0 0 3px rgb(32 145 181 / 48%);
   color: white;
   font-size: 64px;
   font-weight: 700;
@@ -377,7 +377,7 @@
   height: auto;
   padding: 20px;
   width: min(100%, 760px);
-  margin: auto;
+  margin: 0 auto;
 }
 
 @media (max-width: 1023px) {

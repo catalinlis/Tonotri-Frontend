@@ -1,0 +1,44 @@
+<section class="gallery-shell" #dialogShell aria-label="Profile photo gallery">
+  <div class="gallery-viewer">
+    <header class="gallery-header">
+      <div class="gallery-brand">
+        <strong>{{ data.eyebrow || 'Photo journal' }}</strong>
+      </div>
+      <span class="gallery-position" aria-live="polite">{{ selectedIndex() + 1 }} / {{ data.images.length }}</span>
+    </header>
+
+    <div class="gallery-stage">
+      @if (data.images.length > 1) {
+        <button type="button" class="navigation-button previous" (click)="previous()" aria-label="Previous photo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+        </button>
+      }
+      @if (selectedImage(); as photo) {
+        <img class="active-photo" [src]="photo.url" [alt]="photo.alt">
+      }
+      @if (data.images.length > 1) {
+        <button type="button" class="navigation-button next" (click)="next()" aria-label="Next photo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+        </button>
+      }
+    </div>
+
+    @if (data.images.length > 1 && data.showThumbnails !== false) {
+      <footer class="gallery-footer" aria-label="Choose a photo">
+        @for (image of data.images; track $index) {
+          <button type="button" class="thumbnail-button" [class.thumbnail-button--active]="$index === selectedIndex()" (click)="select($index)" [attr.aria-label]="'Show photo ' + ($index + 1)" [attr.aria-current]="$index === selectedIndex() ? 'true' : null">
+            <img [src]="image.url" alt="">
+          </button>
+        }
+      </footer>
+    }
+  </div>
+
+  <aside class="gallery-details">
+    <ng-container *ngComponentOutlet="data.detailsComponent; inputs: detailsInputs()"></ng-container>
+  </aside>
+
+  <button type="button" class="close-button" (click)="close()" aria-label="Close photo gallery">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</section>
