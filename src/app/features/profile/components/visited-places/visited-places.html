@@ -78,8 +78,8 @@
 
           <div class="visited-place-body">
             <div>
-              <h3>{{ card.place.city }}</h3>
-              <p><span aria-hidden="true">◷</span> {{ card.place.date }}</p>
+              <div class="header">{{ card.place.city }}</div>
+              <div class="time"><span aria-hidden="true">◷</span> {{ card.place.date }}</div>
             </div>
             <button type="button" (click)="showPlaceOnMap(card.place)">
               Show on map
@@ -92,7 +92,9 @@
 
     <button class="view-all-places" type="button" (click)="setPlaceFilter('all')">
       View all visited places
-      <span aria-hidden="true">→</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5v14m-6-6 6 6 6-6"></path>
+      </svg>
     </button>
   </section>
 </section>

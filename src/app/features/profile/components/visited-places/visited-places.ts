@@ -40,12 +40,12 @@ export class VisitedPlaces implements AfterViewInit, OnDestroy {
     { city: 'Paris', country: 'France', countryCode: 'FR', date: 'Apr 2025', rating: 4.8, coordinates: [2.3522, 48.8566] },
     { city: 'Lisbon', country: 'Portugal', countryCode: 'PT', date: 'Sep 2024', rating: 4.9, coordinates: [-9.1393, 38.7223] },
     { city: 'Tokyo', country: 'Japan', countryCode: 'JP', date: 'Mar 2024', rating: 4.7, coordinates: [139.6917, 35.6895] },
-    { city: 'New York', country: 'United States', countryCode: 'US', date: 'Oct 2023', rating: 4.6, coordinates: [-74.006, 40.7128] },
+    { city: 'New York', country: 'United States of America', countryCode: 'US', date: 'Oct 2023', rating: 4.6, coordinates: [-74.006, 40.7128] },
   ];
 
   protected readonly visitedPlaceCards: VisitedPlaceCard[] = [
     { place: this.places[0], image: 'assets/coloseum.jpg', imageAlt: 'The Colosseum in Rome', favorite: true },
-    { place: this.places[1], image: 'assets/explore1.jpg', imageAlt: 'Travel memories from Paris', favorite: false },
+    { place: this.places[4], image: 'assets/new-york.jpg', imageAlt: 'New York skyline in the United States', favorite: false },
     { place: this.places[2], image: 'assets/explore2.jpg', imageAlt: 'Coastal travel memories from Lisbon', favorite: true },
     { place: this.places[3], image: 'assets/mountain.jpg', imageAlt: 'A mountain journey near Tokyo', favorite: false },
   ];
