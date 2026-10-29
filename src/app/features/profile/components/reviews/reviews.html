@@ -1,1 +1,223 @@
-<p>reviews works!</p>
+<section class="review-journal" aria-labelledby="reviews-title">
+  <header class="journal-header">
+    <div>
+      <div class="review-journal-title">Stories worth remembering<span>.</span></div>
+      <p class="journal-subtitle">Keep the details that made each place special and help another traveler along the way.</p>
+    </div>
+
+    <button type="button" class="add-review-button" (click)="writeReview.emit()">
+      <span aria-hidden="true">+</span> Write a review
+    </button>
+  </header>
+
+  <div class="review-stats" aria-label="Your review statistics">
+    <article>
+      <span class="stat-icon stat-icon--stories" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5" /></svg>
+      </span>
+      <div><small>Reviews</small><strong>{{ reviews.length }}</strong><span>Travel stories</span></div>
+    </article>
+
+    <article>
+      <span class="stat-icon stat-icon--rating" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z" /></svg>
+      </span>
+      <div><small>Average rating</small><strong>{{ averageRating() }}</strong><span>Across your trips</span></div>
+    </article>
+
+    <article>
+      <span class="stat-icon stat-icon--helpful" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M7 10v11H3V10h4Zm0 9h10.2a2 2 0 0 0 1.9-1.4l1.7-5.2A2 2 0 0 0 18.9 10H14l.7-3.4A3 3 0 0 0 11.8 3L7 10" /></svg>
+      </span>
+      <div><small>Helpful votes</small><strong>{{ helpfulVotes() }}</strong><span>From travelers</span></div>
+    </article>
+  </div>
+
+  <div class="review-toolbar">
+    <div class="filter-list" aria-label="Filter reviews by location">
+      <button
+        type="button"
+        class="filter-chip"
+        [class.active]="activeFilter() === 'all'"
+        [attr.aria-pressed]="activeFilter() === 'all'"
+        (click)="setFilter('all')"
+      >
+        All reviews
+      </button>
+
+      <div class="location-filter">
+        <button
+          type="button"
+          class="filter-chip location-trigger"
+          [class.active]="activeFilter() === 'countries'"
+          [attr.aria-expanded]="activeLocationMenu() === 'countries'"
+          [attr.aria-label]="activeFilter() === 'countries' ? 'Countries, selected ' + (selectedLocation() || 'All countries') : 'Choose a country'"
+          aria-controls="country-review-menu"
+          (click)="$event.stopPropagation(); toggleLocationMenu('countries', $event)"
+        >
+          {{ activeFilter() === 'countries' ? (selectedLocation() || 'All countries') : 'Countries' }}
+          <span class="menu-chevron" aria-hidden="true"></span>
+        </button>
+        @if (activeLocationMenu() === 'countries') {
+          <div
+            id="country-review-menu"
+            class="location-menu"
+            [class.location-menu--above]="locationMenuOpensUp()"
+            role="menu"
+            (click)="$event.stopPropagation()"
+          >
+            <button
+              type="button"
+              role="menuitem"
+              [class.selected]="activeFilter() === 'countries' && !selectedLocation()"
+              (click)="selectLocation('countries', '')"
+            >All countries</button>
+            @for (country of countryOptions; track country) {
+              <button
+                type="button"
+                role="menuitem"
+                [class.selected]="selectedLocation() === country"
+                (click)="selectLocation('countries', country)"
+              >{{ country }}</button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="location-filter">
+        <button
+          type="button"
+          class="filter-chip location-trigger"
+          [class.active]="activeFilter() === 'cities'"
+          [attr.aria-expanded]="activeLocationMenu() === 'cities'"
+          [attr.aria-label]="activeFilter() === 'cities' ? 'Cities, selected ' + (selectedLocation() || 'All cities') : 'Choose a city'"
+          aria-controls="city-review-menu"
+          (click)="$event.stopPropagation(); toggleLocationMenu('cities', $event)"
+        >
+          {{ activeFilter() === 'cities' ? (selectedLocation() || 'All cities') : 'Cities' }}
+          <span class="menu-chevron" aria-hidden="true"></span>
+        </button>
+        @if (activeLocationMenu() === 'cities') {
+          <div
+            id="city-review-menu"
+            class="location-menu"
+            [class.location-menu--above]="locationMenuOpensUp()"
+            role="menu"
+            (click)="$event.stopPropagation()"
+          >
+            <button
+              type="button"
+              role="menuitem"
+              [class.selected]="activeFilter() === 'cities' && !selectedLocation()"
+              (click)="selectLocation('cities', '')"
+            >All cities</button>
+            @for (city of cityOptions; track city) {
+              <button
+                type="button"
+                role="menuitem"
+                [class.selected]="selectedLocation() === city"
+                (click)="selectLocation('cities', city)"
+              >{{ city }}</button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="sort-field">
+      <span>Sort</span>
+      <div class="sort-dropdown">
+        <button
+          type="button"
+          class="filter-chip location-trigger sort-trigger"
+          [class.active]="sortMenuOpen()"
+          [attr.aria-expanded]="sortMenuOpen()"
+          aria-controls="review-sort-menu"
+          (click)="$event.stopPropagation(); toggleSortMenu($event)"
+        >
+          {{ sortBy() === 'latest' ? 'Latest first' : 'Highest rated' }}
+          <span class="menu-chevron" aria-hidden="true"></span>
+        </button>
+        @if (sortMenuOpen()) {
+          <div
+            id="review-sort-menu"
+            class="location-menu sort-menu"
+            [class.location-menu--above]="sortMenuOpensUp()"
+            role="menu"
+            (click)="$event.stopPropagation()"
+          >
+            <button type="button" role="menuitem" [class.selected]="sortBy() === 'latest'" (click)="selectSort('latest')">
+              Latest first
+            </button>
+            <button type="button" role="menuitem" [class.selected]="sortBy() === 'rating'" (click)="selectSort('rating')">
+              Highest rated
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (visibleReviews().length) {
+    <div class="review-list" aria-live="polite">
+      @for (review of visibleReviews(); track review.id; let first = $first) {
+        <article class="review-card">
+          <div class="review-image-wrap">
+            <img
+              [src]="review.image"
+              [alt]="review.imageAlt"
+              width="720"
+              height="520"
+              [attr.loading]="first ? 'eager' : 'lazy'"
+              decoding="async"
+            />
+            <span class="image-shade" aria-hidden="true"></span>
+            <span class="country-code" aria-hidden="true">{{ review.countryCode }}</span>
+            <span class="rating-badge" aria-label="Rated {{ review.rating }} out of 5">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z" /></svg>
+              {{ review.rating }}
+            </span>
+            <div class="place-lockup">
+              <strong>{{ review.country }}</strong>
+              <span>{{ review.location }}</span>
+            </div>
+          </div>
+
+          <div class="review-body">
+            <div class="review-meta">
+              <span>{{ review.dateLabel }}</span>
+              <span>{{ review.category }}</span>
+            </div>
+            <h3>{{ review.title }}</h3>
+            <p>{{ review.excerpt }}</p>
+
+            <footer>
+              <span class="helpful-count">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v11H3V10h4Zm0 9h10.2a2 2 0 0 0 1.9-1.4l1.7-5.2A2 2 0 0 0 18.9 10H14l.7-3.4A3 3 0 0 0 11.8 3L7 10" /></svg>
+                Helpful to {{ review.helpfulCount }} travelers
+              </span>
+              <button
+                type="button"
+                class="edit-button"
+                [attr.aria-label]="'Edit review for ' + review.country"
+                (click)="editReview.emit(review.id)"
+              >
+                Edit
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" /></svg>
+              </button>
+            </footer>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="empty-state" aria-live="polite">
+      <span class="empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h6" /></svg>
+      </span>
+      <h3>No reviews found</h3>
+      <p>Try another place, or show all of your travel stories.</p>
+      <button type="button" (click)="clearFilters()">Show all reviews</button>
+    </div>
+  }
+</section>
