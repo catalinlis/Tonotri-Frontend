@@ -36,7 +36,34 @@
             </div>
           </div>
 
-          <div class="traveler-level ml-auto mr-[70px] max-lg:mx-0 max-lg:mt-[20px]" aria-label="Traveler achievement level: Explorer, level 1">
+          <button
+            type="button"
+            class="achievements-toggle"
+            [class.achievements-toggle--expanded]="achievementsExpanded()"
+            [attr.aria-expanded]="achievementsExpanded()"
+            aria-controls="traveler-level-panel travel-stats-panel"
+            (click)="toggleAchievements()">
+            <span class="achievements-toggle-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"></path>
+                <path d="M7 6H4v1a4 4 0 0 0 4 4M17 6h3v1a4 4 0 0 1-4 4"></path>
+              </svg>
+            </span>
+            <span class="achievements-toggle-copy">
+              <strong>{{ achievementsExpanded() ? 'Hide achievements' : 'View achievements' }}</strong>
+              <small>Traveler level &amp; journey stats</small>
+            </span>
+            <span class="achievements-toggle-count">4 stats</span>
+            <svg class="achievements-toggle-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m7 10 5 5 5-5"></path>
+            </svg>
+          </button>
+
+          <div
+            id="traveler-level-panel"
+            class="traveler-level mobile-achievement-panel ml-auto mr-[70px] max-lg:mx-0 max-lg:mt-[20px]"
+            [class.mobile-achievement-panel--expanded]="achievementsExpanded()"
+            aria-label="Traveler achievement level: Explorer, level 1">
             <div class="traveler-level-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m12 2 3 6 6.5 1-4.75 4.6 1.1 6.5L12 17l-5.85 3.1 1.1-6.5L2.5 9 9 8Z"></path>
@@ -56,7 +83,11 @@
           </div>
         </div>
 
-        <div class="travel-stats" aria-label="Travel statistics">
+        <div
+          id="travel-stats-panel"
+          class="travel-stats mobile-achievement-panel"
+          [class.mobile-achievement-panel--expanded]="achievementsExpanded()"
+          aria-label="Travel statistics">
           <div class="travel-stat-card">
             <div class="travel-stat-content">
               <strong>{{ user.visited_countries.length }}</strong>
@@ -112,10 +143,10 @@
     </div>
 
     <nav class="profile-tabs" aria-label="Profile sections">
-        <a class="profile-tab" routerLink="posts" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" (click)="preserveScrollPosition()">Posts</a>
-        <a class="profile-tab" routerLink="photos" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" (click)="preserveScrollPosition()">Photos</a>
-        <a class="profile-tab" routerLink="visited-places" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" (click)="preserveScrollPosition()">Visited Places</a>
-        <a class="profile-tab" routerLink="reviews" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" (click)="preserveScrollPosition()">Reviews</a>
+        <a class="profile-tab" routerLink="posts" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" >Posts</a>
+        <a class="profile-tab" routerLink="photos" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" >Photos</a>
+        <a class="profile-tab" routerLink="visited-places" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" >Visited Places</a>
+        <a class="profile-tab" routerLink="reviews" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page">Reviews</a>
     </nav>
 
     <div class="profile-zone-content">
