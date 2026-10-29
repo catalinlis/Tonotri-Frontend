@@ -1,0 +1,21 @@
+<main class="country-overview">
+  <header class="header">
+    <img
+      [src]="countryImage()"
+      [alt]="countryName() + ' landscape'"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <span class="header-shade" aria-hidden="true"></span>
+    <a class="back-link" routerLink="/countries" aria-label="Back to all countries">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+      All countries
+    </a>
+    <h1 class="header-country-name">{{ countryName() }}</h1>
+  </header>
+
+  <app-section-navigation
+    [items]="countrySections()"
+    [ariaLabel]="countryName() + ' sections'"
+  />
+</main>

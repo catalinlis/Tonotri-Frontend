@@ -1,0 +1,17 @@
+:host { display: block; }
+.review-detail { width: min(100% - 32px, 1000px); margin: 104px auto 56px; padding: 28px; border: 1px solid #dce9e9; border-radius: 18px; background: white; box-shadow: 0 9px 24px rgb(35 77 82 / 7%); }
+.back-link { display: inline-flex; align-items: center; gap: 5px; color: #168ba4; font-size: 13px; font-weight: 800; text-decoration: none; }
+.back-link:hover { color: #087d72; }
+.back-link:focus-visible { border-radius: 4px; outline: 3px solid rgb(250 153 23 / 50%); outline-offset: 3px; }
+.back-link svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.review-heading { margin-top: 26px; }
+.review-heading p { margin: 0 0 7px; color: #168ba4; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.review-heading h2 { margin: 0; color: #153d47; font-size: clamp(25px, 4vw, 34px); letter-spacing: -.025em; }
+.review-heading > span { display: block; margin-top: 8px; color: #667e83; font-size: 13px; }
+.review-placeholder { display: flex; align-items: flex-start; gap: 14px; margin-top: 25px; padding: 20px; border-radius: 15px; background: #f5fafb; }
+.review-placeholder > span { display: grid; width: 44px; height: 44px; flex: 0 0 44px; place-items: center; border-radius: 13px; background: rgb(50 178 217 / 13%); color: #168ba4; }
+.review-placeholder svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.review-placeholder strong { color: #153d47; font-size: 15px; }
+.review-placeholder p { margin: 7px 0 0; color: #667e83; font-size: 13px; line-height: 1.55; }
+code { color: #087d72; font: inherit; font-weight: 800; }
+@media (max-width: 640px) { .review-detail { width: min(100% - 20px, 1000px); margin-top: 92px; padding: 22px; } .review-placeholder { padding: 16px; } }
