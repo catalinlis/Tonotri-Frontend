@@ -1,3 +1,4 @@
+import { PhotoCard } from '../../../../shared/components/photo-card/photo-card';
 import { Component, computed, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ProfileMediaDialogService } from '../../../../shared/services/profile-media-dialog.service';
@@ -5,7 +6,7 @@ import { PhotoDetails, ProfilePhotoMetadata } from './photo-details/photo-detail
 
 @Component({
   selector: 'app-photos',
-  imports: [],
+  imports: [PhotoCard],
   templateUrl: './photos.html',
   styleUrl: './photos.css',
 })

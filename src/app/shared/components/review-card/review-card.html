@@ -1,0 +1,48 @@
+@let review = this.review();
+<article class="review-card">
+          <div class="review-image-wrap">
+            <img
+              [src]="review.image"
+              [alt]="review.imageAlt"
+              width="720"
+              height="520"
+              [attr.loading]="eager() ? 'eager' : 'lazy'"
+              decoding="async"
+            />
+            <span class="image-shade" aria-hidden="true"></span>
+            <span class="country-code" aria-hidden="true">{{ review.countryCode }}</span>
+            <span class="rating-badge" aria-label="Rated {{ review.rating }} out of 5">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z" /></svg>
+              {{ review.rating }}
+            </span>
+            <div class="place-lockup">
+              <strong>{{ review.country }}</strong>
+              <span>{{ review.location }}</span>
+            </div>
+          </div>
+
+          <div class="review-body">
+            <div class="review-meta">
+              <span>{{ review.dateLabel }}</span>
+              <span>{{ review.category }}</span>
+            </div>
+            <h3>{{ review.title }}</h3>
+            <p>{{ review.excerpt }}</p>
+
+            <footer>
+              <span class="helpful-count">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v11H3V10h4Zm0 9h10.2a2 2 0 0 0 1.9-1.4l1.7-5.2A2 2 0 0 0 18.9 10H14l.7-3.4A3 3 0 0 0 11.8 3L7 10" /></svg>
+                Helpful to {{ review.helpfulCount }} travelers
+              </span>
+              <button
+                type="button"
+                class="edit-button"
+                [attr.aria-label]="'Edit review for ' + review.country"
+                (click)="editReview.emit(review.id)"
+              >
+                Edit
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" /></svg>
+              </button>
+            </footer>
+          </div>
+        </article>

@@ -1,3 +1,4 @@
+import { PostCard } from '../../../../shared/components/post-card/post-card';
 import { Component, computed, inject } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ProfileMediaDialogService } from '../../../../shared/services/profile-media-dialog.service';
@@ -5,7 +6,7 @@ import { PostPhotoDetails, PostPhotoDetailsContext } from './post-photo-details/
 
 @Component({
   selector: 'app-posts',
-  imports: [],
+  imports: [PostCard],
   templateUrl: './posts.html',
   styleUrl: './posts.css',
 })
@@ -33,8 +34,6 @@ export class Posts {
     ],
   };
 
-  readonly postPreviewImages = this.post.images.slice(0, 5);
-  readonly postRemainingPhotos = Math.max(this.post.images.length - 5, 0);
 
   readonly journey = {
     title: 'An Italian Escape',
@@ -71,8 +70,6 @@ export class Posts {
     shares: 18,
   };
 
-  readonly journeyPreviewImages = this.journey.images.slice(0, 5);
-  readonly journeyRemainingPhotos = Math.max(this.journey.images.length - 5, 0);
 
   openPostGallery(startIndex: number): void {
     const user = this.currentUser();
