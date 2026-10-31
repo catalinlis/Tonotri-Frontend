@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { loadMapLibreFromWeb } from '../../../../shared/utils/maplibre-loader';
 
 type Region = 'world' | 'europe' | 'asia';
 
@@ -18,11 +19,6 @@ interface VisitedPlaceCard {
   image: string;
   imageAlt: string;
   favorite: boolean;
-}
-
-interface MapLibreWindow extends Window {
-  maplibregl?: any;
-  __tonotriMapLibrePromise?: Promise<any>;
 }
 
 @Component({
@@ -104,7 +100,7 @@ export class VisitedPlaces implements AfterViewInit, OnDestroy {
 
   private async initialiseMap(): Promise<void> {
     try {
-      const maplibregl = await this.loadMapLibreFromWeb();
+      const maplibregl = await loadMapLibreFromWeb();
       if (this.destroyed || !this.mapContainer) return;
       this.map = new maplibregl.Map({
         container: this.mapContainer.nativeElement,
@@ -152,27 +148,4 @@ export class VisitedPlaces implements AfterViewInit, OnDestroy {
     });
   }
 
-  private loadMapLibreFromWeb(): Promise<any> {
-    const browserWindow = window as MapLibreWindow;
-    if (browserWindow.maplibregl) return Promise.resolve(browserWindow.maplibregl);
-    if (browserWindow.__tonotriMapLibrePromise) return browserWindow.__tonotriMapLibrePromise;
-    const stylesheetUrl = 'https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css';
-    if (!document.querySelector(`link[href="${stylesheetUrl}"]`)) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet'; link.href = stylesheetUrl; document.head.appendChild(link);
-    }
-    browserWindow.__tonotriMapLibrePromise = new Promise((resolve, reject) => {
-      const existing = document.querySelector<HTMLScriptElement>('script[data-tonotri-maplibre]');
-      if (existing) {
-        existing.addEventListener('load', () => resolve(browserWindow.maplibregl));
-        existing.addEventListener('error', reject); return;
-      }
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js';
-      script.async = true; script.dataset['tonotriMaplibre'] = 'true';
-      script.onload = () => resolve(browserWindow.maplibregl); script.onerror = reject;
-      document.head.appendChild(script);
-    });
-    return browserWindow.__tonotriMapLibrePromise;
-  }
 }
