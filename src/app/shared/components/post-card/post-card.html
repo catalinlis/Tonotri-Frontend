@@ -1,6 +1,10 @@
 @let post = this.post();
 @if (this.journey(); as journey) {
-<article class="post-card journey-card">
+<article class="post-card journey-card" [class.post-card--loading]="cardLoading()"
+  [attr.aria-busy]="cardLoading()">
+    @if (cardLoading()) {
+      <app-loader class="post-card-loader" Cwidth="100%" Cheight="100%" [radius]="22" aria-hidden="true" />
+    }
     <header class="post-card-header">
       <img class="post-author-image" [src]="authorImage()" alt="{{ author() }} profile photo">
       <div class="post-author-details">
@@ -32,7 +36,8 @@
     <div class="journey-gallery" [attr.data-count]="previewImages().length" aria-label="Journey photos">
       @for (image of previewImages(); track image.url; let index = $index) {
         <div class="journey-gallery-item" [class.journey-gallery-main]="index === 0">
-          <img [src]="image.url" [alt]="image.alt">
+          <img [src]="image.url" [alt]="image.alt" loading="lazy" decoding="async"
+            (load)="markImageLoaded(image.url)" (error)="markImageLoaded(image.url)">
           <button class="gallery-open-hitbox" type="button" (click)="openPhoto.emit(index)" aria-label="Open journey photo {{ index + 1 }}"></button>
           @if (index === 4 && remainingPhotos() > 0) {
             <button class="journey-more-photos" type="button" (click)="openPhoto.emit(index)" aria-label="View {{ remainingPhotos() }} more journey photos">
@@ -119,7 +124,11 @@
     </footer>
   </article>
 } @else {
-<article class="post-card">
+<article class="post-card" [class.post-card--loading]="cardLoading()"
+  [attr.aria-busy]="cardLoading()">
+    @if (cardLoading()) {
+      <app-loader class="post-card-loader" Cwidth="100%" Cheight="100%" [radius]="22" aria-hidden="true" />
+    }
     <header class="post-card-header">
       <img
         class="post-author-image"
@@ -154,7 +163,8 @@
     <div class="journey-gallery" [attr.data-count]="previewImages().length" aria-label="Post photos">
       @for (image of previewImages(); track image.url; let index = $index) {
         <div class="journey-gallery-item" [class.journey-gallery-main]="index === 0">
-          <img [src]="image.url" [alt]="image.alt">
+          <img [src]="image.url" [alt]="image.alt" loading="lazy" decoding="async"
+            (load)="markImageLoaded(image.url)" (error)="markImageLoaded(image.url)">
           <button class="gallery-open-hitbox" type="button" (click)="openPhoto.emit(index)" aria-label="Open post photo {{ index + 1 }}"></button>
           @if (index === 4 && remainingPhotos() > 0) {
             <button class="journey-more-photos" type="button" (click)="openPhoto.emit(index)" aria-label="View {{ remainingPhotos() }} more post photos">

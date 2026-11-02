@@ -1,6 +1,13 @@
 <main class="review-page">
-  <header class="review-hero">
-    <img class="review-hero__image" [src]="countryImage()" [alt]="countryName() + ' landscape'" fetchpriority="high" decoding="async" />
+  <header class="review-hero" [attr.aria-busy]="!loadedHeroImages().has(countryImage())">
+    @if (!loadedHeroImages().has(countryImage())) {
+      <app-loader class="review-hero__loader" Cwidth="100%" Cheight="100%" [radius]="0" />
+    }
+    <img class="review-hero__image" [src]="countryImage()" [alt]="countryName() + ' landscape'"
+      [class.review-hero__image--loaded]="loadedHeroImages().has(countryImage())"
+      fetchpriority="high" decoding="async"
+      (load)="markHeroImageLoaded(countryImage())" (error)="markHeroImageLoaded(countryImage())" />
+    @if (loadedHeroImages().has(countryImage())) {
     <span class="review-hero__shade" aria-hidden="true"></span>
 
     <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -11,7 +18,7 @@
       <span>Travel Review</span>
     </nav>
 
-    <div class="review-hero__content review-reveal">
+    <div class="review-hero__content">
       <h1>{{ countryName() }}</h1>
       <div class="review-hero__meta">
         <span class="hero-rating"><span aria-hidden="true">★</span> 4.8</span>
@@ -19,6 +26,7 @@
         <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>Rome · Florence · Amalfi Coast</span>
       </div>
     </div>
+    }
   </header>
 
   <div class="review-layout">

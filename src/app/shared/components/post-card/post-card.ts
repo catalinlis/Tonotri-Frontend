@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { AppLoaderComponent } from '../app-loader/loader.component';
 
 export interface PostCardData {
   readonly publishedAt: string;
@@ -22,11 +23,13 @@ export interface JourneyCardData extends PostCardData {
 
 @Component({
   selector: 'app-post-card',
+  imports: [AppLoaderComponent],
   templateUrl: './post-card.html',
   styleUrl: './post-card.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostCard {
+  readonly loadedImages = signal<ReadonlySet<string>>(new Set());
   readonly post = input.required<PostCardData>();
   readonly journey = input<JourneyCardData>();
   readonly author = input.required<string>();
@@ -34,4 +37,12 @@ export class PostCard {
   readonly openPhoto = output<number>();
   readonly previewImages = computed(() => (this.journey() ?? this.post()).images.slice(0, 5));
   readonly remainingPhotos = computed(() => Math.max((this.journey() ?? this.post()).images.length - 5, 0));
+  readonly cardLoading = computed(() => {
+    const loadedImages = this.loadedImages();
+    return this.previewImages().some((image) => !loadedImages.has(image.url));
+  });
+
+  markImageLoaded(image: string): void {
+    this.loadedImages.update((loadedImages) => new Set([...loadedImages, image]));
+  }
 }

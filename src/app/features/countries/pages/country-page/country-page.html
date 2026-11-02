@@ -1,9 +1,17 @@
 <main class="countries-page">
   <header class="header">
+    @if (!headerImageLoaded()) {
+      <app-loader class="image-loader" Cwidth="100%" Cheight="100%" [radius]="0" />
+    }
     <img
       src="assets/earth.jpg"
+      alt="Earth viewed from space"
+      [class.image-pending]="!headerImageLoaded()"
+      [class.image-loaded]="headerImageLoaded()"
       fetchpriority="high"
       decoding="async"
+      (load)="markHeaderImageLoaded()"
+      (error)="markHeaderImageLoaded()"
     />
   </header>
 
@@ -24,18 +32,29 @@
 
   @if (visibleFeaturedCountries().length) {
     <nav class="featured-countries" aria-label="Featured countries">
-      @for (country of visibleFeaturedCountries(); track country.slug) {
-        <a class="country-card" [routerLink]="[country.slug, 'overview']">
+      @for (country of visibleFeaturedCountries(); track country.slug; let index = $index) {
+        <a class="country-card" [routerLink]="[country.slug, 'overview']"
+          [style.--card-index]="index"
+          [attr.aria-busy]="!loadedCountryImages().has(country.image)">
+          @if (!loadedCountryImages().has(country.image)) {
+            <app-loader class="image-loader" Cwidth="100%" Cheight="100%" [radius]="0" />
+          }
           <img
             [src]="country.image"
             [alt]="country.name"
+            [class.image-pending]="!loadedCountryImages().has(country.image)"
+            [class.image-loaded]="loadedCountryImages().has(country.image)"
             width="800"
             height="520"
             loading="lazy"
             decoding="async"
+            (load)="markCountryImageLoaded(country.image)"
+            (error)="markCountryImageLoaded(country.image)"
           />
-          <span class="country-card-shade" aria-hidden="true"></span>
-          <strong>{{ country.name }}</strong>
+          @if (loadedCountryImages().has(country.image)) {
+            <span class="country-card-shade" aria-hidden="true"></span>
+            <strong>{{ country.name }}</strong>
+          }
         </a>
       }
     </nav>

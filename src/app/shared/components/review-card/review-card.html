@@ -1,5 +1,10 @@
 @let review = this.review();
-<article class="review-card" [class.review-card--linked]="!!reviewLink()">
+<article class="review-card" [class.review-card--linked]="!!reviewLink()"
+  [class.review-card--loading]="!loadedImages().has(review.image)"
+  [attr.aria-busy]="!loadedImages().has(review.image)">
+          @if (!loadedImages().has(review.image)) {
+            <app-loader class="review-card-loader" Cwidth="100%" Cheight="100%" [radius]="18" aria-hidden="true" />
+          }
           <div class="review-image-wrap">
             <img
               [src]="review.image"
@@ -8,6 +13,8 @@
               height="520"
               [attr.loading]="eager() ? 'eager' : 'lazy'"
               decoding="async"
+              (load)="markImageLoaded(review.image)"
+              (error)="markImageLoaded(review.image)"
             />
             <span class="image-shade" aria-hidden="true"></span>
             <span class="country-code" aria-hidden="true">{{ review.countryCode }}</span>

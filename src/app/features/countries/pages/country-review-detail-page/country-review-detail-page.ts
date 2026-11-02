@@ -6,6 +6,7 @@ import { map } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
 import { FEATURED_COUNTRIES } from '../../featured-countries';
 import { ItineraryMap } from '../../components/itinerary-map/itinerary-map';
+import { AppLoaderComponent } from '../../../../shared/components/app-loader/loader.component';
 
 interface ReviewComment {
   id: number;
@@ -18,7 +19,7 @@ interface ReviewComment {
 
 @Component({
   selector: 'app-country-review-detail-page',
-  imports: [RouterLink, ItineraryMap],
+  imports: [RouterLink, ItineraryMap, AppLoaderComponent],
   templateUrl: './country-review-detail-page.html',
   styleUrl: './country-review-detail-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +39,7 @@ export class CountryReviewDetailPage implements AfterViewInit, OnDestroy {
     hue: `${Math.round((this.tagHueSeed + index * 137.508) % 360)}deg`,
   }));
   readonly profileImageFailed = signal(false);
+  readonly loadedHeroImages = signal<ReadonlySet<string>>(new Set());
   readonly profilePhotoUrl = computed(() =>
     this.profileImageFailed() ? 'assets/user.png' : (this.authService.currentUser()?.image_path || 'assets/user.png'),
   );
@@ -155,5 +157,12 @@ export class CountryReviewDetailPage implements AfterViewInit, OnDestroy {
 
   onProfileImageError(): void {
     this.profileImageFailed.set(true);
+  }
+
+  markHeroImageLoaded(image: string): void {
+    this.loadedHeroImages.update((loadedImages) => {
+      if (loadedImages.has(image)) return loadedImages;
+      return new Set([...loadedImages, image]);
+    });
   }
 }

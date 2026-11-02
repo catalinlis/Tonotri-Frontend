@@ -1,7 +1,12 @@
 @let photo = this.photo();
 <article class="photo-card" [class.photo-card--featured]="featured()">
         <button type="button" class="photo-open-button" (click)="openPhoto.emit()" aria-label="Open {{ photo.title }} photo">
-          <img [src]="photo.url" [alt]="photo.alt">
+          @if (!loadedImages().has(photo.url)) {
+            <app-loader class="photo-image-loader" Cwidth="100%" Cheight="100%" [radius]="0" />
+          }
+          <img [src]="photo.url" [alt]="photo.alt" loading="lazy" decoding="async"
+            [class.image-pending]="!loadedImages().has(photo.url)"
+            (load)="markImageLoaded(photo.url)" (error)="markImageLoaded(photo.url)">
           <span class="photo-overlay">
             <strong>{{ photo.title }}</strong>
             <span>{{ photo.country }} &middot; {{ photo.date }}</span>

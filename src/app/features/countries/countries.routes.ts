@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { CanMatchFn, RouterModule, Routes } from '@angular/router';
 import { CountryOverviewPage } from './pages/country-overview-page/country-overview-page';
 import { CountryPage } from './pages/country-page/country-page';
 import { CountryReviewDetailPage } from './pages/country-review-detail-page/country-review-detail-page';
+
+const COUNTRY_SECTION_PATHS = new Set(['overview', 'posts', 'photos', 'reviews']);
+const isCountrySection: CanMatchFn = (_route, segments) =>
+  segments.length === 1 && COUNTRY_SECTION_PATHS.has(segments[0].path);
 
 const routes: Routes = [
   {
@@ -18,10 +22,7 @@ const routes: Routes = [
     path: ':countrySlug',
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
-      { path: 'overview', component: CountryOverviewPage, data: { section: 'overview' } },
-      { path: 'posts', component: CountryOverviewPage, data: { section: 'posts' } },
-      { path: 'photos', component: CountryOverviewPage, data: { section: 'photos' } },
-      { path: 'reviews', component: CountryOverviewPage, data: { section: 'reviews' } },
+      { path: ':section', component: CountryOverviewPage, canMatch: [isCountrySection] },
     ],
   },
 ];

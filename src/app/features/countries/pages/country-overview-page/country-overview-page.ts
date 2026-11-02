@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -11,16 +11,18 @@ import { Reviews } from '../../components/reviews/reviews';
 import { ProfileReview } from '../../../../shared/components/review-card/review-card';
 import { createMockOverviewData } from '../../mock-overview-data';
 import { createMockPhotos } from '../../mock-photos';
+import { AppLoaderComponent } from '../../../../shared/components/app-loader/loader.component';
 
 @Component({
   selector: 'app-country-overview-page',
-  imports: [RouterLink, SectionNavigation, Overview, Posts, Photos, Reviews],
+  imports: [RouterLink, SectionNavigation, Overview, Posts, Photos, Reviews, AppLoaderComponent],
   templateUrl: './country-overview-page.html',
   styleUrl: './country-overview-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CountryOverviewPage {
   private readonly route = inject(ActivatedRoute);
+  readonly loadedHeaderImages = signal<ReadonlySet<string>>(new Set());
 
   readonly posts = input<readonly CountryPost[]>();
   readonly photos = input<readonly CountryPhoto[]>();
@@ -33,7 +35,7 @@ export class CountryOverviewPage {
   );
 
   readonly activeSection = toSignal(
-    this.route.data.pipe(map((data) => data['section'] as string ?? 'overview')),
+    this.route.paramMap.pipe(map((params) => params.get('section') ?? 'overview')),
     { initialValue: 'overview' },
   );
 
@@ -61,6 +63,13 @@ export class CountryOverviewPage {
 
   readonly countryPosts = computed(() => this.posts() ?? this.overviewMockData().posts);
   readonly countryReviews = computed(() => this.reviews() ?? this.overviewMockData().reviews);
+
+  markHeaderImageLoaded(image: string): void {
+    this.loadedHeaderImages.update((loadedImages) => {
+      if (loadedImages.has(image)) return loadedImages;
+      return new Set([...loadedImages, image]);
+    });
+  }
 
   readonly countrySections = computed(() => {
     const countryLink = `/countries/${this.countrySlug()}`;

@@ -1,4 +1,4 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -17,12 +17,6 @@ export class AppLoaderComponent {
   inlineBlock = input<boolean>(false);
   rgb = input<string>('rgb(210, 210, 210)');
   radius = input<number>(4);
-
-  constructor() {
-    effect(() => {
-      console.log(this.Cwidth());
-    });
-  }
 
   getMyStyles(){
     const myStyles = {

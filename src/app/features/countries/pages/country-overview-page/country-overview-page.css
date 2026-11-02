@@ -5,19 +5,31 @@
   padding: 20px;
   width: min(100%, 760px);
   margin: 0 auto;
+  animation: section-enter 480ms 180ms cubic-bezier(.2, .75, .2, 1) both;
+}
+.profile-zone-content > app-country-overview,
+.profile-zone-content > app-country-posts,
+.profile-zone-content > app-country-photos,
+.profile-zone-content > app-country-reviews {
+  display: block;
+  animation: section-enter 420ms cubic-bezier(.2, .75, .2, 1) both;
 }
 @media (max-width: 640px) {
   .profile-zone-content { padding: 14px; }
 }
 .country-overview { width: min(100% - 32px, 1000px); margin: 10px auto 0; padding: 60px 0 56px; color: #153d47; }
-.header { position: relative; height: min(335px, calc(37.5vw - 52px)); overflow: hidden; border-top: 0; border-radius: 20px; background: #02070c; box-shadow: 0 14px 34px rgb(17 61 78 / 16%); }
-.header img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center calc(50% + 20px); }
-.header-shade { position: absolute; z-index: 1; inset: 0; background: linear-gradient(rgb(7 28 34 / 28%), rgb(7 28 34 / 54%)); pointer-events: none; }
+app-section-navigation { display: block; animation: navigation-enter 460ms 100ms cubic-bezier(.2, .75, .2, 1) both; }
+.header { position: relative; height: min(335px, calc(37.5vw - 52px)); overflow: hidden; border-top: 0; border-radius: 20px; background: #d9e5e5; box-shadow: 0 14px 34px rgb(17 61 78 / 16%); animation: detail-hero-enter 650ms cubic-bezier(.2, .75, .2, 1) both; }
+.header img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center calc(50% + 20px); opacity: 0; transform: scale(1.04); transition: opacity 650ms ease, transform 1100ms cubic-bezier(.2, .75, .2, 1); }
+.header img.image-loaded { opacity: 1; transform: scale(1); }
+.header-image-loader { position: absolute; z-index: 0; inset: 0; display: block; width: 100%; height: 100%; }
+.header img.image-pending { opacity: 0; }
+.header-shade { position: absolute; z-index: 1; inset: 0; background: linear-gradient(rgb(7 28 34 / 28%), rgb(7 28 34 / 54%)); pointer-events: none; animation: detail-shade-in 450ms ease both; }
 .country-heading { padding: 26px 2px 8px; }
-.back-link { position: absolute; z-index: 2; top: 18px; left: 18px; display: inline-flex; align-items: center; gap: 5px; padding: 9px 12px; border-radius: 999px; background: rgb(241 249 250 / 92%); color: #153d47; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 6px 16px rgb(21 61 71 / 16%); backdrop-filter: blur(8px); }
-.back-link:hover { border-color: #168ba4; background: #168ba4; color: white; }.back-link:focus-visible { outline: 3px solid rgb(250 153 23 / 78%); outline-offset: 3px; }
+.back-link { position: absolute; z-index: 2; top: 18px; left: 18px; display: inline-flex; align-items: center; gap: 5px; padding: 9px 12px; border-radius: 999px; background: rgb(241 249 250 / 92%); color: #153d47; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 6px 16px rgb(21 61 71 / 16%); backdrop-filter: blur(8px); transition: background 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease; animation: back-link-enter 440ms 90ms cubic-bezier(.2, .75, .2, 1) both; }
+.back-link:hover { border-color: #168ba4; background: #168ba4; color: white; box-shadow: 0 9px 22px rgb(21 61 71 / 24%); transform: translateX(-3px); }.back-link:focus-visible { outline: 3px solid rgb(250 153 23 / 78%); outline-offset: 3px; }
 .back-link svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
-.header-country-name { position: absolute; z-index: 2; bottom: 22px; left: 24px; font-family: Roboto; margin: 0; color: white; font-size: clamp(32px, 5vw, 48px); letter-spacing: -.035em; line-height: 1.08; text-shadow: 0 2px 12px rgb(2 7 12 / 72%); }
+.header-country-name { position: absolute; z-index: 2; bottom: 22px; left: 24px; font-family: Roboto; margin: 0; color: white; font-size: clamp(32px, 5vw, 48px); letter-spacing: -.035em; line-height: 1.08; text-shadow: 0 2px 12px rgb(2 7 12 / 72%); animation: country-name-enter 540ms 120ms cubic-bezier(.2, .75, .2, 1) both; }
 .eyebrow { margin: 0 0 9px; color: #168ba4; font-size: 11px; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
 .country-intro { max-width: 610px; margin: 13px 0 0; color: #667e83; font-size: 15px; line-height: 1.55; }
 .overview-card { display: grid; align-items: start; gap: 24px; margin-top: 18px; padding: 28px; border: 1px solid #dce9e9; border-radius: 18px; background: white; box-shadow: 0 9px 24px rgb(35 77 82 / 7%); grid-template-columns: minmax(0, 1fr) minmax(260px, .55fr); }
@@ -30,3 +42,16 @@ h2 { margin: 0; color: #153d47; font-size: clamp(24px, 4vw, 32px); letter-spacin
 code { color: #087d72; font: inherit; font-weight: 800; }
 @media (max-width: 720px) { .overview-card { padding: 22px; grid-template-columns: 1fr; } }
 @media (max-width: 480px) { .country-overview { width: min(100%, 1000px); padding-top: 80px; } .header { height: calc(56.25vw - 1.25px); border-radius: 0; } .header img { object-position: center; } .back-link { top: 12px; left: 12px; } .header-country-name { bottom: 16px; left: 16px;  } .country-heading, .overview-card { margin-right: 10px; margin-left: 10px; } }
+@keyframes detail-hero-enter { from { opacity: 0; transform: translateY(12px) scale(.995); } to { opacity: 1; transform: none; } }
+@keyframes detail-shade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes back-link-enter { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+@keyframes country-name-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes navigation-enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+@keyframes section-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .header, .header-shade, .back-link, .header-country-name, app-section-navigation,
+  .profile-zone-content, .profile-zone-content > app-country-overview,
+  .profile-zone-content > app-country-posts, .profile-zone-content > app-country-photos,
+  .profile-zone-content > app-country-reviews { animation: none; }
+  .header img, .back-link { transition: none; }
+}
