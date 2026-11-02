@@ -11,7 +11,9 @@
 }
 * { box-sizing: border-box; }
 button { font: inherit; cursor: pointer; }
+a.edit-button { text-decoration: none; }
 .review-card {
+  position: relative;
   display: grid;
   min-width: 0;
   overflow: hidden;
@@ -23,6 +25,17 @@ button { font: inherit; cursor: pointer; }
   transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
   content-visibility: auto;
   contain-intrinsic-size: 230px;
+}
+.review-link::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  content: '';
+  cursor: pointer;
+}
+.review-card--linked:focus-within {
+  outline: 3px solid rgb(245 158 11 / 50%);
+  outline-offset: 3px;
 }
 .review-card:hover { border-color: #bddbd5; box-shadow: 0 14px 32px rgb(35 77 82 / 12%); transform: translateY(-2px); }
 .review-image-wrap { position: relative; min-height: 220px; overflow: hidden; background: #d8e6e4; }

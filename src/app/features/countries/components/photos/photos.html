@@ -1,0 +1,65 @@
+<header class="photos-header">
+  <div class="left-header">Captured Moments</div>
+  <span class="photos-count" aria-live="polite">
+    {{ filteredPhotos().length }} {{ filteredPhotos().length === 1 ? 'photo' : 'photos' }}
+  </span>
+</header>
+
+@if (photos().length > 0) {
+  <div class="photos-toolbar">
+    <div class="photo-filters" role="group" aria-label="Filter photos by city">
+      <button type="button" class="filter-chip" [class.filter-chip--active]="!activeCity()"
+        [attr.aria-pressed]="!activeCity()" (click)="selectCity('')">All Photos</button>
+      <app-section-dropdown label="Cities" [value]="activeCity()" [options]="cityOptions()"
+        [active]="!!activeCity()" (selectionChange)="selectCity($event)" />
+    </div>
+  <div class="layout-picker">
+    <span>Layout</span>
+    <div class="layout-options" role="group" aria-label="Choose photo layout">
+      <button
+        [class.layout-button--active]="layout() === 'grid'"
+        type="button"
+        aria-label="Grid layout"
+        [attr.aria-pressed]="layout() === 'grid'"
+        (click)="layout.set('grid')">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="4" width="6" height="6"></rect>
+          <rect x="14" y="4" width="6" height="6"></rect>
+          <rect x="4" y="14" width="6" height="6"></rect>
+          <rect x="14" y="14" width="6" height="6"></rect>
+        </svg>
+      </button>
+      <button
+        [class.layout-button--active]="layout() === 'mosaic'"
+        type="button"
+        aria-label="Column layout"
+        [attr.aria-pressed]="layout() === 'mosaic'"
+        (click)="layout.set('mosaic')">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="4" width="7" height="16"></rect>
+          <rect x="13" y="4" width="7" height="16"></rect>
+        </svg>
+      </button>
+    </div>
+  </div>
+  </div>
+
+  <section
+    class="photos-gallery"
+    [class.photos-gallery--grid]="layout() === 'grid'"
+    [class.photos-gallery--mosaic]="layout() === 'mosaic'"
+    [attr.aria-label]="'Photos taken in ' + countryName()">
+    @for (photo of filteredPhotos(); track photo.id; let index = $index) {
+      <app-photo-card
+        [photo]="photo"
+        [attr.data-index]="index"
+        [featured]="layout() === 'mosaic' && index === 0"
+        (openPhoto)="openGallery(index)" />
+    }
+  </section>
+} @else {
+  <div class="empty-state">
+    <h3>No photos from {{ countryName() }} yet</h3>
+    <p>Photos taken in {{ countryName() }} will appear here when shared.</p>
+  </div>
+}

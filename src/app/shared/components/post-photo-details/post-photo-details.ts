@@ -1,5 +1,5 @@
 import { Component, ElementRef, computed, effect, input, signal, viewChild } from '@angular/core';
-import { MediaGalleryImage } from '../../../../../shared/components/profile-media-dialog/profile-media-dialog.component';
+import { MediaGalleryImage } from '../profile-media-dialog/profile-media-dialog.component';
 
 export interface PostPhotoDetailsContext {
   author: string;

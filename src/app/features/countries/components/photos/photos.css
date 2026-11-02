@@ -1,0 +1,72 @@
+.layout-picker,
+.layout-options {
+  display: flex;
+  align-items: center;
+}
+
+.layout-picker {
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.layout-options {
+  gap: 7px;
+}
+
+.layout-options button {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid #d9e8eb;
+  border-radius: 10px;
+  background: white;
+  color: #7a908d;
+  cursor: pointer;
+}
+
+.layout-options svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.photos-gallery {
+  display: grid;
+  gap: 12px;
+  padding-bottom: 24px;
+}
+
+.photos-gallery--grid,
+.photos-gallery--mosaic {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.photos-gallery--grid app-photo-card {
+  aspect-ratio: 4 / 5;
+}
+
+.photos-gallery--mosaic {
+  grid-auto-rows: 174px;
+}
+
+.photos-gallery--mosaic app-photo-card[data-index='0'],
+.photos-gallery--mosaic app-photo-card[data-index='7'] {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+@media (max-width: 640px) {
+  .layout-picker {
+    gap: 7px;
+  }
+  .layout-options button { width: 42px; height: 42px; }
+  .photos-gallery--grid,
+  .photos-gallery--mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .photos-gallery--grid app-photo-card { min-height: 180px; }
+  .photos-gallery--mosaic { grid-auto-rows: 150px; }
+}

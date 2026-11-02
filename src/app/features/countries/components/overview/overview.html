@@ -1,0 +1,30 @@
+<section [attr.aria-label]="countryName() + ' travel stories'">
+  <header class="posts-header">
+    <div class="left-header">Travel Stories</div>
+    <span class="posts-count">{{ storiesCount() }} {{ storiesCount() === 1 ? 'story' : 'stories' }}</span>
+  </header>
+
+  @if (description()) {
+    <p class="country-description">{{ description() }}</p>
+  }
+
+  <div class="stories-feed">
+    @for (entry of posts(); track entry.id) {
+      <app-post-card [post]="entry.post" [journey]="entry.journey"
+        [author]="entry.author" [authorImage]="entry.authorImage ?? 'assets/user.png'"
+        (openPhoto)="openGallery(entry, $event)" />
+    }
+
+    @for (review of reviews(); track review.id; let first = $first) {
+      <app-review-card [review]="review" [eager]="first && posts().length === 0"
+        [reviewLink]="['/countries', countrySlug(), 'reviews', review.id]" />
+    }
+
+    @if (storiesCount() === 0) {
+      <div class="empty-state">
+        <h3>No travel stories yet</h3>
+        <p>Posts and reviews from {{ countryName() }} will appear here when travelers share them.</p>
+      </div>
+    }
+  </div>
+</section>

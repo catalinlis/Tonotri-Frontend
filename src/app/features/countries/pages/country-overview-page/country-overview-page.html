@@ -18,4 +18,24 @@
     [items]="countrySections()"
     [ariaLabel]="countryName() + ' sections'"
   />
+
+  <div class="profile-zone-content">
+    @switch (activeSection()) {
+      @case ('posts') {
+        <app-country-posts [countryName]="countryName()" [posts]="countryPosts()" />
+      }
+      @case ('photos') {
+        <app-country-photos [countryName]="countryName()" [photos]="countryPhotos()" />
+      }
+      @case ('reviews') {
+        <app-country-reviews [countryName]="countryName()" [countrySlug]="countrySlug()" [reviews]="countryReviews()" />
+      }
+      @default {
+        <app-country-overview [countryName]="countryName()" [countrySlug]="countrySlug()"
+          [description]="description()"
+          [posts]="countryPosts()"
+          [reviews]="countryReviews()" />
+      }
+    }
+  </div>
 </main>

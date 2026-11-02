@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 export interface ProfileReview {
   readonly id: number;
@@ -19,6 +20,7 @@ export interface ProfileReview {
 
 @Component({
   selector: 'app-review-card',
+  imports: [RouterLink],
   templateUrl: './review-card.html',
   styleUrl: './review-card.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,5 +28,6 @@ export interface ProfileReview {
 export class ReviewCard {
   readonly review = input.required<ProfileReview>();
   readonly eager = input(false);
+  readonly reviewLink = input<readonly (string | number)[]>();
   readonly editReview = output<number>();
 }

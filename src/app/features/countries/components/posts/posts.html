@@ -1,0 +1,33 @@
+<section [attr.aria-label]="countryName() + ' posts'">
+  <header class="posts-header">
+    <div class="left-header">Travel Stories</div>
+    <span class="posts-count" aria-live="polite">
+      {{ filteredPosts().length }} {{ filteredPosts().length === 1 ? 'post' : 'posts' }}
+    </span>
+  </header>
+
+  @if (posts().length > 0) {
+    <div class="posts-toolbar">
+      <div class="post-filters" role="group" aria-label="Filter posts by city">
+        <button type="button" class="filter-chip" [class.filter-chip--active]="!activeCity()"
+          [attr.aria-pressed]="!activeCity()" (click)="selectedCity.set('')">All Posts</button>
+        <app-section-dropdown label="Cities" [value]="activeCity()" [options]="cityOptions()"
+          [active]="!!activeCity()" (selectionChange)="selectedCity.set($event)" />
+      </div>
+    </div>
+  }
+
+  @for (entry of filteredPosts(); track entry.id) {
+    <app-post-card
+      [post]="entry.post"
+      [journey]="entry.journey"
+      [author]="entry.author"
+      [authorImage]="entry.authorImage ?? 'assets/user.png'"
+      (openPhoto)="openGallery(entry, $event)" />
+  } @empty {
+    <div class="empty-state">
+      <h3>No posts from {{ activeCity() || countryName() }} yet</h3>
+      <p>Travel stories and journeys from {{ countryName() }} will appear here when shared.</p>
+    </div>
+  }
+</section>

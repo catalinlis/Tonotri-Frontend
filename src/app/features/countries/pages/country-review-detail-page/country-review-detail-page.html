@@ -6,7 +6,7 @@
     <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a routerLink="/countries"><span>Countries</span></a>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
-      <a [routerLink]="['/countries', countrySlug()]"><span>{{ countryName() }}</span></a>
+      <a [routerLink]="['/countries', countrySlug(), 'overview']"><span>{{ countryName() }}</span></a>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
       <span>Travel Review</span>
     </nav>

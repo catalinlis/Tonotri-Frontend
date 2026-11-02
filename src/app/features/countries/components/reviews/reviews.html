@@ -1,0 +1,34 @@
+<section [attr.aria-label]="countryName() + ' reviews'">
+  <header class="reviews-header">
+    <div class="left-header">Reviews</div>
+    <span class="reviews-count" aria-live="polite">
+      {{ visibleReviews().length }} {{ visibleReviews().length === 1 ? 'review' : 'reviews' }}
+    </span>
+  </header>
+
+  <div class="review-toolbar">
+    <div class="review-filters" role="group" aria-label="Filter reviews by city">
+      <button type="button" class="filter-chip" [class.filter-chip--active]="!activeCity()"
+        [attr.aria-pressed]="!activeCity()" (click)="selectedCity.set('')">All reviews</button>
+      <app-section-dropdown label="Cities" [value]="activeCity()" [options]="cityOptions()"
+        [active]="!!activeCity()" (selectionChange)="selectedCity.set($event)" />
+    </div>
+    <div class="sort-control">
+      <span>Sort</span>
+      <app-section-dropdown label="Sort reviews" [value]="sort()" [options]="sortOptions"
+        [alignRight]="true" (selectionChange)="selectSort($event)" />
+    </div>
+  </div>
+
+  <div class="review-list">
+    @for (review of visibleReviews(); track review.id; let first = $first) {
+      <app-review-card [review]="review" [eager]="first"
+        [reviewLink]="['/countries', countrySlug(), 'reviews', review.id]" />
+    } @empty {
+      <div class="empty-state">
+        <h3>No reviews from {{ activeCity() || countryName() }} yet</h3>
+        <p>Traveler reviews will appear here when shared.</p>
+      </div>
+    }
+  </div>
+</section>

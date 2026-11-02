@@ -16,7 +16,13 @@ const routes: Routes = [
   },
   {
     path: ':countrySlug',
-    component: CountryOverviewPage,
+    children: [
+      { path: '', redirectTo: 'overview', pathMatch: 'full' },
+      { path: 'overview', component: CountryOverviewPage, data: { section: 'overview' } },
+      { path: 'posts', component: CountryOverviewPage, data: { section: 'posts' } },
+      { path: 'photos', component: CountryOverviewPage, data: { section: 'photos' } },
+      { path: 'reviews', component: CountryOverviewPage, data: { section: 'reviews' } },
+    ],
   },
 ];
 
