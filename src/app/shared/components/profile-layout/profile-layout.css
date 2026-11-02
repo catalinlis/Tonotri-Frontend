@@ -1,0 +1,85 @@
+.profile-pending {
+  display: none;
+}
+
+.profile-ready {
+  animation: profile-reveal 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.profile-ready .profile-image {
+  animation: portrait-reveal 520ms cubic-bezier(0.22, 1, 0.36, 1) 70ms both;
+}
+
+.profile-ready .profile-name {
+  align-items: center;
+  justify-content: center;
+  max-width: calc(100% - 32px);
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: 14px;
+  color: white;
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.3px;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  transition: background-color 220ms ease, box-shadow 220ms ease, border-color 220ms ease, translate 220ms ease;
+  animation: profile-reveal 420ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
+}
+
+@media (hover: hover) {
+  .profile-ready .profile-name:hover {
+    background-color: #fff;
+    color: #00c5db;
+    box-shadow: 0 7px 16px rgba(13, 85, 96, 0.18);
+    translate: 0 -2px;
+  }
+}
+
+.profile-ready .profile-name:focus-visible {
+  outline: 2px solid #124c55;
+  outline-offset: 3px;
+}
+
+.profile-ready .profile-name:active {
+  background-color: #d9f3ee;
+  box-shadow: 0 1px 4px rgba(13, 85, 96, 0.12);
+  translate: 0 0;
+}
+
+@keyframes profile-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes portrait-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-ready,
+  .profile-ready .profile-image,
+  .profile-ready .profile-name {
+    animation: none;
+    transition: none;
+  }
+
+  .profile-ready .profile-name:hover {
+    translate: none;
+  }
+}

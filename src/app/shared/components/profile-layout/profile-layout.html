@@ -1,4 +1,4 @@
-<div *ngIf="profileLoaded() === false">
+<div *ngIf="loading()" role="status" aria-label="Loading profile">
     <div class="flex flex-col w-[250px] h-auto shadow-[0_0_12px_2px_rgba(0,0,0,0.15)] rounded-lg">
         <div class="flex flex-col w-full">
             <app-loader Cwidth="200" Cheight="200" MarginTop="50" MarginLeft="25" [circle]="true"></app-loader>
@@ -8,16 +8,18 @@
         </div>
     </div>
 </div>
-<div *ngIf="profileLoaded()" class="flex flex-col h-auto shadow-[0_0_12px_2px_rgba(0,0,0,0.15)] rounded-lg overflow-hidden">
+<div *ngIf="profileLoaded() && user()" [class.profile-pending]="loading()" [class.profile-ready]="!loading()" [attr.aria-hidden]="loading()" class="profile-card flex flex-col h-auto shadow-[0_0_12px_2px_rgba(0,0,0,0.15)] rounded-lg overflow-hidden">
     <div class="flex w-full h-[150px] bg-white">
 
     </div>
     <div class="w-[250px] h-[200px] flex flex-col bg-gradient-to-r from-[#32B2D9] to-[#0EC4AB]">
         <div class="profile-image flex w-[200px] h-[200px] rounded-[50%] bg-white items-center justify-center mx-auto mt-[-100px] shadow-[0_0_12px_2px_rgba(0,0,0,0.15)]">
-            <img [src]="profilePhoto() || 'assets/user.png'"
+            <img [src]="imageState().src" (load)="onImageLoad()" (error)="onImageError()"
                  class="w-[190px] h-[190px] object-cover rounded-[50%]" alt="Profile photo">
         </div>
-        <div class="flex mx-auto mt-4 text-[23px] text-white">{{user()?.first_name}} {{user()?.last_name}}</div>
+        <a routerLink="/profile" class="profile-name flex mx-auto mt-4">
+            {{user()?.first_name}} {{user()?.last_name}}
+        </a>
     </div>
 
 </div>
