@@ -79,10 +79,7 @@
           }
         },
         "test": {
-          "builder": "@angular/build:unit-test",
-          "options": {
-            "styles": ["node_modules/igniteui-angular/styles/igniteui-angular.css"]
-          }
+          "builder": "@angular/build:unit-test"
         }
       }
     }
