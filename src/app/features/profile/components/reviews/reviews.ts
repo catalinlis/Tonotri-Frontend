@@ -1,28 +1,16 @@
+import { ReviewCard } from '../../../../shared/components/review-card/review-card';
 import { ChangeDetectionStrategy, Component, HostListener, computed, output, signal } from '@angular/core';
+
+import { ProfileReview } from '../../../../shared/components/review-card/review-card';
 
 type ReviewFilter = 'all' | 'countries' | 'cities';
 type ReviewSort = 'latest' | 'rating';
 
-interface ProfileReview {
-  readonly id: number;
-  readonly country: string;
-  readonly countryCode: string;
-  readonly location: string;
-  readonly cities: readonly string[];
-  readonly image: string;
-  readonly imageAlt: string;
-  readonly rating: number;
-  readonly category: string;
-  readonly title: string;
-  readonly excerpt: string;
-  readonly publishedAt: string;
-  readonly dateLabel: string;
-  readonly helpfulCount: number;
-}
+
 
 @Component({
   selector: 'app-reviews',
-  imports: [],
+  imports: [ReviewCard],
   templateUrl: './reviews.html',
   styleUrl: './reviews.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

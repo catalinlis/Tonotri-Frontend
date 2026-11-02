@@ -1,0 +1,21 @@
+:host { display: block; flex: 0 0 auto; }
+.section-navigation { width: 100%; border-bottom: 1px solid rgb(50 178 217 / 16%); text-align: center; }
+.section-navigation__content { display: flex; width: 100%; max-width: 760px; box-sizing: border-box; align-items: center; gap: 34px; overflow-x: auto; margin: 0 auto; padding: 0 14px; scrollbar-width: none; }
+.section-navigation__content::-webkit-scrollbar { display: none; }
+.section-navigation__item { position: relative; flex: 0 0 auto; padding: 17px 0 15px; border: 0; background: transparent; color: #7a908d; cursor: pointer; font: inherit; font-size: 18px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.section-navigation__item:not(.section-navigation__item--active):hover,
+.section-navigation__item:not(.section-navigation__item--active):focus-visible { color: #087d72; }
+.section-navigation__item:focus-visible { outline: 2px solid #168ba4; outline-offset: 3px; }
+.section-navigation__item--active { color: #006c64; }
+.section-navigation__item--active::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 3px; border-radius: 999px 999px 0 0; background: #0b8f83; content: ''; }
+
+@media (max-width: 640px) {
+  .section-navigation { margin-top: 0; border-bottom: 0; background: white; }
+  .section-navigation__content { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; overflow: visible; padding: 10px 12px 12px; }
+  .section-navigation__item { width: 100%; min-height: 42px; padding: 10px 16px; border: 1px solid #dce9e9; border-radius: 999px; background: #f1f9fa; color: #153d47; font-size: 14px; font-weight: 700; line-height: 20px; text-align: center; box-shadow: 0 3px 10px rgb(21 61 71 / 6%); }
+  .section-navigation__item:not(.section-navigation__item--active):hover { border-color: #32b2d9; background: #e8f6f8; color: #087d72; }
+  .section-navigation__item:focus-visible { outline-color: #fa9917; outline-offset: 2px; }
+  .section-navigation__item--active { border-color: #087d72; background: linear-gradient(135deg, #087d72, #168ba4); color: white; box-shadow: 0 6px 14px rgb(8 125 114 / 22%); }
+  .section-navigation__item--active::after { display: none; }
+}
+

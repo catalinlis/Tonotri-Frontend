@@ -142,12 +142,10 @@
       }
     </div>
 
-    <nav class="profile-tabs" aria-label="Profile sections">
-        <a class="profile-tab" routerLink="posts" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" >Posts</a>
-        <a class="profile-tab" routerLink="photos" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" >Photos</a>
-        <a class="profile-tab" routerLink="visited-places" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page" >Visited Places</a>
-        <a class="profile-tab" routerLink="reviews" routerLinkActive="profile-tab--active" ariaCurrentWhenActive="page">Reviews</a>
-    </nav>
+    <app-section-navigation
+      [items]="profileSections"
+      ariaLabel="Profile sections"
+    />
 
     <div class="profile-zone-content">
       <router-outlet></router-outlet>

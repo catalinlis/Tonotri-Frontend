@@ -1,0 +1,23 @@
+.country-description {
+  max-width: 760px;
+  margin: 0 auto 24px;
+  color: #667e83;
+  line-height: 1.7;
+}
+
+.stories-feed {
+  width: min(100%, 760px);
+  margin-inline: auto;
+}
+
+.posts-header .left-header{
+  font-family: Roboto;
+}
+
+app-post-card,
+app-review-card {
+  display: block;
+  min-width: 0;
+}
+
+app-review-card { margin-bottom: 24px; }

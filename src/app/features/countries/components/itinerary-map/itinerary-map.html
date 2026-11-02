@@ -1,0 +1,24 @@
+<section class="map-card" aria-labelledby="itinerary-map-title">
+  <div class="map-card-header">
+    <div class="map-title-row">
+      <span>Trip route</span>
+    </div>
+    <button class="fit-route" type="button" (click)="fitRoute()">Fit route</button>
+  </div>
+
+  <div class="map-shell">
+    <div #travelMap class="travel-map" role="region" [attr.aria-label]="mapStatus()"></div>
+    <div class="map-legend"><span aria-hidden="true"></span> Itinerary stops</div>
+    @if (selectedStop(); as stop) {
+      <article class="place-preview" aria-live="polite">
+        <div class="preview-number">{{ stops.indexOf(stop) + 1 }}</div>
+        <div><strong>{{ stop.place }}</strong><p>{{ stop.days }}</p></div>
+      </article>
+    }
+  </div>
+
+  <div class="map-footer">
+    <span><i aria-hidden="true"></i> Select a pin to explore a stop</span>
+    <strong>{{ stops.length }} stops on the map</strong>
+  </div>
+</section>

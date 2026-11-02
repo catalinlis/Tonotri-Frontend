@@ -1,0 +1,65 @@
+<main class="countries-page">
+  <header class="header">
+    @if (!headerImageLoaded()) {
+      <app-loader class="image-loader" Cwidth="100%" Cheight="100%" [radius]="0" />
+    }
+    <img
+      src="assets/earth.jpg"
+      alt="Earth viewed from space"
+      [class.image-pending]="!headerImageLoaded()"
+      [class.image-loaded]="headerImageLoaded()"
+      fetchpriority="high"
+      decoding="async"
+      (load)="markHeaderImageLoaded()"
+      (error)="markHeaderImageLoaded()"
+    />
+  </header>
+
+  <div class="country-picker-heading">
+    <div class="choose-country-title">Choose a country</div>
+
+    <label class="country-search">
+      <span class="sr-only">Search countries</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+      <input
+        type="search"
+        placeholder="Search countries"
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+      />
+    </label>
+  </div>
+
+  @if (visibleFeaturedCountries().length) {
+    <nav class="featured-countries" aria-label="Featured countries">
+      @for (country of visibleFeaturedCountries(); track country.slug; let index = $index) {
+        <a class="country-card" [routerLink]="[country.slug, 'overview']"
+          [style.--card-index]="index"
+          [attr.aria-busy]="!loadedCountryImages().has(country.image)">
+          @if (!loadedCountryImages().has(country.image)) {
+            <app-loader class="image-loader" Cwidth="100%" Cheight="100%" [radius]="0" />
+          }
+          <img
+            [src]="country.image"
+            [alt]="country.name"
+            [class.image-pending]="!loadedCountryImages().has(country.image)"
+            [class.image-loaded]="loadedCountryImages().has(country.image)"
+            width="800"
+            height="520"
+            loading="lazy"
+            decoding="async"
+            (load)="markCountryImageLoaded(country.image)"
+            (error)="markCountryImageLoaded(country.image)"
+          />
+          @if (loadedCountryImages().has(country.image)) {
+            <span class="country-card-shade" aria-hidden="true"></span>
+            <strong>{{ country.name }}</strong>
+          }
+        </a>
+      }
+    </nav>
+  } @else {
+    <div class="country-search-empty" aria-live="polite">No countries match your search.</div>
+  }
+
+</main>

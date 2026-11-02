@@ -1,0 +1,24 @@
+<nav class="section-navigation" [attr.aria-label]="ariaLabel()">
+  <div class="section-navigation__content">
+    @for (item of items(); track item.label) {
+      @if (item.active === undefined) {
+        <a
+          class="section-navigation__item"
+          [routerLink]="item.link"
+          [fragment]="item.fragment"
+          routerLinkActive="section-navigation__item--active"
+          ariaCurrentWhenActive="page"
+        >{{ item.label }}</a>
+      } @else {
+        <a
+          class="section-navigation__item"
+          [class.section-navigation__item--active]="item.active"
+          [routerLink]="item.link"
+          [fragment]="item.fragment"
+          [attr.aria-current]="item.active ? 'page' : null"
+        >{{ item.label }}</a>
+      }
+    }
+  </div>
+</nav>
+

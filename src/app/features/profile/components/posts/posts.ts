@@ -1,17 +1,17 @@
+import { PostCard } from '../../../../shared/components/post-card/post-card';
 import { Component, computed, inject } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
-import { ProfileMediaDialogService } from '../../../../shared/services/profile-media-dialog.service';
-import { PostPhotoDetails, PostPhotoDetailsContext } from './post-photo-details/post-photo-details';
+import { PostMediaDialogService } from '../../../../shared/services/post-media-dialog.service';
 
 @Component({
   selector: 'app-posts',
-  imports: [],
+  imports: [PostCard],
   templateUrl: './posts.html',
   styleUrl: './posts.css',
 })
 export class Posts {
   private readonly authService = inject(AuthService);
-  private readonly mediaDialog = inject(ProfileMediaDialogService);
+  private readonly mediaDialog = inject(PostMediaDialogService);
 
   readonly currentUser = this.authService.currentUser;
   readonly profilePhotoUrl = computed(() => this.currentUser()?.image_path ?? 'assets/user.png');
@@ -33,8 +33,6 @@ export class Posts {
     ],
   };
 
-  readonly postPreviewImages = this.post.images.slice(0, 5);
-  readonly postRemainingPhotos = Math.max(this.post.images.length - 5, 0);
 
   readonly journey = {
     title: 'An Italian Escape',
@@ -71,65 +69,29 @@ export class Posts {
     shares: 18,
   };
 
-  readonly journeyPreviewImages = this.journey.images.slice(0, 5);
-  readonly journeyRemainingPhotos = Math.max(this.journey.images.length - 5, 0);
 
   openPostGallery(startIndex: number): void {
     const user = this.currentUser();
     if (!user) return;
 
-    this.openGallery(this.post.images, startIndex, {
+    this.mediaDialog.open({
       author: `${user.first_name} ${user.last_name}`,
       authorImage: this.profilePhotoUrl(),
-      publishedAt: this.post.publishedAt,
-      location: this.post.location,
-      description: this.post.description,
-      tags: this.post.tags,
-      likes: this.post.likes,
-      comments: this.post.comments,
+      post: this.post,
       commentItems: this.post.commentItems,
-      type: 'post',
-    });
+    }, startIndex);
   }
 
   openJourneyGallery(startIndex: number): void {
     const user = this.currentUser();
     if (!user) return;
 
-    this.openGallery(this.journey.images, startIndex, {
+    this.mediaDialog.open({
       author: `${user.first_name} ${user.last_name}`,
       authorImage: this.profilePhotoUrl(),
-      publishedAt: this.journey.publishedAt,
-      location: this.journey.location,
-      description: this.journey.description,
-      tags: this.journey.tags,
-      likes: this.journey.likes,
-      comments: this.journey.comments,
+      post: this.journey,
+      journey: this.journey,
       commentItems: this.journey.commentItems,
-      type: 'journey',
-      journeyDetails: {
-        title: this.journey.title,
-        days: this.journey.days,
-        places: this.journey.places,
-        rating: this.journey.rating,
-        stops: this.journey.stops.map((stop) => ({ ...stop })),
-        tips: [...this.journey.tips],
-      },
-    });
-  }
-
-  private openGallery(
-    images: ReadonlyArray<{ url: string; alt: string }>,
-    startIndex: number,
-    context: PostPhotoDetailsContext,
-  ): void {
-    this.mediaDialog.open({
-      images: images.map((image) => ({ ...image })),
-      startIndex,
-      eyebrow: context.type === 'journey' ? 'Journey gallery' : 'Post gallery',
-      showThumbnails: false,
-      detailsComponent: PostPhotoDetails,
-      detailsContext: context,
-    });
+    }, startIndex);
   }
 }

@@ -15,6 +15,10 @@
                 class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
                 Community
             </a>
+            <a routerLink="/countries" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link"
+                class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
+                Countries
+            </a>
             <a routerLink="/explore" routerLinkActive="bg-[#FA9917] hover:bg-[#FA9917] rounded-md active-link" 
                 class="px-4 py-2 hover:rounded-md transition-colors hover:bg-[#29A5DB] active-link:hover:bg-[#FA9917]">
                 Explore
@@ -134,6 +138,15 @@
                     (click)="closeMenu()"
                     class="mobile-nav-link flex w-full items-center text-left px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB]">
                     Community
+                </a>
+            </div>
+            <div>
+                <a
+                    routerLink="/countries"
+                    routerLinkActive="mobile-nav-active"
+                    (click)="closeMenu()"
+                    class="mobile-nav-link flex w-full items-center text-left px-4 py-2 rounded-md transition-colors hover:bg-[#29A5DB]">
+                    Countries
                 </a>
             </div>
             <div>

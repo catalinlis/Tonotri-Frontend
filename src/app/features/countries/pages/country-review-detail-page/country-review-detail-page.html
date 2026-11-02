@@ -1,0 +1,208 @@
+<main class="review-page">
+  <header class="review-hero" [attr.aria-busy]="!loadedHeroImages().has(countryImage())">
+    @if (!loadedHeroImages().has(countryImage())) {
+      <app-loader class="review-hero__loader" Cwidth="100%" Cheight="100%" [radius]="0" />
+    }
+    <img class="review-hero__image" [src]="countryImage()" [alt]="countryName() + ' landscape'"
+      [class.review-hero__image--loaded]="loadedHeroImages().has(countryImage())"
+      fetchpriority="high" decoding="async"
+      (load)="markHeroImageLoaded(countryImage())" (error)="markHeroImageLoaded(countryImage())" />
+    @if (loadedHeroImages().has(countryImage())) {
+    <span class="review-hero__shade" aria-hidden="true"></span>
+
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a routerLink="/countries"><span>Countries</span></a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+      <a [routerLink]="['/countries', countrySlug(), 'overview']"><span>{{ countryName() }}</span></a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+      <span>Travel Review</span>
+    </nav>
+
+    <div class="review-hero__content">
+      <h1>{{ countryName() }}</h1>
+      <div class="review-hero__meta">
+        <span class="hero-rating"><span aria-hidden="true">★</span> 4.8</span>
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v3M16 2v3M3.5 9h17M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z" /></svg>12-day trip</span>
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>Rome · Florence · Amalfi Coast</span>
+      </div>
+    </div>
+    }
+  </header>
+
+  <div class="review-layout">
+    <article class="story-card" aria-labelledby="review-title">
+      <header class="story-header review-reveal">
+        <div class="rating-row" aria-label="Rated 4.8 out of 5">
+          <span class="stars" aria-hidden="true">★★★★★</span><strong>4.8</strong><span class="dot" aria-hidden="true"></span><span>Visited April 2024</span>
+        </div>
+        <h2 class="title">A country that makes you fall in love with every little detail</h2>
+      </header>
+
+      <div class="story-copy review-reveal">
+        <p>{{ countryName() }} is more than a destination—it is a feeling. From the moment we arrived, we were welcomed by incredible history, beautiful places, and people who made each day feel personal.</p>
+        <p>The food was a highlight: fresh, thoughtful, and best enjoyed slowly. What stayed with us most was how naturally culture, everyday life, and breathtaking scenery fit together.</p>
+        <p>Twelve days never felt like enough. This is the kind of place that asks you to slow down, notice the little details, and start planning your return before you have even left.</p>
+      </div>
+
+      @if (itinerary.length > 0) {
+        <div class="review-itinerary review-reveal" aria-labelledby="itinerary-title">
+          <div class="itinerary-header">
+            <div class="header" id="itinerary-title">Itinerary</div>
+            <div class="stops">{{ itinerary.length }} stops</div>
+          </div>
+          <ol class="review-itinerary__stops" [class.review-itinerary__stops--long]="itinerary.length > 3">
+            @for (stop of itinerary; track $index; let index = $index) {
+              <li [style.--stop-index]="index">
+                <button class="review-itinerary__marker" type="button" [attr.aria-label]="'Show ' + stop.place + ' on the map'" (click)="showStopOnMap(index)"></button>
+                <button class="review-itinerary__stop" type="button" (click)="showStopOnMap(index)"><span>{{ stop.days }}</span><strong>{{ stop.place }}</strong><small>{{ $first ? 'The journey begins' : $last ? 'One last adventure' : 'Along the way' }}</small></button>
+              </li>
+            }
+          </ol>
+        </div>
+
+        <section class="visited-stops" aria-labelledby="visited-stops-title">
+          <ol class="visited-stops__grid">
+            @for (stop of itinerary; track $index; let index = $index) {
+              <li class="visited-stops__card review-reveal">
+                <button class="visited-stops__open-map" type="button" [attr.aria-label]="'Show ' + stop.place + ' on the map'" (click)="showStopOnMap(index)"></button>
+                <div class="visited-stops__card-top">
+                  <span class="visited-stops__number" aria-label="Stop {{ index + 1 }}">{{ index + 1 }}</span>
+                  <span class="visited-stops__days">{{ stop.days }}</span>
+                </div>
+                <h4>{{ stop.place }}</h4>
+                <p>{{ stop.description }}</p>
+                <div class="visited-stops__highlight"><span aria-hidden="true"></span>{{ stop.highlight }}</div>
+              </li>
+            }
+          </ol>
+        </section>
+
+        <app-itinerary-map class="review-reveal" [stops]="itinerary" />
+      }
+
+      <section class="ratings-section review-reveal" aria-labelledby="ratings-title">
+        <div class="ratings-title">Category ratings</div>
+        <div class="rating-grid">
+          @for (rating of categoryRatings; track rating.label) {
+            <div class="rating-item">
+              <span class="rating-icon" aria-hidden="true">
+                @switch (rating.icon) {
+                  @case ('heart') { <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" /></svg> }
+                  @case ('shield') { <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /><path d="m9 12 2 2 4-4" /></svg> }
+                  @case ('train') { <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="15" rx="3" /><path d="M8 21l2-3M16 21l-2-3M8 8h8M8 13h.01M16 13h.01" /></svg> }
+                  @case ('camera') { <svg viewBox="0 0 24 24"><path d="M14.5 4 16 7h4a2 2 0 0 1 2 2v10H2V9a2 2 0 0 1 2-2h4l1.5-3h5Z" /><circle cx="12" cy="13" r="3.5" /></svg> }
+                  @case ('coins') { <svg viewBox="0 0 24 24"><ellipse cx="9" cy="6" rx="6" ry="3" /><path d="M3 6v5c0 1.7 2.7 3 6 3M3 11v5c0 1.7 2.7 3 6 3M15 9c3.3 0 6 1.3 6 3s-2.7 3-6 3-6-1.3-6-3 2.7-3 6-3Z" /><path d="M9 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" /></svg> }
+                  @default { <svg viewBox="0 0 24 24"><path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 3v18M17 3c-3 3-3 8 0 10" /></svg> }
+                }
+              </span>
+              <span class="rating-label">{{ rating.label }}</span>
+              <span class="rating-track" aria-hidden="true"><i [style.width.%]="rating.score * 20"></i></span>
+              <strong>{{ rating.score }}</strong>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section class="photos-section review-reveal" aria-labelledby="photos-title">
+        <div class="section-heading">
+          <div><span>Trip gallery</span><div class="photos-title" id="photos-title">Photos from this journey</div></div>
+        </div>
+        <div class="photo-grid">
+          @for (photo of gallery; track photo.src) {
+            <img [src]="photo.src" [alt]="photo.alt" width="420" height="280" loading="lazy" decoding="async" />
+          }
+        </div>
+        <button class="photos-view-all" type="button">View all photos <span aria-hidden="true">→</span></button>
+      </section>
+
+      <section class="highlights-section review-reveal" aria-labelledby="highlights-title">
+        <div class="section-heading"><div><span>Favorite moments</span><div class="highlights-title">Trip highlights</div></div></div>
+        <div class="highlight-grid">
+          @for (highlight of highlights; track highlight.title) {
+            <article class="highlight-card">
+              <span aria-hidden="true">
+                @switch (highlight.icon) {
+                  @case ('food') { <svg viewBox="0 0 24 24"><path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 3v18M17 3c-3 3-3 8 0 10" /></svg> }
+                  @case ('sun') { <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg> }
+                  @default { <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-5h6v5M8 11h.01M12 11h.01M16 11h.01" /></svg> }
+                }
+              </span>
+              <div><h4>{{ highlight.title }}</h4></div>
+            </article>
+          }
+        </div>
+      </section>
+
+      <footer class="return-banner review-reveal">
+        <span class="return-icon" aria-hidden="true">♥</span>
+        <div><strong>Would you visit again?</strong></div>
+        <span class="return-answer">Yes, definitely</span>
+      </footer>
+    </article>
+
+    <aside class="review-sidebar" aria-label="Review information">
+      <section class="traveler-card review-reveal">
+        <div class="traveler-profile">
+          <img src="assets/woman1.png" alt="Sophie Martin" width="72" height="72" loading="lazy" decoding="async" />
+          <div><h2>Sophie Martin</h2><p>23 reviews · 12 countries</p></div>
+        </div>
+        <div class="traveler-tags" aria-label="Traveler interests">
+          @for (tag of travelerTags; track tag.label) {
+            <span [style.--tag-hue]="tag.hue">{{ tag.label }}</span>
+          }
+        </div>
+        <div class="trip-details">
+          <h3>Trip details</h3>
+          <dl>
+            <div><dt>Trip type</dt><dd>Couple trip</dd></div>
+            <div><dt>Travel dates</dt><dd>Apr 5–16, 2024</dd></div>
+            <div><dt>Places visited</dt><dd>Rome · Florence · Amalfi Coast</dd></div>
+            <div><dt>Best season</dt><dd>Spring</dd></div>
+            <div><dt>Travel style</dt><dd>Culture · Food · Slow travel</dd></div>
+          </dl>
+        </div>
+        <div class="review-actions">
+          <button type="button" [class.is-active]="saved()" [attr.aria-pressed]="saved()" (click)="toggleSaved()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4V3Z" /></svg>{{ saved() ? 'Saved' : 'Save' }}</button>
+          <button type="button" [class.is-active]="helpful()" [attr.aria-pressed]="helpful()" (click)="toggleHelpful()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 22H3V10h4M7 10l5-8c2 0 3 1.5 2.5 3L13 10h6a2 2 0 0 1 2 2l-2 8a2 2 0 0 1-2 2H7V10Z" /></svg>Helpful ({{ helpfulCount() }})</button>
+        </div>
+      </section>
+
+      <section class="comments-card review-reveal" aria-labelledby="comments-title">
+        <div class="comments-header">
+          <div>
+            <span class="comments-eyebrow">Conversation</span>
+            <h3 id="comments-title">Comments</h3>
+          </div>
+          <span class="comments-count" [attr.aria-label]="comments().length + ' comments'">{{ comments().length }}</span>
+        </div>
+
+        <div #commentsList class="comments-list" tabindex="0" aria-label="Review comments">
+          @for (comment of comments(); track comment.id) {
+            <article class="comment" [class.comment--own]="comment.own">
+              <span class="comment-avatar" aria-hidden="true">{{ comment.initials }}</span>
+              <div class="comment-body">
+                <div class="comment-meta"><strong>{{ comment.author }}</strong><time>{{ comment.time }}</time></div>
+                <p>{{ comment.text }}</p>
+              </div>
+            </article>
+          }
+        </div>
+
+        <form class="comment-form" (submit)="postComment($event)">
+          <textarea aria-label="Write a comment" placeholder="Share your thoughts..." rows="2" maxlength="280" [value]="commentDraft()" (input)="commentDraft.set($any($event.target).value)"></textarea>
+          <div class="comment-form__actions">
+            <img class="comment-form__avatar" [src]="profilePhotoUrl()" alt="Your profile photo" width="34" height="34" (error)="onProfileImageError()" />
+            <button type="submit" [disabled]="!commentDraft().trim()">Post</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="community-card review-reveal">
+        <div class="section-heading"><div><span>Community</span><div class="travelers-review-title">What other travelers think</div></div></div>
+        <article class="mini-review"><img src="assets/man1.png" alt="" width="42" height="42" loading="lazy" /><div><strong>Daniel Kim <span>★★★★★</span></strong><p>Incredible food, beautiful scenery, and so much history.</p></div></article>
+        <article class="mini-review"><img src="assets/woman2.png" alt="" width="42" height="42" loading="lazy" /><div><strong>Laura Mendes <span>★★★★★</span></strong><p>A memorable experience from start to finish.</p></div></article>
+        <article class="mini-review"><img src="assets/man2.png" alt="" width="42" height="42" loading="lazy" /><div><strong>James Wilson <span>★★★★<i>★</i></span></strong><p>A place that stays with you long after the trip.</p></div></article>
+      </section>
+    </aside>
+  </div>
+</main>
