@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../../core/services/auth.service';
@@ -21,8 +21,14 @@ export class YourPhotoComponent {
   usersService = inject(UsersService);
   selectedFile: File | null = null;
   previewUrl: string | null = null;
+  readonly submitting = signal(false);
+  private readonly nextStepKey = crypto.randomUUID();
+  private stepCompleted = false;
+  private photoKey = crypto.randomUUID();
+  private uploadedFile: File | null = null;
 
   onFileSelected(event: any){
+    if (this.submitting() || this.stepCompleted) return;
     const file = event.target.files[0];
     const maxSize = 5 * 1024 * 1024; // 3 MB
     const input = event.target as HTMLInputElement;
@@ -43,6 +49,7 @@ export class YourPhotoComponent {
     }
 
     this.selectedFile = file;
+    this.photoKey = crypto.randomUUID();
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -54,24 +61,32 @@ export class YourPhotoComponent {
   }
 
   async nextStep(){
+    if (this.submitting()) return;
+    this.submitting.set(true);
     const nextRegistrationStep = "/onboarding/visited-countries";
 
     try{
-      if(this.selectedFile)
-        await this.uploadProfilePhoto(this.selectedFile);
-
-      this.authService.nextRegistrationStep().subscribe({
-        next: (res) => this.router.navigate([nextRegistrationStep])
-      });
+      if (!this.stepCompleted) {
+        if (this.selectedFile && this.selectedFile !== this.uploadedFile) {
+          await this.uploadProfilePhoto(this.selectedFile);
+          this.uploadedFile = this.selectedFile;
+        }
+        await firstValueFrom(this.authService.nextRegistrationStep(this.nextStepKey));
+        this.stepCompleted = true;
+      }
+      await this.router.navigate([nextRegistrationStep]);
     }
     catch(error){
-      console.log(error);
+      this.toastrService.error('Unable to continue. Please try again.', 'Submission Error');
+    }
+    finally {
+      this.submitting.set(false);
     }
   }
 
   uploadProfilePhoto(file: File):Promise<any>{
     return firstValueFrom(
-      this.usersService.uploadProfilePhoto(file)
+      this.usersService.uploadProfilePhoto(file, this.photoKey)
     );
   }
 }

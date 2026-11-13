@@ -100,8 +100,11 @@ export class AuthService {
     return this.http.get<{step: string}>(`/api/registration/step/`);
   }
 
-  nextRegistrationStep(): Observable<any>{
-    return this.http.post(`/api/registration/next/`, null);
+  // Keep the same key for retries of one logical step.
+  nextRegistrationStep(idempotencyKey: string): Observable<any>{
+    return this.http.post(`/api/registration/next/`, null, {
+      headers: { 'Idempotency-Key': idempotencyKey }
+    });
   }
 
   
