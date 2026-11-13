@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -23,6 +23,7 @@ export class AuthPageComponent {
   error: { field: string, message: string } | null = null;
   fieldsOrder: string[] = ['login', 'password'];
   loginForm!: FormGroup;
+  readonly submitting = signal(false);
 
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef){
     this.loginForm = this.fb.group(
@@ -77,8 +78,10 @@ export class AuthPageComponent {
   }
   
   login(): void{
+    if (this.submitting()) return;
     if(this.loginForm.valid){
-      console.log(this.loginForm);
+      this.error = null;
+      this.submitting.set(true);
       this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
           
@@ -88,21 +91,35 @@ export class AuthPageComponent {
           }
           
           // Redirect to the / page which is the profile
-          this.router.navigateByUrl('/');
+          void this.navigateAfterLogin('/');
         },
         error: (err) => {
             
             if(err.error && err.status===403 && 'guid' in err.error){
-              this.router.navigateByUrl(`/confirm?guid=${err.error.guid}`);
+              void this.navigateAfterLogin(`/confirm?guid=${err.error.guid}`);
               return;
             }
 
             this.error = { field: 'backend', message: LOGIN_ERRORS['backend']['credentials'] }
+            this.submitting.set(false);
             this.cdr.detectChanges();
         }
       });
     } else{
       this.error = this.getFirstFormError();
+    }
+  }
+
+  private async navigateAfterLogin(url: string): Promise<void> {
+    try {
+      const navigated = await this.router.navigateByUrl(url);
+      if (!navigated) {
+        this.error = { field: 'backend', message: 'Unable to open the page. Please try again.' };
+      }
+    } catch {
+      this.error = { field: 'backend', message: 'Unable to open the page. Please try again.' };
+    } finally {
+      this.submitting.set(false);
     }
   }
 
