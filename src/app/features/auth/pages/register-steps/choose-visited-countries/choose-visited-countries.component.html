@@ -101,10 +101,11 @@
     <div class="flex w-full md:w-4/5 lg:w-4/5 xl:w-3/5 mx-auto mt-2">
         <button class="submit-button w-full flex justify-center items-center md:w-auto transition-transform duration-300 hover:scale-102 
                        p-3 pl-10 pr-10 text-[22px] text-white bg-[#3248D9] rounded-sm ml-auto mb-[100px] cursor-pointer"
-                       (click)="skipToNextStep()">
+                       [disabled]="submitting()" [attr.aria-busy]="submitting()" (click)="skipToNextStep()">
             <span *ngIf="!countriesChoosed" class="flex">Skip this step</span>
             <span *ngIf="countriesChoosed" class="flex">Submit</span>
-            <img src="assets/next.png" class="flex ml-3 w-[23px]" alt="">
+            <span *ngIf="submitting()" class="ml-3 h-[23px] w-[23px] shrink-0 animate-spin rounded-full border-[3px] border-white/30 border-t-white" aria-hidden="true"></span>
+            <img *ngIf="!submitting()" src="assets/next.png" class="flex ml-3 w-[23px]" alt="">
         </button>
     </div>
 </div>

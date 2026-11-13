@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CountrySelectComponent } from '@wlucha/ng-country-select';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { AuthService } from '../../../../../core/services/auth.service';
 import { UsersService } from '../../../../../core/services/users.service';
 import { firstValueFrom } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-choose-visited-countries',
@@ -24,8 +25,11 @@ export class ChooseVisitedCountriesComponent implements OnInit{
   map!: L.Map;
   geoJsonLayer!: L.GeoJSON;
   highlightedCountries: string[] = [];
+  readonly submitting = signal(false);
+  private readonly nextStepKey = crypto.randomUUID();
+  private stepCompleted = false;
 
-  constructor(private authService: AuthService, private usersService: UsersService, private router: Router){}
+  constructor(private authService: AuthService, private usersService: UsersService, private router: Router, private toastrService: ToastrService){}
 
   ngOnInit(): void {
     this.map = L.map('map', {
@@ -139,18 +143,24 @@ export class ChooseVisitedCountriesComponent implements OnInit{
   }
 
   async skipToNextStep(){
+    if (this.submitting()) return;
+    this.submitting.set(true);
     const nextRegistrationStep = "/";
 
     try{
-      if(this.countriesChoosed)
-        await this.addCountries(this.highlightedCountries);
-
-      this.authService.nextRegistrationStep().subscribe({
-        next: (res) => this.router.navigate([nextRegistrationStep])
-      })
+      if (!this.stepCompleted) {
+        if (this.countriesChoosed)
+          await this.addCountries([...this.highlightedCountries]);
+        await firstValueFrom(this.authService.nextRegistrationStep(this.nextStepKey));
+        this.stepCompleted = true;
+      }
+      await this.router.navigate([nextRegistrationStep]);
     }
     catch(error){
-      console.log(error);
+      this.toastrService.error('Unable to continue. Please try again.', 'Submission Error');
+    }
+    finally {
+      this.submitting.set(false);
     }
   }
 

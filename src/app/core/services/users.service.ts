@@ -10,11 +10,13 @@ import { UserDetailedInfo } from '../../features/community/models/user-detailed-
 export class UsersService {
   private readonly http = inject(HttpClient);
 
-  uploadProfilePhoto(file: File): Observable<any>{
+  uploadProfilePhoto(file: File, idempotencyKey: string): Observable<ProfilePhoto>{
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.put<ProfilePhoto>(`/api/users/me/profile-photo/`, formData);
+    return this.http.put<ProfilePhoto>(`/api/users/me/profile-photo/`, formData, {
+      headers: { 'Idempotency-Key': idempotencyKey }
+    });
   }
 
   addVisitedCountries(codes: string[]): Observable<any>{
