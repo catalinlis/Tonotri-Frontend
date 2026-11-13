@@ -81,8 +81,12 @@
         />
         <button
           id="sign-in-button"
-          class="action-button animated-item w-full bg-blue-300 text-white p-3 rounded-lg hover:bg-blue-700 transition cursor-pointer">
+          type="submit"
+          [disabled]="submitting()"
+          [attr.aria-busy]="submitting()"
+          class="action-button animated-item flex items-center justify-center w-full bg-blue-300 text-white p-3 rounded-lg hover:bg-blue-700 transition cursor-pointer disabled:cursor-wait">
           Sign in
+          <span *ngIf="submitting()" class="ml-3 h-[23px] w-[23px] shrink-0 animate-spin rounded-full border-[3px] border-white/30 border-t-white" aria-hidden="true"></span>
         </button>
       </form>
       <p class="divider-label animated-item text-white text-[16px] mt-1 mb-1">- or -</p>

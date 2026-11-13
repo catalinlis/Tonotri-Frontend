@@ -2,7 +2,7 @@ export interface UserDetailedInfo {
   username: string;
   first_name: string;
   last_name: string;
-  birthday: string;
+  birthday: string | null;
   gender: string;
   image_path: string | null;
   visited_countries: string[];
