@@ -9,6 +9,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core';
 import { CountryDescription } from '../../models/country-description';
 import { Dialog } from '@angular/cdk/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { PhotoGalleryDialogComponent } from '../../../../shared/components/photo-gallery-dialog/photo-gallery-dialog.component';
 
 
@@ -24,6 +25,7 @@ import { PhotoGalleryDialogComponent } from '../../../../shared/components/photo
 })
 export class CountriesComponent {
   exploreService = inject(ExploreService);
+  toastr = inject(ToastrService);
   sanitizer = inject(DomSanitizer);
   photoGallery = inject(Dialog);
   cdr=inject(ChangeDetectorRef);
@@ -34,6 +36,7 @@ export class CountriesComponent {
   imagesUrls: SafeUrl[] = [];
   country: string = "";
   countryDescription: CountryDescription | null = null;
+  private searchId = 0;
 
   async onSearch() {
     const selectedCountryName = this.selectedCountry?.translations?.en;
@@ -42,6 +45,7 @@ export class CountriesComponent {
       return;
     }
 
+    const searchId = ++this.searchId;
     try {
       this.countrySearch = true;
       this.imagesReady = false;
@@ -53,25 +57,33 @@ export class CountriesComponent {
       ]);
 
     } catch (error) {
-      console.error('Search failed:', error);
+      this.toastr.error('Unable to search for this country. Please try again.', 'Explore Error');
     } finally {
-      this.countrySearch = false;
-      this.cdr.detectChanges();
+      if (searchId === this.searchId) {
+        this.countrySearch = false;
+        this.cdr.detectChanges();
+      }
     }
   }
 
   async loadCountryPhotos(country: string){
+    const searchId = this.searchId;
     this.imagesReady = false;
 
     try{
       const response = await firstValueFrom(this.exploreService.getLocationPhotos(country));
+      if (searchId !== this.searchId) return;
       const urls = response.photo_urls;
+      const images = await this.preloadImages(urls);
+      if (searchId !== this.searchId) return;
       this.country = response.country;
-      this.imagesUrls = await this.preloadImages(urls);
+      this.imagesUrls = images;
       this.imagesReady=true;
       this.cdr.detectChanges();
     } catch(error){
-      console.error(error);
+      if (searchId !== this.searchId) return;
+      this.stopSearch();
+      this.toastr.error('Unable to load country photos. Please try again.', 'Explore Error');
     }
   }
 
@@ -116,15 +128,26 @@ export class CountriesComponent {
   }
 
   async loadCountryDescription(country: string){
+    const searchId = this.searchId;
     this.descriptionReady = false;
 
     try{
-      this.countryDescription = await firstValueFrom(this.exploreService.getCountryDescription(country));
+      const description = await firstValueFrom(this.exploreService.getCountryDescription(country));
+      if (searchId !== this.searchId) return;
+      this.countryDescription = description;
       this.descriptionReady=true;
       this.cdr.detectChanges();
     } catch(error){
-      console.error(error);
+      if (searchId !== this.searchId) return;
+      this.stopSearch();
+      this.toastr.error('Unable to load the country description. Please try again.', 'Explore Error');
     }
   }
 
+  private stopSearch(): void {
+    // Ignore outstanding results from the failed search, including after a retry.
+    ++this.searchId;
+    this.countrySearch = false;
+    this.cdr.detectChanges();
+  }
 }

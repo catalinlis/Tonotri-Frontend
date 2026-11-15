@@ -4,6 +4,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { firstValueFrom } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { ExploreService } from '../../services/explore.service';
 import { Landmark } from '../../models/landmark';
 import { IgxCircularProgressBarComponent } from 'igniteui-angular/progressbar';
@@ -24,6 +25,7 @@ import { LandmarkDescription } from '../../models/landmark-description';
 })
 export class Landmarks {
   exploreService = inject(ExploreService);
+  toastr = inject(ToastrService);
   cdr = inject(ChangeDetectorRef);
   searchControl = new FormControl('');
   landmark: Landmark | null = null;
@@ -32,6 +34,7 @@ export class Landmarks {
   searchFlag = false;
 
   async onSearchLandmark() {
+    if (this.searchFlag) return;
     try {
       this.searchFlag = true;
       this.descriptionReady = false;
@@ -48,7 +51,7 @@ export class Landmarks {
       ]);
 
     } catch (error) {
-      console.error('Search failed:', error);
+      this.toastr.error('Unable to search for this landmark. Please try again.', 'Explore Error');
     } finally {
       this.searchFlag = false;
       this.cdr.detectChanges();
@@ -60,11 +63,14 @@ export class Landmarks {
     try{
       this.landmark = await firstValueFrom(this.exploreService.getLandmarkVariations(landmark));
     } catch(error){
-      console.error(error);
+      this.searchFlag = false;
+      this.cdr.detectChanges();
+      this.toastr.error('Unable to find this landmark. Please try again.', 'Explore Error');
     }
   }
 
   async onSearchLandmarkDescription() {
+    if (this.searchFlag) return;
     try {
       this.searchFlag = true;
       const landmarkDetails = this.landmark;
@@ -84,7 +90,7 @@ export class Landmarks {
       console.log(this.landmarkDescription);
 
     } catch (error) {
-      console.error('Search failed:', error);
+      this.toastr.error('Unable to load landmark details. Please try again.', 'Explore Error');
     } finally {
       this.searchFlag = false;
       this.cdr.detectChanges();
@@ -99,7 +105,9 @@ export class Landmarks {
       this.descriptionReady=true;
       this.cdr.detectChanges();
     } catch(error){
-      console.error(error);
+      this.searchFlag = false;
+      this.cdr.detectChanges();
+      this.toastr.error('Unable to load the landmark description. Please try again.', 'Explore Error');
     }
   }
 
