@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 import { ExploreService } from '../../services/explore.service';
 import { City } from '../../models/city';
 import { ClickOutsideDirective } from '../../../../core/directives/click-outside';
@@ -13,7 +13,7 @@ import { IgxCircularProgressBarComponent } from 'igniteui-angular/progressbar';
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CityDescription } from '../../models/city-description';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { Dialog } from '@angular/cdk/dialog';
 import { PhotoGalleryDialogComponent } from '../../../../shared/components/photo-gallery-dialog/photo-gallery-dialog.component';
 
@@ -51,6 +51,7 @@ export class CitiesComponent implements OnInit{
   country: string = "";
   cityDescription: CityDescription | null = null;
   citySearch: boolean = false;
+  private searchId = 0;
 
   ngOnInit(): void {
     this.searchControl.valueChanges
@@ -74,7 +75,13 @@ export class CitiesComponent implements OnInit{
             this.dropdownOpen = true;
             this.cdr.detectChanges();
             const country = this.selectedCountry.alpha2;
-            return this.exploreService.getCountryCities(country, value!);
+            return this.exploreService.getCountryCities(country, value!).pipe(
+              catchError(error => {
+                this.toastr.error('Unable to search for cities. Please try again.', 'Explore Error');
+                this.dropdownOpen = false;
+                return of([] as City[]);
+              })
+            );
           }
         )
       )
@@ -83,12 +90,6 @@ export class CitiesComponent implements OnInit{
           this.cities = response;
           this.searchFlag = false;
           this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error(err);
-          this.cities = [];
-          this.dropdownOpen = false;
-          this.searchFlag = false;
         }
       });
   }
@@ -123,6 +124,8 @@ export class CitiesComponent implements OnInit{
   }
 
   async onSearch() {
+    if (this.citySearch || !this.selectedCity || !this.selectedCountry) return;
+    const searchId = ++this.searchId;
     try {
       this.citySearch = true;
       const selectedCity = this.selectedCity;
@@ -146,28 +149,36 @@ export class CitiesComponent implements OnInit{
       console.log(this.cityDescription);
 
     } catch (error) {
-      console.error('Search failed:', error);
+      this.toastr.error('Unable to search for this city. Please try again.', 'Explore Error');
     } finally {
-      this.citySearch = false;
-      this.cdr.detectChanges();
+      if (searchId === this.searchId) {
+        this.citySearch = false;
+        this.cdr.detectChanges();
+      }
     }
   }
 
   async loadPhotos(country: string, city: string, population: number){
+    const searchId = this.searchId;
     this.imagesReady = false;
     this.imagesUrls = [];
 
     try{
       const response = await firstValueFrom(this.exploreService.getLocationPhotos(country, city, population));
+      if (searchId !== this.searchId) return;
       if(response.count > 0){
         const urls = response.photo_urls;
+        const images = await this.preloadImages(urls);
+        if (searchId !== this.searchId) return;
         this.country = response.country;
-        this.imagesUrls = await this.preloadImages(urls);
+        this.imagesUrls = images;
         this.imagesReady=true;
         this.cdr.detectChanges();
       }
     } catch(error){
-      console.error(error);
+      if (searchId !== this.searchId) return;
+      this.stopSearch();
+      this.toastr.error('Unable to load city photos. Please try again.', 'Explore Error');
     }
   }
 
@@ -215,15 +226,26 @@ export class CitiesComponent implements OnInit{
   }
 
   async loadCityDescription(country: string, city: string, population: number){
+    const searchId = this.searchId;
     this.descriptionReady = false;
 
     try{
-      this.cityDescription = await firstValueFrom(this.exploreService.getCityDescription(country, city, population));
+      const description = await firstValueFrom(this.exploreService.getCityDescription(country, city, population));
+      if (searchId !== this.searchId) return;
+      this.cityDescription = description;
       this.descriptionReady=true;
       this.cdr.detectChanges();
     } catch(error){
-      console.error(error);
+      if (searchId !== this.searchId) return;
+      this.stopSearch();
+      this.toastr.error('Unable to load the city description. Please try again.', 'Explore Error');
     }
   }
 
+  private stopSearch(): void {
+    // Ignore outstanding results from the failed search, including after a retry.
+    ++this.searchId;
+    this.citySearch = false;
+    this.cdr.detectChanges();
+  }
 }
